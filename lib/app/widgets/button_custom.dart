@@ -18,7 +18,7 @@ class CustomButton extends StatefulWidget {
     this.prefix,
     this.isLoading = false,
     this.disabled = false,
-    this.color = ColorConst.primaryColor,
+    this.color = ColorConst.primary,
     this.textStyle = const TextStyle(
       fontFamily: "montesserat_semi_bold",
       fontSize: 15,
@@ -37,8 +37,8 @@ class _CustomButtonState extends State<CustomButton> {
     return InkWell(
       onTap: widget.isLoading || widget.disabled ? null : widget.onTap,
       child: Container(
-        height: 60.h,
-        width: 100.w,
+        height: 40.h,
+        width: 200.w,
         constraints: BoxConstraints(
           minWidth: 30.w,
         ),
@@ -49,7 +49,7 @@ class _CustomButtonState extends State<CustomButton> {
         decoration: BoxDecoration(
           boxShadow: [
             BoxShadow(
-              color: ColorConst.primaryColor.withOpacity(0.4),
+              color: ColorConst.primary.withOpacity(0.4),
               spreadRadius: 1,
               blurRadius: 1,
               offset: const Offset(0, 1),

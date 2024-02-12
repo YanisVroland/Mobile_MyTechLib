@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
-import '../../app/theme/color_const.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 
@@ -39,7 +38,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: AppTheme.of(context).primaryBackground,
+      backgroundColor: AppTheme.of(context).background,
       body: Container(
         width: MediaQuery.sizeOf(context).width * 1.0,
         height: MediaQuery.sizeOf(context).height * 1.0,
@@ -59,19 +58,15 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
           child: SingleChildScrollView(
               child: Column(
             mainAxisSize: MainAxisSize.max,
-            crossAxisAlignment: CrossAxisAlignment.start,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
                 'assets/images/finWallet_logo_landscapeDark@3x.png',
-                width: 170.0,
-                height: 60.0,
+                width: 300.0,
                 fit: BoxFit.fitWidth,
               ),
-              const Text("Bienvenue"),
-              SizedBox(height: 10.h),
-              const Text("Connectez-vous pour accéder à"),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                padding:  EdgeInsets.only(top: 70.h),
                 child: CustomTextField(
                   controller: emailAddressLoginController,
                   labelText: "Email",
@@ -79,7 +74,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 ),
               ),
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
+                padding:  EdgeInsets.only(top: 20.h),
                 child: CustomTextField(
                   controller: passwordLoginController,
                   obscureText: !passwordLoginVisibility,
@@ -97,24 +92,26 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                   ),
                 ),
               ),
-              const Row(
-                mainAxisSize: MainAxisSize.max,
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  // CustomButton(
-                  //   text: "Mot de passe oublié ?",
-                  //   onTap: () async {
-                  //     Navigator.pushNamed(context, AppRouter.FORGOTPASSWORD);
-                  //   },
-                  // ),
-                ],
-              ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 30.0),
-                    child: CustomButton(
+              Padding(
+                  padding: EdgeInsets.only(top: 10.h,bottom: 20.h),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.max,
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      InkWell(
+                        onTap: () async {
+                          Navigator.pushNamed(context, AppRouter.FORGOTPASSWORD);
+                        },
+                        child: Text("Mot de passe oublié ?"),
+                      ),
+                    ],
+                  )),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 30.h),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    CustomButton(
                       text: "Connexion",
                       onTap: () async {
                         /*final user = await UserRepository().signInWithCredentials(
@@ -127,18 +124,14 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                         Navigator.pushNamed(context, AppRouter.HOME);
                       },
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
               Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    splashColor: Colors.transparent,
-                    focusColor: Colors.transparent,
-                    hoverColor: Colors.transparent,
-                    highlightColor: Colors.transparent,
                     onTap: () async {
                       Navigator.pushNamed(context, AppRouter.REGISTER);
                     },
@@ -146,7 +139,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                       width: MediaQuery.sizeOf(context).width * 0.8,
                       height: 44.0,
                       decoration: BoxDecoration(
-                        color: AppTheme.of(context).secondaryBackground,
+                        color: Colors.white,
                         borderRadius: BorderRadius.circular(8.0),
                       ),
                       child: Row(

@@ -53,7 +53,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: AppTheme.of(context).primaryBackground,
+      backgroundColor: AppTheme.of(context).background,
       body: Column(
         mainAxisSize: MainAxisSize.max,
         children: [
@@ -169,7 +169,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                             borderRadius: BorderRadius.circular(8.0),
                                           ),
                                           filled: true,
-                                          fillColor: AppTheme.of(context).secondaryBackground,
+                                          fillColor: AppTheme.of(context).background,
                                           contentPadding: const EdgeInsetsDirectional.fromSTEB(
                                               20.0, 24.0, 20.0, 24.0),
                                         ),
@@ -213,7 +213,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                           borderRadius: BorderRadius.circular(8.0),
                                         ),
                                         filled: true,
-                                        fillColor: AppTheme.of(context).secondaryBackground,
+                                        fillColor: AppTheme.of(context).background,
                                         contentPadding: const EdgeInsetsDirectional.fromSTEB(
                                             20.0, 24.0, 20.0, 24.0),
                                       ),
@@ -259,7 +259,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     filled: true,
-                                    fillColor: AppTheme.of(context).secondaryBackground,
+                                    fillColor: AppTheme.of(context).background,
                                     contentPadding: const EdgeInsetsDirectional.fromSTEB(
                                         20.0, 24.0, 20.0, 24.0),
                                   ),
@@ -303,7 +303,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     filled: true,
-                                    fillColor: AppTheme.of(context).secondaryBackground,
+                                    fillColor: AppTheme.of(context).background,
                                     contentPadding: const EdgeInsetsDirectional.fromSTEB(
                                         20.0, 24.0, 20.0, 24.0),
                                     suffixIcon: InkWell(
@@ -315,7 +315,6 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                         passwordCreateVisibility
                                             ? Icons.visibility_outlined
                                             : Icons.visibility_off_outlined,
-                                        color: AppTheme.of(context).secondaryText,
                                         size: 20.0,
                                       ),
                                     ),
@@ -360,7 +359,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     filled: true,
-                                    fillColor: AppTheme.of(context).secondaryBackground,
+                                    fillColor: AppTheme.of(context).background,
                                     contentPadding: const EdgeInsetsDirectional.fromSTEB(
                                         20.0, 24.0, 20.0, 24.0),
                                     suffixIcon: InkWell(
@@ -373,7 +372,6 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                         passwordConfirmVisibility
                                             ? Icons.visibility_outlined
                                             : Icons.visibility_off_outlined,
-                                        color: AppTheme.of(context).secondaryText,
                                         size: 20.0,
                                       ),
                                     ),
@@ -433,7 +431,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                                     width: MediaQuery.sizeOf(context).width * 0.8,
                                     height: 44.0,
                                     decoration: BoxDecoration(
-                                      color: AppTheme.of(context).secondaryBackground,
+                                      color: AppTheme.of(context).background,
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     child: InkWell(

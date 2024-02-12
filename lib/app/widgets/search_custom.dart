@@ -31,7 +31,7 @@ class _SearchCustomState extends State<SearchCustom> {
       decoration: InputDecoration(
           border: InputBorder.none,
           hintText: widget.hintText,
-          prefixIcon: Icon(Icons.search, color: ColorConst.secondaryColor),
+          prefixIcon: Icon(Icons.search, color: ColorConst.secondary),
           suffixIcon: widget.suffixIcon,
           labelStyle: TextStyle(
             fontWeight: FontWeight.w500,
@@ -40,7 +40,7 @@ class _SearchCustomState extends State<SearchCustom> {
           hintStyle: TextStyle(
               fontWeight: FontWeight.w500,
               fontFamily: "montesserat_bold",
-              color: ColorConst.primaryColor)),
+              color: ColorConst.primary)),
       cursorColor: ColorConst.background,
       onChanged: (val) {
         widget.search(val);

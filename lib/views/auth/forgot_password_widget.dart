@@ -33,9 +33,9 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       key: scaffoldKey,
-      backgroundColor: AppTheme.of(context).primaryBackground,
+      backgroundColor: AppTheme.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppTheme.of(context).primaryBackground,
+        backgroundColor: AppTheme.of(context).background,
         automaticallyImplyLeading: false,
         leading: InkWell(
           splashColor: Colors.transparent,
@@ -45,9 +45,8 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
           onTap: () async {
             Navigator.pop(context);
           },
-          child: Icon(
+          child:const  Icon(
             Icons.chevron_left_rounded,
-            color: AppTheme.of(context).grayLight,
             size: 32.0,
           ),
         ),
@@ -122,7 +121,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     filled: true,
-                    fillColor: AppTheme.of(context).secondaryBackground,
+                    fillColor: AppTheme.of(context).background,
                     contentPadding: const EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 20.0, 24.0),
                   ),
                   validator: Validators.validateEmpty,

@@ -23,7 +23,8 @@ class CustomTextField extends StatefulWidget {
   final ValueChanged<String>? onChanged;
   final FormFieldValidator<String>? validator;
 
-  const CustomTextField({Key? key,
+  const CustomTextField({
+    Key? key,
     this.controller,
     this.hintText = "",
     this.labelText,
@@ -40,7 +41,7 @@ class CustomTextField extends StatefulWidget {
     this.suffixIcon,
     this.onChanged,
     this.errorStyle,
-    this.borderColor = Colors.black,
+    this.borderColor = Colors.white,
     this.validator,
     this.disabled = false,
     this.readOnly = false,
@@ -64,7 +65,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         maxLines: widget.maxLines,
         obscureText: widget.obscureText && !widget.passwordVisible,
         focusNode: widget.focus,
-        style: TextStyle(color: widget.disabled ? Colors.grey.withOpacity(0.9) : Colors.black.withOpacity(0.8), fontSize: widget.sizeText),
+        style: TextStyle(
+            color: widget.disabled ? Colors.grey.withOpacity(0.9) : Colors.black.withOpacity(0.8),
+            fontSize: widget.sizeText),
         keyboardType: widget.keyboardType,
         validator: widget.validator,
         textCapitalization: TextCapitalization.words,
@@ -74,15 +77,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           errorMaxLines: 2,
           labelText: widget.labelText,
           labelStyle: TextStyle(
-            color: widget.disabled ? Colors.grey : Colors.blueAccent.withOpacity(0.8),
+            color: widget.disabled ? Colors.grey : Colors.black.withOpacity(0.6),
           ),
-          floatingLabelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.6)),
+          floatingLabelStyle:
+              TextStyle(fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.6)),
           alignLabelWithHint: true,
           errorStyle: widget.errorStyle ?? const TextStyle(height: 0),
           hintText: widget.hintText,
           suffixIcon: widget.suffixIcon,
           hintMaxLines: 1,
-          hintStyle: const TextStyle(color: ColorConst.primaryColor),
+          hintStyle:  TextStyle(color: Colors.black.withOpacity(0.5)),
           prefixIcon: widget.prefixIcon,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

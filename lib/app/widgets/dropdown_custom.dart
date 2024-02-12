@@ -50,7 +50,7 @@ class _CustomDropDown extends State<CustomDropDown> {
             errorStyle: TextStyle(height: 0),
             suffixIcon: widget.suffixIcon,
             hintStyle: TextStyle(
-              color:  widget.disabled ? Colors.grey : ColorConst.primaryColor,
+              color:  widget.disabled ? Colors.grey : ColorConst.primary,
             ),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(10),

@@ -36,7 +36,7 @@ class _CustomTableState extends State<CustomTable> {
   Widget fixedRow() => SizedBox(
       width: double.infinity,
       child: Material(
-        color: ColorConst.primaryColorBis,
+        color: ColorConst.primary,
         child: DataTable(
           columns: dataColumns,
           rows: widget.dataFixedRows,
