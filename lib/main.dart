@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import 'app/routes/router.dart';
 import 'app/theme/app_const.dart';
@@ -34,7 +35,8 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return  MaterialApp(
+    return  ScreenUtilInit(
+        builder: () => MaterialApp(
           title: AppConst.appName,
           debugShowCheckedModeBanner: false,
           onGenerateRoute: AppRouter.generateRoute,
@@ -48,6 +50,6 @@ class _MyAppState extends State<MyApp> {
           ),
           themeMode: _themeMode,
           home: MainScreen(),
-        );
+        ));
   }
 }
