@@ -1,15 +1,15 @@
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
-class CompagnyListPeopleWidget extends StatefulWidget {
-  const CompagnyListPeopleWidget({Key? key}) : super(key: key);
+class CompanyListPeopleWidget extends StatefulWidget {
+  const CompanyListPeopleWidget({Key? key}) : super(key: key);
 
   @override
-  _CompagnyListPeopleWidgetState createState() =>
-      _CompagnyListPeopleWidgetState();
+  _CompanyListPeopleWidgetState createState() =>
+      _CompanyListPeopleWidgetState();
 }
 
-class _CompagnyListPeopleWidgetState extends State<CompagnyListPeopleWidget>
+class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget>
     with TickerProviderStateMixin {
 
   final scaffoldKey = GlobalKey<ScaffoldState>();

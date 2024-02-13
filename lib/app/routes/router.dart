@@ -1,9 +1,15 @@
 import 'package:flutter/material.dart';
+import 'package:my_tech_lib/views/library/create_compagny_library_widget.dart';
+import 'package:my_tech_lib/views/library/library_widget.dart';
+import 'package:my_tech_lib/views/library/project_widget.dart';
 
 import '../../views/auth/forgot_password_widget.dart';
 import '../../views/auth/login_page_widget.dart';
 import '../../views/auth/onboarding_widget.dart';
 import '../../views/auth/register_account_widget.dart';
+import '../../views/compagny/compagny_edit_widget.dart';
+import '../../views/compagny/compagny_list_people_widget.dart';
+import '../../views/library/create_public_library_widget.dart';
 import '../../views/navigator/navigator.dart';
 import '../../views/options/edit_profile_widget.dart';
 import '../../views/options/notifications_settings_widget.dart';
@@ -24,6 +30,15 @@ class AppRouter {
   static const String NOTIFICATION_SETTINGS = '/Notification';
   static const String ONBOARDING = '/Onboarding';
 
+  static const String COMPANY_EDIT = '/CompanyEdit';
+  static const String COMPANY_LIST_POEPLE = '/CompanyListPeople';
+
+  static const String LIBRARY = '/Library';
+  static const String CREATE_PUBLIC_LIBRARY = '/CreatePublicLibraryWidget';
+  static const String CREATE_COMPANY_LIBRARY = '/CreateCompanyLibraryWidget';
+
+  static const String PROJECT = '/Project';
+
 
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -37,7 +52,7 @@ class AppRouter {
       case SPLASH:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case HOME:
-        return MaterialPageRoute(builder: (_) =>  NavBarPage());
+        return MaterialPageRoute(builder: (_) => NavBarPage());
       case CHANGE_PASSWORD:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case EDIT_PROFILE:
@@ -52,14 +67,31 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
 
 
-      // case ACTIVITY:
-      //   return MaterialPageRoute(
-      //       builder: (_) => ActivitiesScreen(
-      //           (settings.arguments! as List<Object>)[0] as ProductionOrder,
-      //           (settings.arguments! as List<Object>)[1] as Operator));
+
+      case COMPANY_EDIT:
+        return MaterialPageRoute(builder: (_) => const CompanyEditWidget());
+      case COMPANY_LIST_POEPLE:
+        return MaterialPageRoute(builder: (_) => const CompanyListPeopleWidget());
+
+      case LIBRARY:
+        return MaterialPageRoute(builder: (_) => const LibraryWidget());
+      case CREATE_PUBLIC_LIBRARY:
+        return MaterialPageRoute(builder: (_) => const CreatePublicLibraryWidget());
+      case CREATE_COMPANY_LIBRARY:
+        return MaterialPageRoute(builder: (_) => const CreateCompanyLibraryWidget());
+
+      case PROJECT:
+        return MaterialPageRoute(builder: (_) => const ProjectWidget());
+
+    // case ACTIVITY:
+    //   return MaterialPageRoute(
+    //       builder: (_) => ActivitiesScreen(
+    //           (settings.arguments! as List<Object>)[0] as ProductionOrder,
+    //           (settings.arguments! as List<Object>)[1] as Operator));
       default:
         return MaterialPageRoute(
-            builder: (_) => Scaffold(
+            builder: (_) =>
+                Scaffold(
                   body: Center(
                     child: Text('No route defined for ${settings.name}'),
                   ),

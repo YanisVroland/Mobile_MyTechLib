@@ -51,14 +51,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           //TODO Nav 'createPublicLibrary',
-          //     extra: <String, dynamic>{
-          //       kTransitionInfoKey: TransitionInfo(
-          //         hasTransition: true,
-          //         transitionType: PageTransitionType.bottomToTop,
-          //         duration: Duration(milliseconds: 220),
-          //       ),
-          //     },
-          //   );
+          Navigator.pushNamed(context, AppRouter.CREATE_PUBLIC_LIBRARY);
         },
         backgroundColor: AppTheme.of(context).tertiary,
         elevation: 8.0,

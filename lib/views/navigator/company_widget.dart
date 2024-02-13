@@ -170,7 +170,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
                                                   size: 20.0,
                                                 ),
                                                 onPressed: () async {
-                                                  //TODO Nav ('compagnyEdit'
+                                                  Navigator.pushNamed(context, AppRouter.COMPANY_EDIT);
                                                 },
                                               ),
                                             ),
@@ -235,7 +235,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
                                                   size: 20.0,
                                                 ),
                                                 onPressed: () async {
-                                                  //TODO Nav ('compagnyListPeople'
+                                                  Navigator.pushNamed(context, AppRouter.COMPANY_LIST_POEPLE);
                                                 },
                                               ),
                                             ),

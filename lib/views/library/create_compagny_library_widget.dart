@@ -5,14 +5,14 @@ import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 
-class CreateCompagnyLibraryWidget extends StatefulWidget {
-  const CreateCompagnyLibraryWidget({Key? key}) : super(key: key);
+class CreateCompanyLibraryWidget extends StatefulWidget {
+  const CreateCompanyLibraryWidget({Key? key}) : super(key: key);
 
   @override
-  _CreateCompagnyLibraryWidgetState createState() => _CreateCompagnyLibraryWidgetState();
+  _CreateCompanyLibraryWidgetState createState() => _CreateCompanyLibraryWidgetState();
 }
 
-class _CreateCompagnyLibraryWidgetState extends State<CreateCompagnyLibraryWidget>
+class _CreateCompanyLibraryWidgetState extends State<CreateCompanyLibraryWidget>
     with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   int idxSwitch = 1;

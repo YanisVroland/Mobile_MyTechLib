@@ -4,14 +4,14 @@ import 'package:flutter/material.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
 
-class CompagnyEditWidget extends StatefulWidget {
-  const CompagnyEditWidget({Key? key}) : super(key: key);
+class CompanyEditWidget extends StatefulWidget {
+  const CompanyEditWidget({Key? key}) : super(key: key);
 
   @override
-  _CompagnyEditWidgetState createState() => _CompagnyEditWidgetState();
+  _CompanyEditWidgetState createState() => _CompanyEditWidgetState();
 }
 
-class _CompagnyEditWidgetState extends State<CompagnyEditWidget> with TickerProviderStateMixin {
+class _CompanyEditWidgetState extends State<CompanyEditWidget> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   // State field(s) for TextField widget.
