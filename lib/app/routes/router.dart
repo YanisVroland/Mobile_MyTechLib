@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../views/auth/forgot_password_widget.dart';
 import '../../views/auth/login_page_widget.dart';
+import '../../views/auth/onboarding_widget.dart';
 import '../../views/auth/register_account_widget.dart';
 import '../../views/navigator/navigator.dart';
 import '../../views/options/edit_profile_widget.dart';
@@ -48,7 +49,7 @@ class AppRouter {
       case NOTIFICATION_SETTINGS:
         return MaterialPageRoute(builder: (_) => const NotificationsSettingsWidget());
       case ONBOARDING:
-        return MaterialPageRoute(builder: (_) => const SplashScreen());
+        return MaterialPageRoute(builder: (_) => const OnboardingPage());
 
 
       // case ACTIVITY:
