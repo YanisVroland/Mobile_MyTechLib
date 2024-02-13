@@ -1,20 +1,21 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:my_tech_lib/app/widgets/button_custom.dart';
 
+import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/validators.dart';
 import '../../app/widgets/icon_custom.dart';
 
-class CompagnyWidget extends StatefulWidget {
-  const CompagnyWidget({Key? key}) : super(key: key);
+class CompanyWidget extends StatefulWidget {
+  const CompanyWidget({Key? key}) : super(key: key);
 
   @override
-  _CompagnyWidgetState createState() => _CompagnyWidgetState();
+  _CompanyWidgetState createState() => _CompanyWidgetState();
 }
 
-class _CompagnyWidgetState extends State<CompagnyWidget> with TickerProviderStateMixin {
+class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   // // Stores action output result for [Firestore Query - Query a collection] action in IconButton widget.
@@ -65,7 +66,7 @@ class _CompagnyWidgetState extends State<CompagnyWidget> with TickerProviderStat
       //     builder: (context) => FloatingActionButton(
       //       onPressed: () async {
       //       //TODO Nav (
-      //           'createCompagnyLibrary',
+      //           'createCompanyLibrary',
       //           extra: <String, dynamic>{
       //             kTransitionInfoKey: TransitionInfo(
       //               hasTransition: true,
@@ -93,13 +94,8 @@ class _CompagnyWidgetState extends State<CompagnyWidget> with TickerProviderStat
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
             child: InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
               onTap: () async {
-                //TODO Nav ('profilePage');
-              },
+                Navigator.pushNamed(context, AppRouter.PROFILE);              },
               child: Icon(
                 Icons.settings,
                 size: 26.0,

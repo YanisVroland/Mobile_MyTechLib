@@ -1,5 +1,6 @@
 
 
+import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -75,12 +76,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
             child: InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
               onTap: () async {
-                //TODO Nav ('profilePage');
+                Navigator.pushNamed(context, AppRouter.PROFILE);
               },
               child: Icon(
                 Icons.settings,

@@ -106,7 +106,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                     children: [
                       InkWell(
                         onTap: () async {
-                          Navigator.pushNamed(context, AppRouter.FORGOTPASSWORD);
+                          Navigator.pushNamed(context, AppRouter.FORGOT_PASSWORD);
                         },
                         child: Text("Mot de passe oublié ?"),
                       ),

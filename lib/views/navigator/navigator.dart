@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_theme.dart';
-import 'compagny_widget.dart';
+import 'company_widget.dart';
 import 'home_widget.dart';
 import 'information_widget.dart';
 
@@ -31,7 +31,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'information': const InformationWidget(),
       'home': const HomeWidget(),
-      'compagny': const CompagnyWidget(),
+      'company': const CompanyWidget(),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 
@@ -62,7 +62,7 @@ class _NavBarPageState extends State<NavBarPage> {
             tooltip: '',
           ),
           BottomNavigationBarItem(
-            label: 'Bibliothéque',
+            label: 'Bibliothèque',
             icon: Icon(
               Icons.stacked_line_chart_rounded,
               size: 24.0,

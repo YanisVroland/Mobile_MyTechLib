@@ -1,6 +1,8 @@
 import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../app/routes/router.dart';
+
 class InformationWidget extends StatefulWidget {
   const InformationWidget({Key? key}) : super(key: key);
 
@@ -8,12 +10,10 @@ class InformationWidget extends StatefulWidget {
   _InformationWidgetState createState() => _InformationWidgetState();
 }
 
-class _InformationWidgetState extends State<InformationWidget>
-    with TickerProviderStateMixin {
+class _InformationWidgetState extends State<InformationWidget> with TickerProviderStateMixin {
   int filterIdx = 1;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
 
   @override
   void initState() {
@@ -33,19 +33,13 @@ class _InformationWidgetState extends State<InformationWidget>
       appBar: AppBar(
         backgroundColor: AppTheme.of(context).background,
         automaticallyImplyLeading: false,
-        title: Text("Actualités"
-
-        ),
+        title: Text("Actualités"),
         actions: [
           Padding(
             padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
             child: InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
               onTap: () async {
-                //TODO Nav ('profilePage');
+                Navigator.pushNamed(context, AppRouter.PROFILE);
               },
               child: Icon(
                 Icons.settings,
@@ -102,14 +96,14 @@ class _InformationWidgetState extends State<InformationWidget>
                           border: Border.all(
                             color: filterIdx == 1
                                 ? AppTheme.of(context).primary
-                                : AppTheme.of(context)
-                                .background,
+                                : AppTheme.of(context).background,
                           ),
                         ),
                         alignment: AlignmentDirectional(0.00, 0.00),
                         child: Align(
                           alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text("Aujourd'hui ",
+                          child: Text(
+                            "Aujourd'hui ",
                           ),
                         ),
                       ),
@@ -142,14 +136,12 @@ class _InformationWidgetState extends State<InformationWidget>
                           border: Border.all(
                             color: filterIdx == 2
                                 ? AppTheme.of(context).primary
-                                : AppTheme.of(context)
-                                .background,
+                                : AppTheme.of(context).background,
                           ),
                         ),
                         child: Align(
                           alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text("Semaine"
-                          ),
+                          child: Text("Semaine"),
                         ),
                       ),
                     ),
@@ -187,14 +179,13 @@ class _InformationWidgetState extends State<InformationWidget>
                           border: Border.all(
                             color: filterIdx == 3
                                 ? AppTheme.of(context).primary
-                                : AppTheme.of(context)
-                                .background,
+                                : AppTheme.of(context).background,
                           ),
                         ),
                         child: Align(
                           alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text("Mois",
-
+                          child: Text(
+                            "Mois",
                           ),
                         ),
                       ),
@@ -223,21 +214,20 @@ class _InformationWidgetState extends State<InformationWidget>
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          10.0, 10.0, 10.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Nouveau",
+                          Text(
+                            "Nouveau",
                             textAlign: TextAlign.start,
-
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 5.0, 0.0, 0.0),
-                            child: Text("12",
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                            child: Text(
+                              "12",
                               textAlign: TextAlign.start,
                             ),
                           ),
@@ -259,24 +249,21 @@ class _InformationWidgetState extends State<InformationWidget>
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          10.0, 10.0, 10.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Mise à jour",
+                          Text(
+                            "Mise à jour",
                             textAlign: TextAlign.start,
-
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 5.0, 0.0, 0.0),
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                             child: Text(
                               filterIdx.toString(),
                               textAlign: TextAlign.start,
-
                             ),
                           ),
                         ],
@@ -297,21 +284,20 @@ class _InformationWidgetState extends State<InformationWidget>
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          10.0, 10.0, 10.0, 10.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Text("Supression",
+                          Text(
+                            "Supression",
                             textAlign: TextAlign.start,
-
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(
-                                0.0, 5.0, 0.0, 0.0),
-                            child: Text("23",
+                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                            child: Text(
+                              "23",
                               textAlign: TextAlign.start,
                             ),
                           ),
@@ -346,159 +332,155 @@ class _InformationWidgetState extends State<InformationWidget>
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
                     Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(
-                          20.0, 12.0, 20.0, 12.0),
+                      padding: EdgeInsetsDirectional.fromSTEB(20.0, 12.0, 20.0, 12.0),
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text("Aujourd'hui"
-                          ),
+                          Text("Aujourd'hui"),
                         ],
                       ),
                     ),
                     Padding(
-                        padding:
-                        EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
+                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
                         child:
-                        // ListView.builder(
-                        //   padding: EdgeInsets.zero,
-                        //   shrinkWrap: true,
-                        //   scrollDirection: Axis.vertical,
-                        //   itemCount: listViewUsersRecordList.length,
-                        //   itemBuilder: (context, listViewIndex) {
-                        //     final listViewUsersRecord =
-                        //     listViewUsersRecordList[listViewIndex];
-                        //     return Padding(
-                        //       padding: EdgeInsetsDirectional.fromSTEB(
-                        //           0.0, 0.0, 0.0, 8.0),
-                        //       child: Container(
-                        //         height: 70.0,
-                        //         decoration: BoxDecoration(
-                        //           color: AppTheme.of(context)
-                        //               .secondaryBackground,
-                        //           boxShadow: [
-                        //             BoxShadow(
-                        //               blurRadius: 4.0,
-                        //               color: Color(0x3F14181B),
-                        //               offset: Offset(0.0, 3.0),
-                        //             )
-                        //           ],
-                        //           borderRadius: BorderRadius.circular(8.0),
-                        //         ),
-                        //         child: Padding(
-                        //           padding: EdgeInsetsDirectional.fromSTEB(
-                        //               0.0, 3.0, 0.0, 0.0),
-                        //           child: Row(
-                        //             mainAxisSize: MainAxisSize.min,
-                        //             children: [
-                        //               Expanded(
-                        //                 child: Padding(
-                        //                   padding:
-                        //                   EdgeInsetsDirectional.fromSTEB(
-                        //                       12.0, 0.0, 0.0, 0.0),
-                        //                   child: Column(
-                        //                     mainAxisSize: MainAxisSize.max,
-                        //                     mainAxisAlignment:
-                        //                     MainAxisAlignment.start,
-                        //                     crossAxisAlignment:
-                        //                     CrossAxisAlignment.start,
-                        //                     children: [
-                        //                       Flexible(
-                        //                         child: Text(
-                        //                           FFLocalizations.of(context)
-                        //                               .getText(
-                        //                             '0ux8q945' /* Microsoft : Client */,
-                        //                           ),
-                        //                           style: AppTheme.of(
-                        //                               context)
-                        //                               .headlineSmall
-                        //                               .override(
-                        //                             fontFamily: 'Lexend',
-                        //                             fontSize: 14.0,
-                        //                             fontWeight:
-                        //                             FontWeight.bold,
-                        //                           ),
-                        //                         ),
-                        //                       ),
-                        //                       Padding(
-                        //                         padding: EdgeInsetsDirectional
-                        //                             .fromSTEB(
-                        //                             0.0, 4.0, 0.0, 0.0),
-                        //                         child: Text(
-                        //                           FFLocalizations.of(context)
-                        //                               .getText(
-                        //                             'wjf27zoc' /* Nouveau shelf : Amazon */,
-                        //                           ),
-                        //                           style: AppTheme.of(
-                        //                               context)
-                        //                               .bodyMedium
-                        //                               .override(
-                        //                             fontFamily: 'Lexend',
-                        //                             fontSize: 13.0,
-                        //                           ),
-                        //                         ),
-                        //                       ),
-                        //                       Padding(
-                        //                         padding: EdgeInsetsDirectional
-                        //                             .fromSTEB(
-                        //                             0.0, 4.0, 0.0, 0.0),
-                        //                         child: Text(
-                        //                           FFLocalizations.of(context)
-                        //                               .getText(
-                        //                             'l2s9qs1n' /* Par : Yanis Vroland */,
-                        //                           ),
-                        //                           style: AppTheme.of(
-                        //                               context)
-                        //                               .bodyMedium
-                        //                               .override(
-                        //                             fontFamily: 'Lexend',
-                        //                             fontSize: 13.0,
-                        //                           ),
-                        //                         ),
-                        //                       ),
-                        //                     ],
-                        //                   ),
-                        //                 ),
-                        //               ),
-                        //               Padding(
-                        //                 padding:
-                        //                 EdgeInsetsDirectional.fromSTEB(
-                        //                     12.0, 0.0, 12.0, 0.0),
-                        //                 child: Column(
-                        //                   mainAxisSize: MainAxisSize.max,
-                        //                   mainAxisAlignment:
-                        //                   MainAxisAlignment.start,
-                        //                   crossAxisAlignment:
-                        //                   CrossAxisAlignment.end,
-                        //                   children: [
-                        //                     Text(
-                        //                       FFLocalizations.of(context)
-                        //                           .getText(
-                        //                         'vfijb5nf' /* 12/07/2022 */,
-                        //                       ),
-                        //                       textAlign: TextAlign.end,
-                        //                       style:
-                        //                       AppTheme.of(context)
-                        //                           .titleSmall
-                        //                           .override(
-                        //                         fontFamily: 'Lexend',
-                        //                         color: AppTheme
-                        //                             .of(context)
-                        //                             .secondaryText,
-                        //                       ),
-                        //                     ),
-                        //                   ],
-                        //                 ),
-                        //               ),
-                        //             ],
-                        //           ),
-                        //         ),
-                        //       ),
-                        //     );
-                        //   },
-                        // ),
-                        Container()
-                    ),
+                            // ListView.builder(
+                            //   padding: EdgeInsets.zero,
+                            //   shrinkWrap: true,
+                            //   scrollDirection: Axis.vertical,
+                            //   itemCount: listViewUsersRecordList.length,
+                            //   itemBuilder: (context, listViewIndex) {
+                            //     final listViewUsersRecord =
+                            //     listViewUsersRecordList[listViewIndex];
+                            //     return Padding(
+                            //       padding: EdgeInsetsDirectional.fromSTEB(
+                            //           0.0, 0.0, 0.0, 8.0),
+                            //       child: Container(
+                            //         height: 70.0,
+                            //         decoration: BoxDecoration(
+                            //           color: AppTheme.of(context)
+                            //               .secondaryBackground,
+                            //           boxShadow: [
+                            //             BoxShadow(
+                            //               blurRadius: 4.0,
+                            //               color: Color(0x3F14181B),
+                            //               offset: Offset(0.0, 3.0),
+                            //             )
+                            //           ],
+                            //           borderRadius: BorderRadius.circular(8.0),
+                            //         ),
+                            //         child: Padding(
+                            //           padding: EdgeInsetsDirectional.fromSTEB(
+                            //               0.0, 3.0, 0.0, 0.0),
+                            //           child: Row(
+                            //             mainAxisSize: MainAxisSize.min,
+                            //             children: [
+                            //               Expanded(
+                            //                 child: Padding(
+                            //                   padding:
+                            //                   EdgeInsetsDirectional.fromSTEB(
+                            //                       12.0, 0.0, 0.0, 0.0),
+                            //                   child: Column(
+                            //                     mainAxisSize: MainAxisSize.max,
+                            //                     mainAxisAlignment:
+                            //                     MainAxisAlignment.start,
+                            //                     crossAxisAlignment:
+                            //                     CrossAxisAlignment.start,
+                            //                     children: [
+                            //                       Flexible(
+                            //                         child: Text(
+                            //                           FFLocalizations.of(context)
+                            //                               .getText(
+                            //                             '0ux8q945' /* Microsoft : Client */,
+                            //                           ),
+                            //                           style: AppTheme.of(
+                            //                               context)
+                            //                               .headlineSmall
+                            //                               .override(
+                            //                             fontFamily: 'Lexend',
+                            //                             fontSize: 14.0,
+                            //                             fontWeight:
+                            //                             FontWeight.bold,
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                       Padding(
+                            //                         padding: EdgeInsetsDirectional
+                            //                             .fromSTEB(
+                            //                             0.0, 4.0, 0.0, 0.0),
+                            //                         child: Text(
+                            //                           FFLocalizations.of(context)
+                            //                               .getText(
+                            //                             'wjf27zoc' /* Nouveau shelf : Amazon */,
+                            //                           ),
+                            //                           style: AppTheme.of(
+                            //                               context)
+                            //                               .bodyMedium
+                            //                               .override(
+                            //                             fontFamily: 'Lexend',
+                            //                             fontSize: 13.0,
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                       Padding(
+                            //                         padding: EdgeInsetsDirectional
+                            //                             .fromSTEB(
+                            //                             0.0, 4.0, 0.0, 0.0),
+                            //                         child: Text(
+                            //                           FFLocalizations.of(context)
+                            //                               .getText(
+                            //                             'l2s9qs1n' /* Par : Yanis Vroland */,
+                            //                           ),
+                            //                           style: AppTheme.of(
+                            //                               context)
+                            //                               .bodyMedium
+                            //                               .override(
+                            //                             fontFamily: 'Lexend',
+                            //                             fontSize: 13.0,
+                            //                           ),
+                            //                         ),
+                            //                       ),
+                            //                     ],
+                            //                   ),
+                            //                 ),
+                            //               ),
+                            //               Padding(
+                            //                 padding:
+                            //                 EdgeInsetsDirectional.fromSTEB(
+                            //                     12.0, 0.0, 12.0, 0.0),
+                            //                 child: Column(
+                            //                   mainAxisSize: MainAxisSize.max,
+                            //                   mainAxisAlignment:
+                            //                   MainAxisAlignment.start,
+                            //                   crossAxisAlignment:
+                            //                   CrossAxisAlignment.end,
+                            //                   children: [
+                            //                     Text(
+                            //                       FFLocalizations.of(context)
+                            //                           .getText(
+                            //                         'vfijb5nf' /* 12/07/2022 */,
+                            //                       ),
+                            //                       textAlign: TextAlign.end,
+                            //                       style:
+                            //                       AppTheme.of(context)
+                            //                           .titleSmall
+                            //                           .override(
+                            //                         fontFamily: 'Lexend',
+                            //                         color: AppTheme
+                            //                             .of(context)
+                            //                             .secondaryText,
+                            //                       ),
+                            //                     ),
+                            //                   ],
+                            //                 ),
+                            //               ),
+                            //             ],
+                            //           ),
+                            //         ),
+                            //       ),
+                            //     );
+                            //   },
+                            // ),
+                            Container()),
                   ],
                 ),
               ),
