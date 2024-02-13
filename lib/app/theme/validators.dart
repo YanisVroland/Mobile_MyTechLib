@@ -20,10 +20,19 @@ class Validators {
     return null;
   }
 
+  static String? validateEmail(String? value){
+    if (value!.isEmpty) {
+      return 'Ne peut pas être vide';
+    }
+    if (!rgMail.hasMatch(value)) {
+      return 'Adresse e-mail invalide';
+    }
+    return null;
+  }
+
   static String? validateEmpty(String? value) {
     if (value!.isEmpty) {
-      // return 'Ne peut pas être vide';
-      return '';
+      return 'Ne peut pas être vide';
     }
     return null;
   }
@@ -37,32 +46,4 @@ class Validators {
     return null;
   }
 
-  static String? validatePercentage(String? value) {
-    if (value!.isEmpty) {
-      return 'Ne peut pas être vide';
-    }
-
-    double? val = double.tryParse(value);
-    if (val == null || val < 0 || val > 100) return 'Ce n\'est pas un pourcentage valide';
-
-    return null;
-  }
-
-  static String? validateDouble(String? value) {
-    if (value!.isEmpty) {
-      return 'Ne peut pas être vide';
-    }
-    double? val = double.tryParse(value);
-
-    if (val == null) return 'Ce n\'est pas une valeur décimale';
-    return null;
-  }
-
-  static String? validateDropDownEmpty(dynamic value) {
-    if (value == null) {
-      // return 'Ne peut pas être vide';
-      return '';
-    }
-    return null;
-  }
 }

@@ -65,16 +65,22 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 width: 300.0,
                 fit: BoxFit.fitWidth,
               ),
-              Padding(
-                padding:  EdgeInsets.only(top: 70.h),
-                child: CustomTextField(
-                  controller: emailAddressLoginController,
-                  labelText: "Email",
-                  hintText: "Entrer votre email",
+               Padding(
+                padding: EdgeInsets.only(top: 30.h, bottom: 20.h),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.max,
+                  children: [
+                    Text("Créez votre compte ci-dessous."),
+                  ],
                 ),
               ),
+              CustomTextField(
+                controller: emailAddressLoginController,
+                labelText: "Email",
+                hintText: "Entrer votre email",
+              ),
               Padding(
-                padding:  EdgeInsets.only(top: 20.h),
+                padding: EdgeInsets.only(top: 20.h),
                 child: CustomTextField(
                   controller: passwordLoginController,
                   obscureText: !passwordLoginVisibility,
@@ -93,7 +99,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 ),
               ),
               Padding(
-                  padding: EdgeInsets.only(top: 10.h,bottom: 20.h),
+                  padding: EdgeInsets.only(top: 10.h, bottom: 20.h),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.end,
@@ -132,7 +138,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   InkWell(
-                    onTap: () async {
+                    onTap: () {
                       Navigator.pushNamed(context, AppRouter.REGISTER);
                     },
                     child: Container(
