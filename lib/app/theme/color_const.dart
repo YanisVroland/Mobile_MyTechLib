@@ -8,6 +8,7 @@ class ColorConst {
   static const Color transparent = Color(0x00000000);
 
   static const Color background = Color(0xFFF5F8F8);
+  static const Color secondaryBackground = Color(0xFFE5E5E5);
 
   static const Color success =  Color(0xFF04A24C);
   static const Color warning =  Color(0xFFFCDC0C);

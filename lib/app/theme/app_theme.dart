@@ -45,6 +45,7 @@ abstract class AppTheme {
   late Color info;
 
   late Color background;
+  late Color secondaryBackground;
 
 }
 
@@ -66,6 +67,7 @@ class LightModeTheme extends AppTheme {
   late Color info = ColorConst.info;
 
   late Color background = ColorConst.background;
+  late Color secondaryBackground = ColorConst.secondaryBackground;
 }
 
 abstract class Typography {

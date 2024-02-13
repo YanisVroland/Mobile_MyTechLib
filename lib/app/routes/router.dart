@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../views/auth/forgot_password_widget.dart';
 import '../../views/auth/login_page_widget.dart';
 import '../../views/auth/register_account_widget.dart';
+import '../../views/navigator/navigator.dart';
 import '../../views/splash_screen.dart';
 
 class AppRouter {
@@ -22,8 +23,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case SPLASH:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
-      // case HOME:
-      //   return MaterialPageRoute(builder: (_) =>  NavBarPage());
+      case HOME:
+        return MaterialPageRoute(builder: (_) =>  NavBarPage());
 
       // case ACTIVITY:
       //   return MaterialPageRoute(

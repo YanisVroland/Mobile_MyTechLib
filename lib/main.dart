@@ -43,10 +43,12 @@ class _MyAppState extends State<MyApp> {
           theme: ThemeData(
             brightness: Brightness.light,
             scrollbarTheme: ScrollbarThemeData(),
+            useMaterial3: true,
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
             scrollbarTheme: ScrollbarThemeData(),
+            useMaterial3: true,
           ),
           themeMode: _themeMode,
           home: MainScreen(),
