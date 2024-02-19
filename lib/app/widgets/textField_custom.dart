@@ -13,6 +13,7 @@ class CustomTextField extends StatefulWidget {
   final Widget? suffixIcon;
   final TextStyle? errorStyle;
   final Color borderColor;
+  final Color fillColor;
   final bool obscureText;
   final bool disabled;
   final bool enabled;
@@ -42,6 +43,7 @@ class CustomTextField extends StatefulWidget {
     this.onChanged,
     this.errorStyle,
     this.borderColor = Colors.white,
+    this.fillColor = Colors.white,
     this.validator,
     this.disabled = false,
     this.readOnly = false,
@@ -73,7 +75,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
         textCapitalization: TextCapitalization.words,
         decoration: InputDecoration(
           filled: true,
-          fillColor: widget.disabled ? Colors.grey.withOpacity(0.2) : Colors.white,
+          fillColor: widget.disabled ? Colors.grey.withOpacity(0.2) : widget.fillColor,
           errorMaxLines: 2,
           labelText: widget.labelText,
           labelStyle: TextStyle(

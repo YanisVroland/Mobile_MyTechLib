@@ -66,8 +66,6 @@ class AppRouter {
       case ONBOARDING:
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
 
-
-
       case COMPANY_EDIT:
         return MaterialPageRoute(builder: (_) => const CompanyEditWidget());
       case COMPANY_LIST_POEPLE:
