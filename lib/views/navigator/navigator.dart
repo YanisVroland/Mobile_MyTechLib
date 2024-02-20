@@ -43,7 +43,7 @@ class _NavBarPageState extends State<NavBarPage> {
           _currentPage = null;
           _currentPageName = tabs.keys.toList()[i];
         }),
-        backgroundColor: AppTheme.of(context).background,
+        backgroundColor: AppTheme.of(context).secondaryBackground,
         selectedItemColor: AppTheme.of(context).primary,
         showSelectedLabels: true,
         showUnselectedLabels: false,

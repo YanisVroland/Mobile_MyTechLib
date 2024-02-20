@@ -87,16 +87,17 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
       //   ),
       // ),
       appBar: AppBar(
-        backgroundColor: AppTheme.of(context).background,
+        backgroundColor: AppTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
-        title: const Text("Compagnie"),
+        title: const Text('Compagnie', style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
         actions: [
           Padding(
             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
             child: InkWell(
               onTap: () async {
-                Navigator.pushNamed(context, AppRouter.PROFILE);              },
-              child: Icon(
+                Navigator.pushNamed(context, AppRouter.PROFILE);
+              },
+              child: const Icon(
                 Icons.settings,
                 size: 26.0,
               ),

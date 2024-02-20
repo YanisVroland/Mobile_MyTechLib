@@ -1,7 +1,11 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_tech_lib/app/theme/app_const.dart';
+
 import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/routes/router.dart';
+import '../../services/models/information.dart';
 
 class InformationWidget extends StatefulWidget {
   const InformationWidget({Key? key}) : super(key: key);
@@ -14,10 +18,16 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
   int filterIdx = 1;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+  late List<Information> listInformation;
 
   @override
   void initState() {
     super.initState();
+    listInformation = [
+      Information(id: "1", createdBy: "Yanis", createdAt: "12/12/2001", updatedAt: "12/12/2001"),
+      Information(id: "2", createdBy: "Yanis", createdAt: "12/12/2001", updatedAt: "12/12/2001"),
+      Information(id: "3", createdBy: "Yanis", createdAt: "12/12/2001", updatedAt: "12/12/2001"),
+    ];
   }
 
   @override
@@ -31,17 +41,18 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
       key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppTheme.of(context).background,
+        backgroundColor: AppTheme.of(context).secondaryBackground,
         automaticallyImplyLeading: false,
-        title: Text("Actualités"),
+        title:
+            const Text(AppConst.appName, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
         actions: [
           Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
+            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
             child: InkWell(
               onTap: () async {
                 Navigator.pushNamed(context, AppRouter.PROFILE);
               },
-              child: Icon(
+              child: const Icon(
                 Icons.settings,
                 size: 26.0,
               ),
@@ -58,7 +69,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 0.0),
+              padding: const EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 0.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -80,18 +91,16 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                           color: filterIdx == 1
                               ? AppTheme.of(context).primary
                               : AppTheme.of(context).background,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               blurRadius: 4.0,
                               color: Color(0x33000000),
                               offset: Offset(0.0, 2.0),
                             )
                           ],
-                          borderRadius: BorderRadius.only(
+                          borderRadius: const BorderRadius.only(
                             bottomLeft: Radius.circular(20.0),
-                            bottomRight: Radius.circular(0.0),
                             topLeft: Radius.circular(20.0),
-                            topRight: Radius.circular(0.0),
                           ),
                           border: Border.all(
                             color: filterIdx == 1
@@ -99,11 +108,11 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                 : AppTheme.of(context).background,
                           ),
                         ),
-                        alignment: AlignmentDirectional(0.00, 0.00),
-                        child: Align(
-                          alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text(
-                            "Aujourd'hui ",
+                        alignment: const AlignmentDirectional(0.00, 0.00),
+                        child: Text(
+                          "Aujourd'hui ",
+                          style: TextStyle(
+                            color: filterIdx == 1 ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -126,7 +135,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                           color: filterIdx == 2
                               ? AppTheme.of(context).primary
                               : AppTheme.of(context).background,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               blurRadius: 4.0,
                               color: Color(0x33000000),
@@ -139,9 +148,12 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                 : AppTheme.of(context).background,
                           ),
                         ),
-                        child: Align(
-                          alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text("Semaine"),
+                        alignment: const AlignmentDirectional(0.00, 0.00),
+                        child: Text(
+                          "Semaine",
+                          style: TextStyle(
+                            color: filterIdx == 2 ? Colors.white : Colors.black,
+                          ),
                         ),
                       ),
                     ),
@@ -163,17 +175,15 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                           color: filterIdx == 3
                               ? AppTheme.of(context).primary
                               : AppTheme.of(context).background,
-                          boxShadow: [
+                          boxShadow: const [
                             BoxShadow(
                               blurRadius: 4.0,
                               color: Color(0x33000000),
                               offset: Offset(0.0, 2.0),
                             )
                           ],
-                          borderRadius: BorderRadius.only(
-                            bottomLeft: Radius.circular(0.0),
+                          borderRadius: const BorderRadius.only(
                             bottomRight: Radius.circular(20.0),
-                            topLeft: Radius.circular(0.0),
                             topRight: Radius.circular(20.0),
                           ),
                           border: Border.all(
@@ -182,10 +192,11 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                 : AppTheme.of(context).background,
                           ),
                         ),
-                        child: Align(
-                          alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text(
-                            "Mois",
+                        alignment: const AlignmentDirectional(0.00, 0.00),
+                        child: Text(
+                          "Mois",
+                          style: TextStyle(
+                            color: filterIdx == 3 ? Colors.white : Colors.black,
                           ),
                         ),
                       ),
@@ -195,7 +206,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
               ),
             ),
             Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 20.0),
+              padding: const EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 20.0),
               child: Row(
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -204,7 +215,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                     width: MediaQuery.sizeOf(context).width * 0.25,
                     decoration: BoxDecoration(
                       color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           blurRadius: 4.0,
                           color: Color(0x3F14181B),
@@ -214,7 +225,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -223,8 +234,12 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                           Text(
                             "Nouveau",
                             textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: AppTheme.of(context).secondary,
+                              fontSize: 12.0,
+                            ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                             child: Text(
                               "12",
@@ -239,7 +254,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                     width: MediaQuery.sizeOf(context).width * 0.25,
                     decoration: BoxDecoration(
                       color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           blurRadius: 4.0,
                           color: Color(0x3F14181B),
@@ -249,7 +264,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -258,9 +273,13 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                           Text(
                             "Mise à jour",
                             textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: AppTheme.of(context).secondary,
+                              fontSize: 12.0,
+                            ),
                           ),
                           Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                             child: Text(
                               filterIdx.toString(),
                               textAlign: TextAlign.start,
@@ -274,7 +293,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                     width: MediaQuery.sizeOf(context).width * 0.25,
                     decoration: BoxDecoration(
                       color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           blurRadius: 4.0,
                           color: Color(0x3F14181B),
@@ -284,7 +303,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                       borderRadius: BorderRadius.circular(8.0),
                     ),
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
+                      padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
                       child: Column(
                         mainAxisSize: MainAxisSize.max,
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -293,8 +312,12 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                           Text(
                             "Supression",
                             textAlign: TextAlign.start,
+                            style: TextStyle(
+                              color: AppTheme.of(context).secondary,
+                              fontSize: 12.0,
+                            ),
                           ),
-                          Padding(
+                          const Padding(
                             padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                             child: Text(
                               "23",
@@ -308,180 +331,89 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                 ],
               ),
             ),
-            Expanded(
-              child: Container(
-                decoration: BoxDecoration(
-                  color: AppTheme.of(context).secondaryBackground,
-                  boxShadow: [
-                    BoxShadow(
-                      blurRadius: 4.0,
-                      color: Color(0x33000000),
-                      offset: Offset(0.0, 2.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.only(
-                    bottomLeft: Radius.circular(0.0),
-                    bottomRight: Radius.circular(0.0),
-                    topLeft: Radius.circular(16.0),
-                    topRight: Radius.circular(16.0),
+            Padding(
+                padding: EdgeInsets.only(bottom: 10.h),
+                child: Text(
+                  "Liste des informations",
+                  style: TextStyle(
+                    color: AppTheme.of(context).primary,
+                    fontSize: 20.0,
+                    fontWeight: FontWeight.bold,
                   ),
-                ),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.center,
-                  children: [
-                    Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(20.0, 12.0, 20.0, 12.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.max,
-                        children: [
-                          Text("Aujourd'hui"),
-                        ],
+                )),
+            Expanded(
+              child: Padding(
+                padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  shrinkWrap: true,
+                  scrollDirection: Axis.vertical,
+                  itemCount: listInformation.length,
+                  itemBuilder: (context, listViewIndex) {
+                    final element = listInformation[listViewIndex];
+                    return Padding(
+                      padding: EdgeInsets.only(bottom: 10.h),
+                      child: Container(
+                        height: 70.0,
+                        decoration: BoxDecoration(
+                          color: AppTheme.of(context).secondaryBackground,
+                          boxShadow: const [
+                            BoxShadow(
+                              blurRadius: 4.0,
+                              color: Color(0x3F14181B),
+                              offset: Offset(0.0, 3.0),
+                            )
+                          ],
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                  child: Column(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    children: [
+                                      Flexible(
+                                        child: Text("Client : Microsoft "),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                        child: Text("Nouveau shelf : Amazon "),
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                        child: Text("Par : Yanis Vroland "),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                child: Column(
+                                  mainAxisSize: MainAxisSize.max,
+                                  mainAxisAlignment: MainAxisAlignment.start,
+                                  crossAxisAlignment: CrossAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      " 12/07/2022 ",
+                                      textAlign: TextAlign.end,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
                       ),
-                    ),
-                    Padding(
-                        padding: EdgeInsetsDirectional.fromSTEB(10.0, 0.0, 10.0, 0.0),
-                        child:
-                            // ListView.builder(
-                            //   padding: EdgeInsets.zero,
-                            //   shrinkWrap: true,
-                            //   scrollDirection: Axis.vertical,
-                            //   itemCount: listViewUsersRecordList.length,
-                            //   itemBuilder: (context, listViewIndex) {
-                            //     final listViewUsersRecord =
-                            //     listViewUsersRecordList[listViewIndex];
-                            //     return Padding(
-                            //       padding: EdgeInsetsDirectional.fromSTEB(
-                            //           0.0, 0.0, 0.0, 8.0),
-                            //       child: Container(
-                            //         height: 70.0,
-                            //         decoration: BoxDecoration(
-                            //           color: AppTheme.of(context)
-                            //               .secondaryBackground,
-                            //           boxShadow: [
-                            //             BoxShadow(
-                            //               blurRadius: 4.0,
-                            //               color: Color(0x3F14181B),
-                            //               offset: Offset(0.0, 3.0),
-                            //             )
-                            //           ],
-                            //           borderRadius: BorderRadius.circular(8.0),
-                            //         ),
-                            //         child: Padding(
-                            //           padding: EdgeInsetsDirectional.fromSTEB(
-                            //               0.0, 3.0, 0.0, 0.0),
-                            //           child: Row(
-                            //             mainAxisSize: MainAxisSize.min,
-                            //             children: [
-                            //               Expanded(
-                            //                 child: Padding(
-                            //                   padding:
-                            //                   EdgeInsetsDirectional.fromSTEB(
-                            //                       12.0, 0.0, 0.0, 0.0),
-                            //                   child: Column(
-                            //                     mainAxisSize: MainAxisSize.max,
-                            //                     mainAxisAlignment:
-                            //                     MainAxisAlignment.start,
-                            //                     crossAxisAlignment:
-                            //                     CrossAxisAlignment.start,
-                            //                     children: [
-                            //                       Flexible(
-                            //                         child: Text(
-                            //                           FFLocalizations.of(context)
-                            //                               .getText(
-                            //                             '0ux8q945' /* Microsoft : Client */,
-                            //                           ),
-                            //                           style: AppTheme.of(
-                            //                               context)
-                            //                               .headlineSmall
-                            //                               .override(
-                            //                             fontFamily: 'Lexend',
-                            //                             fontSize: 14.0,
-                            //                             fontWeight:
-                            //                             FontWeight.bold,
-                            //                           ),
-                            //                         ),
-                            //                       ),
-                            //                       Padding(
-                            //                         padding: EdgeInsetsDirectional
-                            //                             .fromSTEB(
-                            //                             0.0, 4.0, 0.0, 0.0),
-                            //                         child: Text(
-                            //                           FFLocalizations.of(context)
-                            //                               .getText(
-                            //                             'wjf27zoc' /* Nouveau shelf : Amazon */,
-                            //                           ),
-                            //                           style: AppTheme.of(
-                            //                               context)
-                            //                               .bodyMedium
-                            //                               .override(
-                            //                             fontFamily: 'Lexend',
-                            //                             fontSize: 13.0,
-                            //                           ),
-                            //                         ),
-                            //                       ),
-                            //                       Padding(
-                            //                         padding: EdgeInsetsDirectional
-                            //                             .fromSTEB(
-                            //                             0.0, 4.0, 0.0, 0.0),
-                            //                         child: Text(
-                            //                           FFLocalizations.of(context)
-                            //                               .getText(
-                            //                             'l2s9qs1n' /* Par : Yanis Vroland */,
-                            //                           ),
-                            //                           style: AppTheme.of(
-                            //                               context)
-                            //                               .bodyMedium
-                            //                               .override(
-                            //                             fontFamily: 'Lexend',
-                            //                             fontSize: 13.0,
-                            //                           ),
-                            //                         ),
-                            //                       ),
-                            //                     ],
-                            //                   ),
-                            //                 ),
-                            //               ),
-                            //               Padding(
-                            //                 padding:
-                            //                 EdgeInsetsDirectional.fromSTEB(
-                            //                     12.0, 0.0, 12.0, 0.0),
-                            //                 child: Column(
-                            //                   mainAxisSize: MainAxisSize.max,
-                            //                   mainAxisAlignment:
-                            //                   MainAxisAlignment.start,
-                            //                   crossAxisAlignment:
-                            //                   CrossAxisAlignment.end,
-                            //                   children: [
-                            //                     Text(
-                            //                       FFLocalizations.of(context)
-                            //                           .getText(
-                            //                         'vfijb5nf' /* 12/07/2022 */,
-                            //                       ),
-                            //                       textAlign: TextAlign.end,
-                            //                       style:
-                            //                       AppTheme.of(context)
-                            //                           .titleSmall
-                            //                           .override(
-                            //                         fontFamily: 'Lexend',
-                            //                         color: AppTheme
-                            //                             .of(context)
-                            //                             .secondaryText,
-                            //                       ),
-                            //                     ),
-                            //                   ],
-                            //                 ),
-                            //               ),
-                            //             ],
-                            //           ),
-                            //         ),
-                            //       ),
-                            //     );
-                            //   },
-                            // ),
-                            Container()),
-                  ],
+                    );
+                  },
                 ),
               ),
             ),

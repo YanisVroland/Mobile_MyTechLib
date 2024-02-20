@@ -130,7 +130,6 @@ class DarkModeTheme extends AppTheme {
   late Color grayDark = Color(0xFF57636C);
   late Color grayLight = Color(0xFF8B97A2);
   late Color errorRed = Color(0xFFF06A6A);
-  late Color customColor1 = Color(0xFFDD13B7);
 }
 
 extension TextStyleHelper on TextStyle {
