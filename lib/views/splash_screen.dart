@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../app/theme/color_const.dart';
+import 'package:lottie/lottie.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({Key? key}) : super(key: key);
@@ -21,8 +22,8 @@ class _SplashScreenState extends State<SplashScreen> {
           children: [
             Padding(
                 padding: EdgeInsets.only(top: 10.h, bottom: 50.h),
-                child: Text("Chargement : ")),
-            CircularProgressIndicator(),
+                child: const Text("Chargement : ")),
+            const CircularProgressIndicator(),
           ],
         )));
   }
