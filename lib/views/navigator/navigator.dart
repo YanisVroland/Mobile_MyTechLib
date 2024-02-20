@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_theme.dart';
-import 'company_widget.dart';
-import 'home_widget.dart';
-import 'information_widget.dart';
+import 'company/company_screen.dart';
+import 'home_screen.dart';
+import 'information_screen.dart';
 
 class NavBarPage extends StatefulWidget {
   NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
@@ -52,11 +52,11 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             label: 'Information',
             icon: Icon(
-              Icons.credit_card,
+              Icons.credit_card_outlined,
               size: 24.0,
             ),
             activeIcon: Icon(
-              Icons.stacked_line_chart_rounded,
+              Icons.credit_card_rounded,
               size: 24.0,
             ),
             tooltip: '',
@@ -64,7 +64,7 @@ class _NavBarPageState extends State<NavBarPage> {
           BottomNavigationBarItem(
             label: 'Bibliothèque',
             icon: Icon(
-              Icons.stacked_line_chart_rounded,
+              Icons.stacked_line_chart_outlined,
               size: 24.0,
             ),
             activeIcon: Icon(

@@ -7,6 +7,7 @@ import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/validators.dart';
+import '../../app/widgets/appBar_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 import '../../services/models/library.dart';
 
@@ -78,28 +79,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
           size: 32.0,
         ),
       ),
-      appBar: AppBar(
-        backgroundColor: AppTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        title: const Text(AppConst.appName,
-            style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-        actions: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
-            child: InkWell(
-              onTap: () async {
-                Navigator.pushNamed(context, AppRouter.PROFILE);
-              },
-              child: const Icon(
-                Icons.settings,
-                size: 26.0,
-              ),
-            ),
-          ),
-        ],
-        centerTitle: true,
-        elevation: 5.0,
-      ),
+      appBar: const CustomAppBar(),
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,

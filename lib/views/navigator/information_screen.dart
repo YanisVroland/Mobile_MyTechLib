@@ -5,6 +5,7 @@ import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/routes/router.dart';
+import '../../app/widgets/appBar_custom.dart';
 import '../../services/models/information.dart';
 
 class InformationWidget extends StatefulWidget {
@@ -40,28 +41,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
-      appBar: AppBar(
-        backgroundColor: AppTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        title:
-            const Text(AppConst.appName, style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
-        actions: [
-          Padding(
-            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
-            child: InkWell(
-              onTap: () async {
-                Navigator.pushNamed(context, AppRouter.PROFILE);
-              },
-              child: const Icon(
-                Icons.settings,
-                size: 26.0,
-              ),
-            ),
-          ),
-        ],
-        centerTitle: true,
-        elevation: 5.0,
-      ),
+      appBar: const CustomAppBar(),
       body: SafeArea(
         top: true,
         child: Column(
@@ -99,8 +79,8 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                             )
                           ],
                           borderRadius: const BorderRadius.only(
-                            bottomLeft: Radius.circular(20.0),
-                            topLeft: Radius.circular(20.0),
+                            bottomLeft: Radius.circular(8.0),
+                            topLeft: Radius.circular(8.0),
                           ),
                           border: Border.all(
                             color: filterIdx == 1
@@ -183,8 +163,8 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                             )
                           ],
                           borderRadius: const BorderRadius.only(
-                            bottomRight: Radius.circular(20.0),
-                            topRight: Radius.circular(20.0),
+                            bottomRight: Radius.circular(8.0),
+                            topRight: Radius.circular(8.0),
                           ),
                           border: Border.all(
                             color: filterIdx == 3

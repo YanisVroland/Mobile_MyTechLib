@@ -5,7 +5,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'app/routes/router.dart';
 import 'app/theme/app_const.dart';
 import 'app/theme/app_theme.dart';
-import 'main_page.dart';
+import 'main_screen.dart';
 
 
 void main() async {

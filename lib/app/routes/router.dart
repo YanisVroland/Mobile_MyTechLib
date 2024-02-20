@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:my_tech_lib/views/library/create_compagny_library_widget.dart';
-import 'package:my_tech_lib/views/library/library_widget.dart';
-import 'package:my_tech_lib/views/library/project_widget.dart';
+import 'package:my_tech_lib/views/library/create_compagny_library_screen.dart';
+import 'package:my_tech_lib/views/library/library_screen.dart';
+import 'package:my_tech_lib/views/library/project_screen.dart';
 
-import '../../views/auth/forgot_password_widget.dart';
-import '../../views/auth/login_page_widget.dart';
-import '../../views/auth/onboarding_widget.dart';
-import '../../views/auth/register_account_widget.dart';
-import '../../views/compagny/compagny_edit_widget.dart';
-import '../../views/compagny/compagny_list_people_widget.dart';
-import '../../views/library/create_public_library_widget.dart';
+import '../../views/auth/forgot_password_screen.dart';
+import '../../views/auth/login_page_screen.dart';
+import '../../views/auth/onboarding_screen.dart';
+import '../../views/auth/register_account_screen.dart';
+import '../../views/compagny/compagny_edit_screen.dart';
+import '../../views/compagny/compagny_list_people_screen.dart';
+import '../../views/library/create_public_library_screen.dart';
 import '../../views/navigator/navigator.dart';
 import '../../views/options/edit_profile_widget.dart';
 import '../../views/options/notifications_settings_widget.dart';
