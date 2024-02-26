@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "220117681372",
+    "project_id": "mytecklib",
+    "storage_bucket": "mytecklib.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:220117681372:android:07c32a6ee6d185ae992019",
+        "android_client_info": {
+          "package_name": "com.mobile.mytechlib"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "220117681372-69mpha6c0bd5qhc0dn5f35ccch1lv5eo.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB3GgJCOcMQBMAG0ChMdeLI96QHZcAJ4XU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "220117681372-69mpha6c0bd5qhc0dn5f35ccch1lv5eo.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "220117681372-fqhol598058u7vfboguvu0mo75ruaheg.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mytecklib.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
