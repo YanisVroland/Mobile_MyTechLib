@@ -141,11 +141,14 @@ class _JoinCompanyState extends State<JoinCompany> {
           filterIdx == 1
               ? Column(
                   children: [
-                    const Text("Ajouter votre entreprise",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    Text(
+                      "Ajouter votre entreprise",
+                      style: TextStyle(
+                        color: AppTheme.of(context).primary,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 40.h, top: 40.h),
                       child: CustomTextField(
@@ -163,11 +166,14 @@ class _JoinCompanyState extends State<JoinCompany> {
                 )
               : Column(
                   children: [
-                    const Text("Rejoindre une entreprise",
-                        style: TextStyle(
-                          fontSize: 20.0,
-                          fontWeight: FontWeight.bold,
-                        )),
+                    Text(
+                      "Rejoindre une entreprise",
+                      style: TextStyle(
+                        color: AppTheme.of(context).primary,
+                        fontSize: 20.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
                     Padding(
                       padding: EdgeInsets.only(left: 20.w, right: 20.w, bottom: 40.h, top: 40.h),
                       child: CustomTextField(

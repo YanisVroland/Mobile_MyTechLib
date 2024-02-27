@@ -402,24 +402,22 @@ class _ViewCompanyState extends State<ViewCompany> {
                       ),
                     ),
                   ),
-                  Container(
-                    width: 35.0,
-                    height: 35.0,
-                    decoration: BoxDecoration(
-                      color: const Color(0xFFFF0000),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: IconCustom(
-                      borderColor: Colors.transparent,
-                      borderRadius: 30.0,
-                      buttonSize: 46.0,
-                      icon: Icon(
-                        Icons.login_rounded,
-                        size: 20.0,
-                      ),
-                      onPressed: () async {},
-                    ),
-                  ),
+                  InkWell(
+                      onTap: () {
+                        Navigator.pushNamed(context, AppRouter.COMPANY_EDIT);
+                      },
+                      child: Container(
+                        width: 35.0,
+                        height: 35.0,
+                        decoration: BoxDecoration(
+                          color: Colors.red.shade300,
+                          borderRadius: BorderRadius.circular(8.0),
+                        ),
+                        child: const Icon(
+                          Icons.login,
+                          size: 20.0,
+                        ),
+                      )),
                 ],
               ),
             ),
