@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/views/splash_screen.dart';
-import 'services/models/user.dart';
+import 'services/models/user_model.dart';
 import 'views/auth/login_page_screen.dart';
 
 class  MainScreen extends StatefulWidget {

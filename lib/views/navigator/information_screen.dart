@@ -4,7 +4,7 @@ import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/widgets/appBar_custom.dart';
-import '../../services/models/information.dart';
+import '../../services/models/information_model.dart';
 
 class InformationWidget extends StatefulWidget {
   const InformationWidget({Key? key}) : super(key: key);

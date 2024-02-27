@@ -5,7 +5,7 @@ import '../../app/theme/app_theme.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/textField_custom.dart';
-import '../../services/models/user.dart';
+import '../../services/models/user_model.dart';
 
 class RegisterAccountWidget extends StatefulWidget {
   const RegisterAccountWidget({Key? key}) : super(key: key);
