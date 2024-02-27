@@ -17,7 +17,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   //TODO TMP
-  bool hasCompany = false;
+  bool hasCompany = true;
 
   @override
   void initState() {
@@ -37,8 +37,9 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
           },
           backgroundColor: AppTheme.of(context).primary,
           elevation: 8.0,
-          child: const Icon(
+          child:  Icon(
             Icons.post_add_rounded,
+            color: AppTheme.of(context).background,
             size: 32.0,
           ),
         ),
