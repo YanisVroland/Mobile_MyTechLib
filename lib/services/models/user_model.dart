@@ -1,22 +1,27 @@
-
-class UserData {
+class UserModel {
   late String uuid;
   late String email;
-  late String login;
-  late String pwd;
-  late bool active_token;
-  late String token_device;
+  late String name;
+  late String lastname;
+  late String password;
+  late String access_token;
+  late String refresh_token;
 
-  UserData(
-      {this.uuid = "",
-      required this.email,
-      required this.pwd,
-      this.token_device = '',
-      this.login = "",
-      this.active_token = false});
+  UserModel({
+    this.uuid = '',
+    this.email = '',
+    this.name = '',
+    this.lastname = '',
+    this.password = '',
+    this.access_token = '',
+    this.refresh_token = '',
+  });
 
-  UserData.fromJson(map)
-      : uuid = map["uuid"],
-        login = map["login"],
-        email = map["email"];
+  UserModel.fromJson(map)
+      : uuid = map["uuid"] ?? "",
+        email = map["email"] ?? "",
+        name = map["name"] ?? "",
+        lastname = map["lastname"] ?? "",
+        access_token = map["access_token"] ?? "",
+        refresh_token = map["refresh_token"] ?? "";
 }

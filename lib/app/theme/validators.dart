@@ -10,15 +10,6 @@ class Validators {
     return null;
   }
 
-  static String? validateLastName(String? value) {
-    if (value!.isEmpty) {
-      return 'Ne peut pas être vide';
-    }
-    if (!rgString.hasMatch(value)) {
-      return 'Le nom d’utilisateur ou le mot de passe est incorrect';
-    }
-    return null;
-  }
 
   static String? validateEmail(String? value){
     if (value!.isEmpty) {

@@ -5,7 +5,9 @@ import '../../app/theme/app_theme.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/textField_custom.dart';
+import '../../services/models/responseAPI_model.dart';
 import '../../services/models/user_model.dart';
+import '../../services/repositories/user_repository.dart';
 
 class RegisterAccountWidget extends StatefulWidget {
   const RegisterAccountWidget({Key? key}) : super(key: key);
@@ -21,16 +23,18 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
   late TextEditingController passwordCreateController;
   late TextEditingController passwordConfirmController;
 
-  late bool passwordCreateVisibility;
-  late bool passwordConfirmVisibility;
+  late bool _passwordCreateVisibility;
+  late bool _passwordConfirmVisibility;
 
-  final scaffoldKey = GlobalKey<ScaffoldState>();
+  final _scaffoldKey = GlobalKey<ScaffoldState>();
+  final _formKey = GlobalKey<FormState>();
+  final bool _loader = false;
 
   @override
   void initState() {
     super.initState();
-    passwordCreateVisibility = false;
-    passwordConfirmVisibility = false;
+    _passwordCreateVisibility = false;
+    _passwordConfirmVisibility = false;
 
     lastNameController = TextEditingController();
     firstNameController = TextEditingController();
@@ -49,10 +53,185 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
     passwordConfirmController.dispose();
   }
 
+  validButton() async {
+    UserModel user = UserModel(
+      email: emailAddressController.text,
+      name: firstNameController.text,
+      lastname: lastNameController.text,
+      password: passwordCreateController.text,
+    );
+    UserRepository userRepository = UserRepository();
+    ResponseApi? response = await userRepository.signUp(context, user);
+    if (response != null && response.status == 201) {
+      Navigator.pushNamedAndRemoveUntil(context, '/Home', (Route<dynamic> route) => false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
+    Widget formRegister = Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/finWallet_logo_landscapeDark@3x.png',
+              width: 300.0,
+              fit: BoxFit.fitWidth,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 30.h, bottom: 20.h),
+              child: const Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text("Créez votre compte ci-dessous."),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                    child: CustomTextField(
+                      controller: lastNameController,
+                      obscureText: false,
+                      labelText: "Nom",
+                      hintText: "Entrer votre nom...",
+                      validator: Validators.validateEmpty,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: CustomTextField(
+                    controller: firstNameController,
+                    obscureText: false,
+                    labelText: "Prénom",
+                    hintText: "Entrer votre prénom...",
+                    validator: Validators.validateEmpty,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+                child: CustomTextField(
+                  controller: emailAddressController,
+                  obscureText: false,
+                  labelText: "Adresse e-mail",
+                  hintText: "Entrer votre adresse e-mail...",
+                  validator: Validators.validateEmail,
+                )),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+              child: CustomTextField(
+                controller: passwordCreateController,
+                obscureText: !_passwordCreateVisibility,
+                labelText: "Mot de passe",
+                hintText: "Entrer votre mot de passe...",
+                suffixIcon: InkWell(
+                  onTap: () =>
+                      setState(() => _passwordCreateVisibility = !_passwordCreateVisibility),
+                  focusNode: FocusNode(skipTraversal: true),
+                  child: Icon(
+                    _passwordCreateVisibility
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    size: 20.0,
+                  ),
+                ),
+                validator: Validators.validatePassword,
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
+              child: CustomTextField(
+                controller: passwordConfirmController,
+                obscureText: !_passwordConfirmVisibility,
+                labelText: "Confirmer le mot de passe",
+                hintText: "Confirmer votre mot de passe...",
+                suffixIcon: InkWell(
+                  onTap: () =>
+                      setState(() => _passwordConfirmVisibility = !_passwordConfirmVisibility),
+                  focusNode: FocusNode(skipTraversal: true),
+                  child: Icon(
+                    _passwordConfirmVisibility
+                        ? Icons.visibility_outlined
+                        : Icons.visibility_off_outlined,
+                    size: 20.0,
+                  ),
+                ),
+                validator: (value) {
+                  if (value != passwordCreateController.text) {
+                    return "Mot de passe non identique";
+                  }
+                  return null;
+                },
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                      text: "Créer un compte",
+                      isLoading: _loader,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await validButton();
+                        }
+                      }),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    Navigator.pushNamed(context, AppRouter.LOGIN);
+                  },
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width * 0.8,
+                    height: 44.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppTheme.of(context).primary,
+                          size: 24.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 22.0, 0.0),
+                          child: Text("Connexion",
+                              style: TextStyle(
+                                  fontFamily: 'Lexend', color: AppTheme.of(context).primary)),
+                        ),
+                        const Text(
+                          "Vous avez déjà un compte ?",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ));
+
     return Scaffold(
-      key: scaffoldKey,
+      key: _scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
       body: Container(
         width: MediaQuery.sizeOf(context).width * 1.0,
@@ -71,176 +250,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
             vertical: 70.h,
           ),
           child: SingleChildScrollView(
-            child: Column(
-              mainAxisSize: MainAxisSize.max,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/images/finWallet_logo_landscapeDark@3x.png',
-                  width: 300.0,
-                  fit: BoxFit.fitWidth,
-                ),
-                 Padding(
-                   padding: EdgeInsets.only(top: 30.h, bottom: 20.h),
-                  child: const Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Text("Créez votre compte ci-dessous."),
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Expanded(
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
-                        child: CustomTextField(
-                          controller: lastNameController,
-                          obscureText: false,
-                          labelText: "Nom",
-                          hintText: "Entrer votre nom...",
-                          validator: Validators.validateEmpty,
-                        ),
-                      ),
-                    ),
-                    Expanded(
-                      child: CustomTextField(
-                        controller: firstNameController,
-                        obscureText: false,
-                        labelText: "Prénom",
-                        hintText: "Entrer votre prénom...",
-                        validator: Validators.validateEmpty,
-                      ),
-                    ),
-                  ],
-                ),
-                Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
-                    child: CustomTextField(
-                      controller: emailAddressController,
-                      obscureText: false,
-                      labelText: "Adresse e-mail",
-                      hintText: "Entrer votre adresse e-mail...",
-                      validator: Validators.validateEmail,
-                    )),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
-                  child: CustomTextField(
-                    controller: passwordCreateController,
-                    obscureText: !passwordCreateVisibility,
-                    labelText: "Mot de passe",
-                    hintText: "Entrer votre mot de passe...",
-                    suffixIcon: InkWell(
-                      onTap: () =>
-                          setState(() => passwordCreateVisibility = !passwordCreateVisibility),
-                      focusNode: FocusNode(skipTraversal: true),
-                      child: Icon(
-                        passwordCreateVisibility
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        size: 20.0,
-                      ),
-                    ),
-                    validator: Validators.validatePassword,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
-                  child: CustomTextField(
-                    controller: passwordConfirmController,
-                    obscureText: !passwordConfirmVisibility,
-                    labelText: "Confirmer le mot de passe",
-                    hintText: "Confirmer votre mot de passe...",
-                    suffixIcon: InkWell(
-                      onTap: () =>
-                          setState(() => passwordConfirmVisibility = !passwordConfirmVisibility),
-                      focusNode: FocusNode(skipTraversal: true),
-                      child: Icon(
-                        passwordConfirmVisibility
-                            ? Icons.visibility_outlined
-                            : Icons.visibility_off_outlined,
-                        size: 20.0,
-                      ),
-                    ),
-                    validator: Validators.validatePassword,
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.symmetric(vertical: 30.h),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      CustomButton(
-                        text: "Créer un compte",
-                        onTap: () async {
-                          if (passwordCreateController!.text != passwordConfirmController!.text) {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              const SnackBar(
-                                content: Text(
-                                  'Passwords don\'t match!',
-                                ),
-                              ),
-                            );
-                            return;
-                          }
-                          UserData userTmp = UserData(
-                              email: emailAddressController!.text,
-                              pwd: passwordCreateController!.text);
-                          // final user = await UserRepository().signUp(userTmp);
-                          // if (user == null) {
-                          //   return;
-                          // }
-                          //TODO nav onboarding
-                          // Navigator.pushNamed(context, AppRouter.onboardingRoute);
-                          // context.goNamedAuth('onboarding', context.mounted);
-                        },
-                      )
-                    ],
-                  ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        Navigator.pushNamed(context, AppRouter.LOGIN);
-                      },
-                      child: Container(
-                        width: MediaQuery.sizeOf(context).width * 0.8,
-                        height: 44.0,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.arrow_back_rounded,
-                              color: AppTheme.of(context).primary,
-                              size: 24.0,
-                            ),
-                            Padding(
-                              padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 22.0, 0.0),
-                              child: Text("Connexion",
-                                  style: TextStyle(
-                                      fontFamily: 'Lexend', color: AppTheme.of(context).primary)),
-                            ),
-                            const Text(
-                              "Vous avez déjà un compte ?",
-                            ),
-                          ],
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ],
-            ),
+            child: formRegister,
           ),
         ),
       ),

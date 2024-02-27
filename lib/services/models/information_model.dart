@@ -6,18 +6,17 @@ class Information {
 
   Information({
     this.id = '-1',
-    this.createdBy= '',
-    this.createdAt= '',
-    this.updatedAt= '',
+    this.createdBy = '',
+    this.createdAt = '',
+    this.updatedAt = '',
   });
 
-  factory Information.fromJson(Map<String, dynamic> json) {
-    return Information(
-      id: json['id'],
-      createdBy: json['createdBy'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
-    );
-  }
+
+  Information.fromJson(map)
+      :id = map['id'],
+        createdBy= map['createdBy'] ?? '',
+        createdAt= map['createdAt']  ?? '',
+        updatedAt = map['updatedAt']  ?? '';
+
 }
 

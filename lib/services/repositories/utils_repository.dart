@@ -10,7 +10,6 @@ import '../local/pref.dart';
 import '../models/responseAPI_model.dart';
 
 class UtilsRepository {
-
   Future<void> getDefaultData(Map<String, Object> bodyJson) async {
     String uuidDevice = await LocalPref().getString("uuidDevice");
     if (uuidDevice.isEmpty) {
@@ -27,7 +26,7 @@ class UtilsRepository {
     bodyJson.putIfAbsent('version', () => "V1.0.0");
   }
 
-  Future<ResponseApi> requestPost(
+  Future<ResponseApi?> requestPost(
       BuildContext context, String endpoint, Map<String, Object> bodyJson) async {
     try {
       await getDefaultData(bodyJson);
@@ -35,6 +34,7 @@ class UtilsRepository {
         Uri.parse(AppConst.baseUrl + endpoint),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + AppConst.anonToken,
         },
         body: jsonEncode(bodyJson),
       );
@@ -45,8 +45,7 @@ class UtilsRepository {
     }
   }
 
-
-  Future<ResponseApi> requestGet(BuildContext context, String endpoint) async {
+  Future<ResponseApi?> requestGet(BuildContext context, String endpoint) async {
     try {
       var url = Uri.parse(AppConst.baseUrl + endpoint);
       var response = await http.get(url);
@@ -56,37 +55,22 @@ class UtilsRepository {
     }
   }
 
-  verificationResponse(BuildContext context, response, String endpoint) async {
+  Future<ResponseApi?> verificationResponse(BuildContext context, dynamic response, String endpoint) async {
     print("$endpoint => Status : ${response.statusCode} Body : ${response.body}");
 
-    if(response.statusCode < 200 || response.statusCode > 204){
-      SnackConst.SnackCustom(AppConst.errorApiMessage, context, duration: 3);
-    }else if(response.statusCode == 204){
-      SnackConst.SnackCustom(AppConst.missingDataMessage, context, duration: 3,color: Colors.blue);
-    }
-    switch (response.statusCode) {
-      case (406):
-        // await showDialog(
-        //     barrierDismissible: false,
-        //     context: context,
-        //     builder: (context) {
-        //       return CustomDialogBoxInfo(
-        //           title: "Appareil déconnecté",
-        //           descriptions: "Compte utilisé sur un autre appareil.",
-        //           positiveLabelButton: "Se reconnecter",
-        //           positivePressed: () async {
-        //             await LocalPref().saveString("idEmployee", "");
-        //             Navigator.pushNamedAndRemoveUntil(
-        //                 context, '/Login', (Route<dynamic> route) => false);
-        //           });
-        //     });
-        break;
-      case (501):
-        //TODO BLOQUER UI
-        break;
-      default:
-        return ResponseApi.fromRequest(response);
+    if (response.statusCode >= 200 && response.statusCode <= 204) {
+      if (response.statusCode == 204) {
+        SnackConst.SnackCustom(AppConst.missingDataMessage, context,
+            duration: 3, color: Colors.blue);
+      }
+      return ResponseApi.fromRequest(response);
+    } else {
+      if (response.body.contains("message")) {
+        SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
+            duration: 3, color: Colors.red);
+      } else {
+        SnackConst.SnackCustom(AppConst.errorApiMessage, context, duration: 3);
+      }
     }
   }
-
 }

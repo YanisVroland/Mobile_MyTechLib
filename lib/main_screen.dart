@@ -13,7 +13,7 @@ class  MainScreen extends StatefulWidget {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  static late UserData user_me;
+  static late UserModel user_me;
   late bool load;
   int state = -1;
 
