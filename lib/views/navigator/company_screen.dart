@@ -1,10 +1,10 @@
-import 'package:my_tech_lib/views/navigator/company/widget/join_company_widget.dart';
-import 'package:my_tech_lib/views/navigator/company/widget/view_company_widget.dart';
+import 'package:my_tech_lib/views/navigator/widget/join_company_widget.dart';
+import 'package:my_tech_lib/views/navigator/widget/view_company_widget.dart';
 
-import '../../../app/theme/app_theme.dart';
+import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
-import '../../../app/widgets/appBar_custom.dart';
+import '../../app/widgets/appBar_custom.dart';
 
 class CompanyWidget extends StatefulWidget {
   const CompanyWidget({Key? key}) : super(key: key);

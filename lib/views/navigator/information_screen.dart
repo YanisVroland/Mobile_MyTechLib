@@ -1,10 +1,8 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_tech_lib/app/theme/app_const.dart';
 
 import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
-import '../../app/routes/router.dart';
 import '../../app/widgets/appBar_custom.dart';
 import '../../services/models/information.dart';
 

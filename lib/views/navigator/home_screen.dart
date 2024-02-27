@@ -76,6 +76,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         backgroundColor: AppTheme.of(context).primary,
         child: const Icon(
           Icons.post_add_rounded,
+          color: ColorConst.background,
           size: 32.0,
         ),
       ),
