@@ -70,7 +70,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             child: const Row(
               mainAxisSize: MainAxisSize.max,
               children: [
-                Text("Créez votre compte ci-dessous."),
+                Text("Connectez vous à votre compte ci-dessous."),
               ],
             ),
           ),

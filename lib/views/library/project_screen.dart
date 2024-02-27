@@ -149,7 +149,6 @@ class _ProjectWidgetState extends State<ProjectWidget> with TickerProviderStateM
                                   text: "Télécharger",
 
                                   onTap: () {
-                                    print('Button pressed ...');
                                   },
                                 ),
                               ],
@@ -323,7 +322,6 @@ class _ProjectWidgetState extends State<ProjectWidget> with TickerProviderStateM
                                   text: "Subscribe",
 
                                   onTap: () {
-                                    print('Button pressed ...');
                                   },
                                 ),
                               ],

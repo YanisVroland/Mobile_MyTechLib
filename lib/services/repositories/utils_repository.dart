@@ -16,13 +16,10 @@ class UtilsRepository {
       uuidDevice = const Uuid().v4();
       await LocalPref().saveString("uuidDevice", uuidDevice);
     }
+    String idEmployee = await LocalPref().getString("uuid_user");
 
-    String nameEmployee = await LocalPref().getString("nameEmployee");
-    String idEmployee = await LocalPref().getString("idEmployee");
-
-    bodyJson.putIfAbsent('uuidDevice', () => uuidDevice);
-    bodyJson.putIfAbsent('idEmployee', () => idEmployee);
-    bodyJson.putIfAbsent('nameEmployee', () => nameEmployee);
+    bodyJson.putIfAbsent('uuid_device', () => uuidDevice);
+    bodyJson.putIfAbsent('uuid_user', () => idEmployee);
     bodyJson.putIfAbsent('version', () => "V1.0.0");
   }
 

@@ -1,9 +1,12 @@
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/repositories/utils_repository.dart';
 
 import '../../app/theme/app_const.dart';
+import '../../app/theme/snackBar_const.dart';
+import '../local/pref.dart';
 import '../models/responseAPI_model.dart';
 import '../models/user_model.dart';
 
@@ -16,7 +19,15 @@ class UserRepository {
         'email': name.trim(),
         'password': password.trim(),
       };
-      return await utilsRepository.requestPost(context, AppConst.signInEndpoint, requestBody);
+      ResponseApi? response =
+          await utilsRepository.requestPost(context, AppConst.signInPostEndpoint, requestBody);
+
+      if (response != null && response.status == 200) {
+        await LocalPref().saveString("uuid_user", response.body["uuid_user"]);
+        await LocalPref().saveString("access_token", response.body["access_token"]);
+        await LocalPref().saveString("refresh_token", response.body["refresh_token"]);
+      }
+      return response;
     } catch (e) {
       log(e.toString());
       return null;
@@ -31,19 +42,24 @@ class UserRepository {
         'lastname': user.lastname.trim(),
         'password': user.password.trim(),
       };
-      return await utilsRepository.requestPost(context, AppConst.signUpEndpoint, requestBody);
+      ResponseApi? response =
+          await utilsRepository.requestPost(context, AppConst.signUpPostEndpoint, requestBody);
+
+      if (response != null && response.status == 201) {
+        SnackConst.SnackCustom(AppConst.userCreatedMessage, context,
+            duration: 3, color: Colors.green);
+        return await signIn(context, user.email, user.password);
+      }
+      return response;
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
-  Future<ResponseApi?> signOut(BuildContext context) async {
+  Future<ResponseApi?> getUser(BuildContext context, String uuidUser) async {
     try {
-      var requestBody = {
-        'disconnectOther': "true",
-      };
-      return await utilsRepository.requestPost(context, AppConst.signOutEndpoint, requestBody);
+      return utilsRepository.requestGet(context, AppConst.userGetEndpoint + uuidUser);
     } catch (e) {
       log(e.toString());
       return null;
