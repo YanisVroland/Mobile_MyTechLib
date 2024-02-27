@@ -4,6 +4,7 @@ class Library {
   final String createdBy;
   final String createdAt;
   final String updatedAt;
+  final bool isPersonal;
 
   Library({
     this.id = '-1',
@@ -11,15 +12,17 @@ class Library {
     this.createdBy= '',
     this.createdAt= '',
     this.updatedAt= '',
+    this.isPersonal= true,
   });
 
   factory Library.fromJson(Map<String, dynamic> json) {
     return Library(
-      id: json['id'],
+      id: json['uuid'],
       name: json['name'],
-      createdBy: json['createdBy'],
-      createdAt: json['createdAt'],
-      updatedAt: json['updatedAt'],
+      createdBy: json['created_by'],
+      createdAt: json['created_at'],
+      updatedAt: json['updated_at'],
+      isPersonal: json['is_personal'],
     );
   }
 }

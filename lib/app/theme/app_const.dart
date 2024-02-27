@@ -12,6 +12,9 @@ class AppConst {
   static String signUpPostEndpoint = '/user/registration';
   static String userGetEndpoint = '/user/';
 
+  // -> Library
+  static String libraryUserGetEndpoint = '/library/byUser/';
+
 
   // Messages
   static String errorApiMessage = 'Erreur de fonctionnement, veuillez contacter le support.';

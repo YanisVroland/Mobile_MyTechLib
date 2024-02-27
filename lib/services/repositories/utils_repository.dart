@@ -1,7 +1,7 @@
 import 'dart:convert';
+import 'dart:math';
 
 import 'package:flutter/material.dart';
-import 'package:uuid/uuid.dart';
 import '../../app/theme/app_const.dart';
 import 'package:http/http.dart' as http;
 
@@ -10,28 +10,15 @@ import '../local/pref.dart';
 import '../models/responseAPI_model.dart';
 
 class UtilsRepository {
-  Future<void> getDefaultData(Map<String, Object> bodyJson) async {
-    String uuidDevice = await LocalPref().getString("uuidDevice");
-    if (uuidDevice.isEmpty) {
-      uuidDevice = const Uuid().v4();
-      await LocalPref().saveString("uuidDevice", uuidDevice);
-    }
-    String idEmployee = await LocalPref().getString("uuid_user");
-
-    bodyJson.putIfAbsent('uuid_device', () => uuidDevice);
-    bodyJson.putIfAbsent('uuid_user', () => idEmployee);
-    bodyJson.putIfAbsent('version', () => "V1.0.0");
-  }
-
   Future<ResponseApi?> requestPost(
       BuildContext context, String endpoint, Map<String, Object> bodyJson) async {
     try {
-      await getDefaultData(bodyJson);
+      String accessToken = await LocalPref().getString("access_token");
       final response = await http.post(
         Uri.parse(AppConst.baseUrl + endpoint),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
-          'Authorization': 'Bearer ' + AppConst.anonToken,
+          'Authorization': 'Bearer ' + (accessToken.isNotEmpty ? accessToken : AppConst.anonToken),
         },
         body: jsonEncode(bodyJson),
       );
@@ -44,15 +31,20 @@ class UtilsRepository {
 
   Future<ResponseApi?> requestGet(BuildContext context, String endpoint) async {
     try {
-      var url = Uri.parse(AppConst.baseUrl + endpoint);
-      var response = await http.get(url);
+      String accessToken = await LocalPref().getString("access_token");
+
+      var response = await http.get(
+        Uri.parse(AppConst.baseUrl + endpoint),
+        headers: <String, String>{'Authorization': 'Bearer ' + accessToken},
+      );
       return await verificationResponse(context, response, endpoint);
     } catch (e) {
       throw Exception(e);
     }
   }
 
-  Future<ResponseApi?> verificationResponse(BuildContext context, dynamic response, String endpoint) async {
+  Future<ResponseApi?> verificationResponse(
+      BuildContext context, dynamic response, String endpoint) async {
     print("$endpoint => Status : ${response.statusCode} Body : ${response.body}");
 
     if (response.statusCode >= 200 && response.statusCode <= 204) {
