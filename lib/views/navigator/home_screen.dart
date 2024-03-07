@@ -219,7 +219,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                               const Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(0.0, 0.0, 4.0, 0.0),
-                                                                  child: Text("Par :")),
+                                                                  child: Text("Créée par :")),
                                                               Text(
                                                                 element.createdBy,
                                                               ),
@@ -333,7 +333,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                               const Padding(
                                                                   padding: EdgeInsetsDirectional
                                                                       .fromSTEB(0.0, 0.0, 4.0, 0.0),
-                                                                  child: Text("Par :")),
+                                                                  child: Text("Créée par :")),
                                                               Text(
                                                                 element.createdBy,
                                                               ),
