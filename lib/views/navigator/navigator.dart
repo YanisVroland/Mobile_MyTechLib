@@ -7,7 +7,7 @@ import 'home_screen.dart';
 import 'information_screen.dart';
 
 class NavBarPage extends StatefulWidget {
-  NavBarPage(this.user, {Key? key, this.initialPage, this.page}) : super(key: key);
+  const NavBarPage(this.user, {Key? key, this.initialPage, this.page}) : super(key: key);
   final UserModel user;
   final String? initialPage;
   final Widget? page;
@@ -32,7 +32,7 @@ class _NavBarPageState extends State<NavBarPage> {
     final tabs = {
       'information': const InformationWidget(),
       'home': const HomeWidget(),
-      'company': const CompanyWidget(),
+      'company': CompanyWidget(widget.user),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 

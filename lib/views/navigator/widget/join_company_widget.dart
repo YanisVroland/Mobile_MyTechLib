@@ -5,9 +5,11 @@ import 'package:my_tech_lib/app/widgets/textField_custom.dart';
 
 import '../../../../app/theme/app_theme.dart';
 import '../../../../app/widgets/button_custom.dart';
+import '../../../services/models/user_model.dart';
 
 class JoinCompany extends StatefulWidget {
-  const JoinCompany({Key? key}) : super(key: key);
+  const JoinCompany(this.user, {Key? key}) : super(key: key);
+  final UserModel user;
 
   @override
   _JoinCompanyState createState() => _JoinCompanyState();

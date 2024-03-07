@@ -4,8 +4,7 @@ class UserModel {
   late String name;
   late String lastname;
   late String password;
-  late String access_token;
-  late String refresh_token;
+  late String companyUuid;
 
   UserModel({
     this.uuid = '',
@@ -13,8 +12,7 @@ class UserModel {
     this.name = '',
     this.lastname = '',
     this.password = '',
-    this.access_token = '',
-    this.refresh_token = '',
+    this.companyUuid = '',
   });
 
   UserModel.fromJson(map)
@@ -22,6 +20,7 @@ class UserModel {
         email = map["email"] ?? "",
         name = map["name"] ?? "",
         lastname = map["lastname"] ?? "",
-        access_token = map["access_token"] ?? "",
-        refresh_token = map["refresh_token"] ?? "";
+        companyUuid = map["core_company"] ?? "";
+
+
 }

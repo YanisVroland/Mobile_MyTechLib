@@ -5,9 +5,11 @@ import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/widgets/appBar_custom.dart';
+import '../../services/models/user_model.dart';
 
 class CompanyWidget extends StatefulWidget {
-  const CompanyWidget({Key? key}) : super(key: key);
+  const CompanyWidget(this.user, {Key? key}) : super(key: key);
+  final UserModel user;
 
   @override
   _CompanyWidgetState createState() => _CompanyWidgetState();
@@ -17,11 +19,12 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   //TODO TMP
-  bool hasCompany = false;
+  late bool hasCompany;
 
   @override
   void initState() {
     super.initState();
+    hasCompany = widget.user.companyUuid.isNotEmpty;
   }
 
   @override
@@ -37,7 +40,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
           },
           backgroundColor: AppTheme.of(context).primary,
           elevation: 8.0,
-          child:  Icon(
+          child: Icon(
             Icons.post_add_rounded,
             color: AppTheme.of(context).background,
             size: 32.0,
@@ -49,9 +52,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
           top: true,
           child: Stack(
             children: [
-              hasCompany
-                  ? const ViewCompany()
-                  : const JoinCompany(),
+              hasCompany ? ViewCompany(widget.user.companyUuid) :  JoinCompany(widget.user),
             ],
           )),
     );

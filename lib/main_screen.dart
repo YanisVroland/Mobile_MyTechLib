@@ -9,8 +9,8 @@ import 'services/models/user_model.dart';
 import 'views/auth/login_page_screen.dart';
 
 class MainScreen extends StatefulWidget {
-  MainScreen(this.uuidUser, {Key? key}) : super(key: key);
-  String? uuidUser;
+  const MainScreen(this.uuidUser, {Key? key}) : super(key: key);
+  final String? uuidUser;
 
   @override
   _MainScreenState createState() => _MainScreenState();

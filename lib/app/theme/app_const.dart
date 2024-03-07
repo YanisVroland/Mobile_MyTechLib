@@ -15,6 +15,9 @@ class AppConst {
   // -> Library
   static String libraryUserGetEndpoint = '/library/byUser/';
 
+  // -> Company
+  static String companyGetEndpoint = '/company/';
+
 
   // Messages
   static String errorApiMessage = 'Erreur de fonctionnement, veuillez contacter le support.';
