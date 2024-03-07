@@ -17,7 +17,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
   final scaffoldKey = GlobalKey<ScaffoldState>();
 
   //TODO TMP
-  bool hasCompany = true;
+  bool hasCompany = false;
 
   @override
   void initState() {

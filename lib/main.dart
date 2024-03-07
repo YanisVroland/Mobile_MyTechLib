@@ -51,7 +51,7 @@ class _MyAppState extends State<MyApp> {
             useMaterial3: true,
           ),
           themeMode: _themeMode,
-          home: MainScreen(),
+          home: MainScreen(null),
         ));
   }
 }

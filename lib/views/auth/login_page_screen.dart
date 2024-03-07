@@ -46,14 +46,16 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     UserRepository userRepository = UserRepository();
     ResponseApi? response = await userRepository.signIn(
         context, emailAddressLoginController.text, passwordLoginController.text);
+
     if (response != null && response.status == 200) {
-        Navigator.pushNamedAndRemoveUntil(context, '/Home', (Route<dynamic> route) => false);
+      String uuid = response.body['uuid_user'];
+      Navigator.pushNamedAndRemoveUntil(context, AppRouter.MAIN, (Route<dynamic> route) => false,
+          arguments: uuid);
     }
   }
 
   @override
   Widget build(BuildContext context) {
-
     Widget formLogin = Form(
       key: _formKey,
       child: Column(
@@ -88,10 +90,8 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
               labelText: "Mot de passe",
               hintText: "Entrer votre mot de passe",
               validator: Validators.validatePassword,
-
               suffixIcon: InkWell(
-                onTap: () =>
-                    setState(() => passwordLoginVisibility = !passwordLoginVisibility),
+                onTap: () => setState(() => passwordLoginVisibility = !passwordLoginVisibility),
                 focusNode: FocusNode(skipTraversal: true),
                 child: Icon(
                   passwordLoginVisibility

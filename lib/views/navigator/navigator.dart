@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
 
 import '../../app/theme/app_theme.dart';
+import '../../services/models/user_model.dart';
 import 'company_screen.dart';
 import 'home_screen.dart';
 import 'information_screen.dart';
 
 class NavBarPage extends StatefulWidget {
-  NavBarPage({Key? key, this.initialPage, this.page}) : super(key: key);
-
+  NavBarPage(this.user, {Key? key, this.initialPage, this.page}) : super(key: key);
+  final UserModel user;
   final String? initialPage;
   final Widget? page;
 

@@ -3,6 +3,8 @@ import 'package:my_tech_lib/views/library/create_compagny_library_screen.dart';
 import 'package:my_tech_lib/views/library/library_screen.dart';
 import 'package:my_tech_lib/views/library/project_screen.dart';
 
+import '../../main_screen.dart';
+import '../../services/models/user_model.dart';
 import '../../views/auth/forgot_password_screen.dart';
 import '../../views/auth/login_page_screen.dart';
 import '../../views/auth/onboarding_screen.dart';
@@ -18,6 +20,7 @@ import '../../views/options/profile_page_widget.dart';
 import '../../views/splash_screen.dart';
 
 class AppRouter {
+  static const String MAIN = '/Main';
   static const String HOME = '/Home';
   static const String SPLASH = '/Splash';
   static const String LOGIN = '/Login';
@@ -43,6 +46,8 @@ class AppRouter {
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
+      case MAIN:
+        return MaterialPageRoute(builder: (_) => MainScreen(settings.arguments as String?));
       case LOGIN:
         return MaterialPageRoute(builder: (_) => const LoginPageWidget());
       case REGISTER:
@@ -52,7 +57,7 @@ class AppRouter {
       case SPLASH:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case HOME:
-        return MaterialPageRoute(builder: (_) => NavBarPage());
+        return MaterialPageRoute(builder: (_) => NavBarPage(settings.arguments as UserModel));
       case CHANGE_PASSWORD:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case EDIT_PROFILE:

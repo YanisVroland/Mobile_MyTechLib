@@ -63,8 +63,9 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
     UserRepository userRepository = UserRepository();
     ResponseApi? response = await userRepository.signUp(context, user);
     if (response != null && response.status == 200) {
-      Navigator.pushNamedAndRemoveUntil(context, '/Home', (Route<dynamic> route) => false);
-    }
+      String uuid = response.body['uuid_user'];
+      Navigator.pushNamedAndRemoveUntil(context, AppRouter.MAIN, (Route<dynamic> route) => false,
+          arguments: uuid);    }
   }
 
   @override
