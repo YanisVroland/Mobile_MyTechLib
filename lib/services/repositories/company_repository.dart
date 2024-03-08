@@ -21,4 +21,14 @@ class CompanyRepository {
       return null;
     }
   }
+
+
+  Future<ResponseApi?> getUserCompany(BuildContext context, String companyUuid) async {
+    try {
+      return utilsRepository.requestGet(context, AppConst.companyUsersGetEndpoint + companyUuid);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
 }

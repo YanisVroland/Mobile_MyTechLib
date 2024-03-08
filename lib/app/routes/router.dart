@@ -42,8 +42,6 @@ class AppRouter {
 
   static const String PROJECT = '/Project';
 
-
-
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case MAIN:
@@ -74,7 +72,8 @@ class AppRouter {
       case COMPANY_EDIT:
         return MaterialPageRoute(builder: (_) => const CompanyEditWidget());
       case COMPANY_LIST_POEPLE:
-        return MaterialPageRoute(builder: (_) => const CompanyListPeopleWidget());
+        return MaterialPageRoute(
+            builder: (_) => CompanyListPeopleWidget(settings.arguments as String));
 
       case LIBRARY:
         return MaterialPageRoute(builder: (_) => const LibraryWidget());
@@ -86,15 +85,14 @@ class AppRouter {
       case PROJECT:
         return MaterialPageRoute(builder: (_) => const ProjectWidget());
 
-    // case ACTIVITY:
-    //   return MaterialPageRoute(
-    //       builder: (_) => ActivitiesScreen(
-    //           (settings.arguments! as List<Object>)[0] as ProductionOrder,
-    //           (settings.arguments! as List<Object>)[1] as Operator));
+      // case ACTIVITY:
+      //   return MaterialPageRoute(
+      //       builder: (_) => ActivitiesScreen(
+      //           (settings.arguments! as List<Object>)[0] as ProductionOrder,
+      //           (settings.arguments! as List<Object>)[1] as Operator));
       default:
         return MaterialPageRoute(
-            builder: (_) =>
-                Scaffold(
+            builder: (_) => Scaffold(
                   body: Center(
                     child: Text('No route defined for ${settings.name}'),
                   ),

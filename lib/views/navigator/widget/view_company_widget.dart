@@ -153,7 +153,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                                   fontSize: 12.0,
                                                 ),
                                               ),
-                                               Text(
+                                              Text(
                                                 company!.createdAt,
                                                 style: const TextStyle(
                                                   fontSize: 10.0,
@@ -168,7 +168,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                           InkWell(
                                               onTap: () {
                                                 Navigator.pushNamed(
-                                                    context, AppRouter.COMPANY_LIST_POEPLE);
+                                                    context, AppRouter.COMPANY_LIST_POEPLE, arguments: widget.companyUuid);
                                               },
                                               child: Container(
                                                 width: 35.0,
@@ -347,19 +347,19 @@ class _ViewCompanyState extends State<ViewCompany> {
                                 Row(
                                   mainAxisSize: MainAxisSize.max,
                                   children: [
-                                     Expanded(
+                                    Expanded(
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         children: [
                                           const Text(
                                             "Code : ",
                                           ),
-                                         Expanded(
-                                           child: Text(
-                                             company!.code,
-                                             overflow: TextOverflow.ellipsis,
-                                           ),
-                                         )
+                                          Expanded(
+                                            child: Text(
+                                              company!.code,
+                                              overflow: TextOverflow.ellipsis,
+                                            ),
+                                          )
                                         ],
                                       ),
                                     ),
@@ -381,8 +381,9 @@ class _ViewCompanyState extends State<ViewCompany> {
                                         )),
                                   ],
                                 ),
-                                 Padding(
-                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
+                                Padding(
+                                  padding:
+                                      const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     crossAxisAlignment: CrossAxisAlignment.start,
