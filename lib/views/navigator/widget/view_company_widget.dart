@@ -7,6 +7,7 @@ import '../../../../app/routes/router.dart';
 import '../../../../app/theme/app_theme.dart';
 import '../../../services/models/company_model.dart';
 import '../../../services/models/responseAPI_model.dart';
+import '../../../services/models/user_model.dart';
 import '../../../services/repositories/company_repository.dart';
 
 class ViewCompany extends StatefulWidget {
@@ -18,6 +19,7 @@ class ViewCompany extends StatefulWidget {
 }
 
 class _ViewCompanyState extends State<ViewCompany> {
+  List<UserModel> listCompanyUser = [];
   int? countCompany;
   int? countParticipant;
   bool _loader = true;
@@ -26,6 +28,7 @@ class _ViewCompanyState extends State<ViewCompany> {
   @override
   void initState() {
     super.initState();
+
     initCompany();
   }
 
@@ -33,15 +36,22 @@ class _ViewCompanyState extends State<ViewCompany> {
     setState(() {
       _loader = true;
     });
-
     ResponseApi? response = await CompanyRepository().getCompany(context, widget.companyUuid);
     if (response != null && response.status == 200) {
       company = Company.fromJson(response.body);
+      await getUserCompany();
     }
-
     setState(() {
       _loader = false;
     });
+  }
+
+  Future<void> getUserCompany() async {
+    ResponseApi? response = await CompanyRepository().getUserCompany(context, widget.companyUuid);
+    if (response != null && response.status == 200) {
+      List<dynamic> result = await response.body.map((doc) => UserModel.fromJson(doc)).toList();
+      listCompanyUser.addAll(result.cast<UserModel>());
+    }
   }
 
   @override
@@ -168,7 +178,8 @@ class _ViewCompanyState extends State<ViewCompany> {
                                           InkWell(
                                               onTap: () {
                                                 Navigator.pushNamed(
-                                                    context, AppRouter.COMPANY_LIST_POEPLE, arguments: widget.companyUuid);
+                                                    context, AppRouter.COMPANY_LIST_POEPLE,
+                                                    arguments: listCompanyUser);
                                               },
                                               child: Container(
                                                 width: 35.0,

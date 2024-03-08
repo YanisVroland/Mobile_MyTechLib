@@ -19,7 +19,7 @@ class UserModel {
       : uuid = map["uuid"] ?? "",
         email = map["email"] ?? "",
         name = map["name"] ?? "",
-        lastname = map["lastname"] ?? "",
+        lastname = map["lastName"] ?? "",
         companyUuid = map["core_company"] ?? "";
 
 
