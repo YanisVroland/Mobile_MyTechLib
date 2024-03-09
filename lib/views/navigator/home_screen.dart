@@ -11,10 +11,12 @@ import '../../app/widgets/appBar_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 import '../../services/models/library_model.dart';
 import '../../services/models/responseAPI_model.dart';
+import '../../services/models/user_model.dart';
 import '../../services/repositories/library_repository.dart';
 
 class HomeWidget extends StatefulWidget {
-  const HomeWidget({Key? key}) : super(key: key);
+  const HomeWidget(this.user, {Key? key}) : super(key: key);
+  final UserModel user;
 
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
@@ -26,6 +28,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
   late TabController tabBarController;
   List<Library> listPersonalLibrairies = [];
   List<Library> listCompanyLibrairies = [];
+  List<Library> globalListLibrairies = [];
   late bool inCompany;
   bool _loader = true;
 
@@ -34,12 +37,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
   @override
   void initState() {
     super.initState();
-    getPersonalLibraries();
+
+    // TODO ajouter vraie variable
+    inCompany = widget.user.companyUuid.isNotEmpty;
+
+    initData();
 
     textController = TextEditingController();
-
-    //TODO relier value
-    inCompany = false;
 
     tabBarController = TabController(
       vsync: this,
@@ -48,20 +52,42 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     )..addListener(() => setState(() {}));
   }
 
-  Future<void> getPersonalLibraries() async {
+  Future<void> initData() async {
     setState(() {
       _loader = true;
     });
-
-    ResponseApi? response = await LibraryRepository().getPersonalLibrary(context);
-    if (response != null && response.status == 200) {
-      List<dynamic> result = await response.body.map((doc) => Library.fromJson(doc)).toList();
-      listPersonalLibrairies.addAll(result.cast<Library>());
+    await getPersonalLibraries();
+    if (inCompany) {
+      await getCompanyLibraries();
     }
-
     setState(() {
       _loader = false;
     });
+  }
+
+  Future<void> getPersonalLibraries() async {
+    ResponseApi? response = await LibraryRepository().getPersonalLibrary(context);
+    if (response != null && response.status == 200) {
+      List<dynamic> result = await response.body.map((doc) => Library.fromJson(doc)).toList();
+
+      setState(() {
+        listPersonalLibrairies.addAll(result.cast<Library>());
+        globalListLibrairies.addAll(result.cast<Library>());
+      });
+    }
+  }
+
+  Future<void> getCompanyLibraries() async {
+    ResponseApi? response =
+        await LibraryRepository().getCompanyLibrary(context, widget.user.companyUuid);
+    if (response != null && response.status == 200) {
+      List<dynamic> result = await response.body.map((doc) => Library.fromJson(doc)).toList();
+
+      setState(() {
+        listCompanyLibrairies.addAll(result.cast<Library>());
+        globalListLibrairies.addAll(result.cast<Library>());
+      });
+    }
   }
 
   @override
@@ -167,9 +193,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                         padding: EdgeInsets.zero,
                                         shrinkWrap: true,
                                         scrollDirection: Axis.vertical,
-                                        itemCount: listPersonalLibrairies.length,
+                                        itemCount: globalListLibrairies.length,
                                         itemBuilder: (context, listViewIndex) {
-                                          final element = listPersonalLibrairies[listViewIndex];
+                                          final element = globalListLibrairies[listViewIndex];
                                           return Padding(
                                             padding: EdgeInsets.only(bottom: 10.h),
                                             child: InkWell(
@@ -269,7 +295,110 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                       ),
                                     )
                                   : inCompany
-                                      ? Padding(padding: EdgeInsets.all(10.w), child: Container())
+                                      ? Padding(
+                                          padding: EdgeInsets.all(10.w),
+                                          child: ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: listCompanyLibrairies.length,
+                                            itemBuilder: (context, listViewIndex) {
+                                              final element = listCompanyLibrairies[listViewIndex];
+                                              return Padding(
+                                                padding: EdgeInsets.only(bottom: 10.h),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    //TODO Nav (
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          AppTheme.of(context).secondaryBackground,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          blurRadius: 4.0,
+                                                          color: Color(0x3F14181B),
+                                                          offset: Offset(0.0, 3.0),
+                                                        )
+                                                      ],
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                          0.0, 5.0, 0.0, 10.0),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding: const EdgeInsetsDirectional
+                                                                  .fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                                              child: Column(
+                                                                mainAxisSize: MainAxisSize.max,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment.start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(
+                                                                    element.name,
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsetsDirectional
+                                                                            .fromSTEB(
+                                                                            0.0, 10.0, 0.0, 0.0),
+                                                                    child: Row(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize.max,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment.center,
+                                                                      children: [
+                                                                        const Padding(
+                                                                            padding:
+                                                                                EdgeInsetsDirectional
+                                                                                    .fromSTEB(
+                                                                                        0.0,
+                                                                                        0.0,
+                                                                                        4.0,
+                                                                                        0.0),
+                                                                            child: Text(
+                                                                                "Créée par :")),
+                                                                        Text(
+                                                                          element.createdBy,
+                                                                        ),
+                                                                      ],
+                                                                    ),
+                                                                  ),
+                                                                ],
+                                                              ),
+                                                            ),
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsetsDirectional
+                                                                .fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                            child: Column(
+                                                              mainAxisSize: MainAxisSize.max,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment.end,
+                                                              children: [
+                                                                Text(
+                                                                  element.createdAt,
+                                                                  textAlign: TextAlign.end,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                          ))
                                       : Column(
                                           children: [
                                             Lottie.asset(

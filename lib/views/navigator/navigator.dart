@@ -31,7 +31,7 @@ class _NavBarPageState extends State<NavBarPage> {
   Widget build(BuildContext context) {
     final tabs = {
       'information': const InformationWidget(),
-      'home': const HomeWidget(),
+      'home':  HomeWidget(widget.user),
       'company': CompanyWidget(widget.user),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);

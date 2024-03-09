@@ -22,4 +22,13 @@ class LibraryRepository {
       return null;
     }
   }
+
+  Future<ResponseApi?> getCompanyLibrary(BuildContext context, String companyUuid) async {
+    try {
+      return utilsRepository.requestGet(context, AppConst.libraryCompanyGetEndpoint + companyUuid);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
 }
