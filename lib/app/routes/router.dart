@@ -4,6 +4,7 @@ import 'package:my_tech_lib/views/library/library_screen.dart';
 import 'package:my_tech_lib/views/library/project_screen.dart';
 
 import '../../main_screen.dart';
+import '../../services/models/company_model.dart';
 import '../../services/models/user_model.dart';
 import '../../views/auth/forgot_password_screen.dart';
 import '../../views/auth/login_page_screen.dart';
@@ -53,7 +54,9 @@ class AppRouter {
       case SPLASH:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case HOME:
-        return MaterialPageRoute(builder: (_) => NavBarPage(settings.arguments as UserModel));
+        return MaterialPageRoute(builder: (_) => NavBarPage(
+                    (settings.arguments! as List<Object>)[0] as UserModel,
+                    (settings.arguments! as List<Object>)[1] as Company));
       case CHANGE_PASSWORD:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case EDIT_PROFILE:

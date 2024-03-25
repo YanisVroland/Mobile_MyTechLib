@@ -11,8 +11,8 @@ import '../../../services/models/user_model.dart';
 import '../../../services/repositories/company_repository.dart';
 
 class ViewCompany extends StatefulWidget {
-  const ViewCompany(this.companyUuid, {Key? key}) : super(key: key);
-  final String companyUuid;
+  const ViewCompany(this.company, {Key? key}) : super(key: key);
+  final Company company;
 
   @override
   _ViewCompanyState createState() => _ViewCompanyState();
@@ -22,32 +22,14 @@ class _ViewCompanyState extends State<ViewCompany> {
   List<UserModel> listCompanyUser = [];
   int? countCompany;
   int? countParticipant;
-  bool _loader = true;
-  Company? company;
 
   @override
   void initState() {
     super.initState();
-
-    initCompany();
-  }
-
-  initCompany() async {
-    setState(() {
-      _loader = true;
-    });
-    ResponseApi? response = await CompanyRepository().getCompany(context, widget.companyUuid);
-    if (response != null && response.status == 200) {
-      company = Company.fromJson(response.body);
-      await getUserCompany();
-    }
-    setState(() {
-      _loader = false;
-    });
   }
 
   Future<void> getUserCompany() async {
-    ResponseApi? response = await CompanyRepository().getUserCompany(context, widget.companyUuid);
+    ResponseApi? response = await CompanyRepository().getUserCompany(context, widget.company.uuid);
     if (response != null && response.status == 200) {
       List<dynamic> result = await response.body.map((doc) => UserModel.fromJson(doc)).toList();
       listCompanyUser.addAll(result.cast<UserModel>());
@@ -56,29 +38,8 @@ class _ViewCompanyState extends State<ViewCompany> {
 
   @override
   Widget build(BuildContext context) {
-    return _loader
-        ? Expanded(
-            child: Center(
-                child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                  padding: EdgeInsets.only(top: 10.h, bottom: 50.h),
-                  child: const Text("Chargement : ")),
-              const CircularProgressIndicator(),
-            ],
-          )))
-        //TODO componat custom error request + text
-        : company == null
-            ? Expanded(
-                child: Center(
-                  child: Lottie.asset(
-                    'assets/lottie/400.json',
-                  ),
-                ),
-              )
-            : Padding(
+    return
+        Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 0.0),
                 child: Stack(
                   children: [
@@ -149,7 +110,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                       Column(
                                         children: [
                                           Text(
-                                            company!.name.toUpperCase(),
+                                            widget.company!.name.toUpperCase(),
                                             style: const TextStyle(
                                               fontWeight: FontWeight.bold,
                                             ),
@@ -164,7 +125,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                                 ),
                                               ),
                                               Text(
-                                                company!.createdAt,
+                                                widget.company!.createdAt,
                                                 style: const TextStyle(
                                                   fontSize: 10.0,
                                                 ),
@@ -367,7 +328,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                           ),
                                           Expanded(
                                             child: Text(
-                                              company!.code,
+                                              widget.company!.code,
                                               overflow: TextOverflow.ellipsis,
                                             ),
                                           )
@@ -402,7 +363,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                       const Text("Description : "),
                                       Flexible(
                                         child: AutoSizeText(
-                                          company!.description,
+                                          widget.company!.description,
                                           maxLines: 5,
                                         ),
                                       ),

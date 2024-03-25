@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_tech_lib/app/theme/color_const.dart';
@@ -40,7 +42,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
     // TODO ajouter vraie variable
     inCompany = widget.user.companyUuid.isNotEmpty;
-
     initData();
 
     textController = TextEditingController();

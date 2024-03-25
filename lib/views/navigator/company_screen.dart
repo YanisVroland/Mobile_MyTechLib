@@ -1,3 +1,4 @@
+import 'package:lottie/lottie.dart';
 import 'package:my_tech_lib/views/navigator/widget/join_company_widget.dart';
 import 'package:my_tech_lib/views/navigator/widget/view_company_widget.dart';
 
@@ -5,11 +6,13 @@ import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/widgets/appBar_custom.dart';
+import '../../services/models/company_model.dart';
 import '../../services/models/user_model.dart';
 
 class CompanyWidget extends StatefulWidget {
-  const CompanyWidget(this.user, {Key? key}) : super(key: key);
+  const CompanyWidget(this.user, this.company, {Key? key}) : super(key: key);
   final UserModel user;
+  final Company? company;
 
   @override
   _CompanyWidgetState createState() => _CompanyWidgetState();
@@ -52,7 +55,17 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
           top: true,
           child: Stack(
             children: [
-              hasCompany ? ViewCompany(widget.user.companyUuid) :  JoinCompany(widget.user),
+              hasCompany
+                  ? widget.company == null
+                      ? Expanded(
+                          child: Center(
+                            child: Lottie.asset(
+                              'assets/lottie/400.json',
+                            ),
+                          ),
+                        )
+                      : ViewCompany(widget.company!)
+                  : JoinCompany(widget.user),
             ],
           )),
     );

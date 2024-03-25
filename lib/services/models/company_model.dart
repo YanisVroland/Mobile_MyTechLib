@@ -3,7 +3,7 @@ import 'dart:math';
 import '../../app/theme/tools.dart';
 
 class Company {
-  final String id;
+  final String uuid;
   final String name;
   final String description;
   final String code;
@@ -12,7 +12,7 @@ class Company {
   final String updatedAt;
 
   Company({
-    this.id = '-1',
+    this.uuid = '-1',
     this.name = '',
     this.description = '',
     this.code = '',
@@ -23,7 +23,7 @@ class Company {
 
   factory Company.fromJson(Map<String, dynamic> json) {
     return Company(
-      id: json['uuid'] ?? '-1',
+      uuid: json['uuid'] ?? '-1',
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       code: json['code'] ?? '',
