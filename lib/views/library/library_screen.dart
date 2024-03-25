@@ -122,7 +122,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                 decoration: BoxDecoration(
                   color: AppTheme.of(context).primary,
                 ),
-                child: Padding(
+                child: const Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 16.0, 0.0),
                   child: Column(
                     mainAxisSize: MainAxisSize.max,
@@ -138,11 +138,11 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
               ),
               Expanded(
                 child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
+                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
                   child: Container(
                     decoration: BoxDecoration(
                       color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: [
+                      boxShadow: const [
                         BoxShadow(
                           blurRadius: 4.0,
                           color: Color(0x33000000),

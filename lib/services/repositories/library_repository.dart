@@ -2,6 +2,7 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_tech_lib/services/models/library_model.dart';
 import 'package:my_tech_lib/services/repositories/utils_repository.dart';
 
 import '../../app/theme/app_const.dart';
@@ -26,6 +27,15 @@ class LibraryRepository {
   Future<ResponseApi?> getCompanyLibrary(BuildContext context, String companyUuid) async {
     try {
       return utilsRepository.requestGet(context, AppConst.libraryCompanyGetEndpoint + companyUuid);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> createLibrary(BuildContext context, Library library) async {
+    try {
+      return utilsRepository.requestPost(context, AppConst.libraryCreateEndpoint, library.toJson());
     } catch (e) {
       log(e.toString());
       return null;

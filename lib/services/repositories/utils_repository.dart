@@ -11,7 +11,7 @@ import '../models/responseAPI_model.dart';
 
 class UtilsRepository {
   Future<ResponseApi?> requestPost(
-      BuildContext context, String endpoint, Map<String, Object> bodyJson) async {
+      BuildContext context, String endpoint, Map<String, dynamic> bodyJson) async {
     try {
       String accessToken = await LocalPref().getString("access_token");
       final response = await http.post(

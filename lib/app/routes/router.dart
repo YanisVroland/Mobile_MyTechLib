@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:my_tech_lib/views/library/create_compagny_library_screen.dart';
+import 'package:my_tech_lib/views/library/create_library_screen.dart';
 import 'package:my_tech_lib/views/library/library_screen.dart';
 import 'package:my_tech_lib/views/library/project_screen.dart';
 
@@ -9,9 +9,8 @@ import '../../views/auth/forgot_password_screen.dart';
 import '../../views/auth/login_page_screen.dart';
 import '../../views/auth/onboarding_screen.dart';
 import '../../views/auth/register_account_screen.dart';
-import '../../views/compagny/compagny_edit_screen.dart';
-import '../../views/compagny/compagny_list_people_screen.dart';
-import '../../views/library/create_public_library_screen.dart';
+import '../../views/company/company_edit_screen.dart';
+import '../../views/company/company_list_people_screen.dart';
 import '../../views/navigator/navigator.dart';
 import '../../views/options/edit_profile_widget.dart';
 import '../../views/options/notifications_settings_widget.dart';
@@ -37,8 +36,7 @@ class AppRouter {
   static const String COMPANY_LIST_POEPLE = '/CompanyListPeople';
 
   static const String LIBRARY = '/Library';
-  static const String CREATE_PUBLIC_LIBRARY = '/CreatePublicLibraryWidget';
-  static const String CREATE_COMPANY_LIBRARY = '/CreateCompanyLibraryWidget';
+  static const String CREATE_LIBRARY = '/CreatePublicLibraryWidget';
 
   static const String PROJECT = '/Project';
 
@@ -77,10 +75,8 @@ class AppRouter {
 
       case LIBRARY:
         return MaterialPageRoute(builder: (_) => const LibraryWidget());
-      case CREATE_PUBLIC_LIBRARY:
-        return MaterialPageRoute(builder: (_) => const CreatePublicLibraryWidget());
-      case CREATE_COMPANY_LIBRARY:
-        return MaterialPageRoute(builder: (_) => const CreateCompanyLibraryWidget());
+      case CREATE_LIBRARY:
+        return MaterialPageRoute(builder: (_) =>  CreateLibraryWidget(settings.arguments as UserModel));
 
       case PROJECT:
         return MaterialPageRoute(builder: (_) => const ProjectWidget());

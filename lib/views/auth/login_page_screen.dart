@@ -4,7 +4,6 @@ import 'package:my_tech_lib/app/theme/validators.dart';
 
 import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
-import '../../app/theme/color_const.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 import '../../services/models/responseAPI_model.dart';
@@ -18,7 +17,6 @@ class LoginPageWidget extends StatefulWidget {
 }
 
 class _LoginPageWidgetState extends State<LoginPageWidget> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
   late TextEditingController emailAddressLoginController;
   late TextEditingController passwordLoginController;
   final _formKey = GlobalKey<FormState>();
@@ -174,7 +172,6 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     );
 
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
       body: Container(
         width: MediaQuery.sizeOf(context).width * 1.0,

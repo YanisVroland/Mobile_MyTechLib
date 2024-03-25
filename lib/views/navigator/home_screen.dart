@@ -104,7 +104,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       backgroundColor: AppTheme.of(context).background,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.pushNamed(context, AppRouter.CREATE_PUBLIC_LIBRARY);
+          Navigator.pushNamed(context, AppRouter.CREATE_LIBRARY, arguments: widget.user);
         },
         backgroundColor: AppTheme.of(context).primary,
         child: const Icon(
