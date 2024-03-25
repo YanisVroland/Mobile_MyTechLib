@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/icon_custom.dart';
+import '../../services/models/project_model.dart';
 
 class ProjectWidget extends StatefulWidget {
-  const ProjectWidget({Key? key}) : super(key: key);
+  const ProjectWidget(this.project, {Key? key}) : super(key: key);
+  final Project project;
 
   @override
   _ProjectWidgetState createState() => _ProjectWidgetState();

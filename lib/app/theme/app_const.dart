@@ -17,6 +17,10 @@ class AppConst {
   static String libraryCompanyGetEndpoint = '/library/byCompany/';
   static String libraryCreateEndpoint = '/library/';
 
+  // -> Project
+  static String projectGetEndpoint = '/project/byLibrary/';
+  static String projectCreateEndpoint = '/project/';
+
   // -> Company
   static String companyGetEndpoint = '/company/';
   static String companyUsersGetEndpoint = '/company/user/';

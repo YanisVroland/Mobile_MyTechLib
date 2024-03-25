@@ -181,13 +181,17 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                             controller: tabBarController,
                             children: [
                               _loader
-                                  ? Expanded(
-                                      child: Center(
-                                        child: Lottie.asset(
-                                          'assets/lottie/list_loader.json',
-                                        ),
+                                  ? Center(
+                                      child: Lottie.asset(
+                                        'assets/lottie/list_loader.json',
                                       ),
                                     )
+                                  : globalListLibrairies.isEmpty
+                                      ? Center(
+                                          child: Lottie.asset(
+                                            'assets/lottie/list_empty.json',
+                                          ),
+                                        )
                                   : Padding(
                                       padding: EdgeInsets.all(10.w),
                                       child: ListView.builder(
@@ -201,7 +205,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                             padding: EdgeInsets.only(bottom: 10.h),
                                             child: InkWell(
                                               onTap: () async {
-                                                //TODO Nav (
+                                                Navigator.pushNamed(context, AppRouter.LIBRARY, arguments: element);
                                               },
                                               child: Container(
                                                 decoration: BoxDecoration(
@@ -296,8 +300,14 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                       ),
                                     )
                                   : inCompany
-                                      ? Padding(
-                                          padding: EdgeInsets.all(10.w),
+                                      ?  listCompanyLibrairies.isEmpty
+                                  ? Center(
+                                child: Lottie.asset(
+                                  'assets/lottie/list_empty.json',
+                                ),
+                              )
+                                  :Padding(
+                                           padding: EdgeInsets.all(10.w),
                                           child: ListView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
@@ -309,7 +319,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    //TODO Nav (
+                                                    Navigator.pushNamed(context, AppRouter.LIBRARY, arguments: element);
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
@@ -428,7 +438,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                         ),
                                       ),
                                     )
-                                  : Padding(
+                                  : listPersonalLibrairies.isEmpty
+                                      ? Center(
+                                          child: Lottie.asset(
+                                            'assets/lottie/list_empty.json',
+                                          ),
+                                        )
+                                      : Padding(
                                       padding: EdgeInsets.all(10.w),
                                       child: ListView.builder(
                                         padding: EdgeInsets.zero,
@@ -441,7 +457,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                             padding: EdgeInsets.only(bottom: 10.h),
                                             child: InkWell(
                                               onTap: () async {
-                                                //TODO Nav (
+                                                Navigator.pushNamed(context, AppRouter.LIBRARY, arguments: element);
                                               },
                                               child: Container(
                                                 decoration: BoxDecoration(

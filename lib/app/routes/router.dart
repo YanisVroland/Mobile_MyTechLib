@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/views/library/create_library_screen.dart';
 import 'package:my_tech_lib/views/library/library_screen.dart';
-import 'package:my_tech_lib/views/library/project_screen.dart';
+import 'package:my_tech_lib/views/project/create_project_screen.dart';
+import 'package:my_tech_lib/views/project/project_screen.dart';
 
 import '../../main_screen.dart';
 import '../../services/models/company_model.dart';
+import '../../services/models/library_model.dart';
+import '../../services/models/project_model.dart';
 import '../../services/models/user_model.dart';
 import '../../views/auth/forgot_password_screen.dart';
 import '../../views/auth/login_page_screen.dart';
@@ -40,6 +43,7 @@ class AppRouter {
   static const String CREATE_LIBRARY = '/CreatePublicLibraryWidget';
 
   static const String PROJECT = '/Project';
+  static const String CREATE_PROJECT = '/CreateProject';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -77,18 +81,15 @@ class AppRouter {
             builder: (_) => CompanyListPeopleWidget(settings.arguments as List<UserModel>));
 
       case LIBRARY:
-        return MaterialPageRoute(builder: (_) => const LibraryWidget());
+        return MaterialPageRoute(builder: (_) =>  LibraryWidget(settings.arguments as Library));
       case CREATE_LIBRARY:
         return MaterialPageRoute(builder: (_) =>  CreateLibraryWidget(settings.arguments as UserModel));
 
       case PROJECT:
-        return MaterialPageRoute(builder: (_) => const ProjectWidget());
+        return MaterialPageRoute(builder: (_) => ProjectWidget(settings.arguments as Project));
+      case CREATE_PROJECT:
+        return MaterialPageRoute(builder: (_) =>  CreateProjectWidget(settings.arguments as Library));
 
-      // case ACTIVITY:
-      //   return MaterialPageRoute(
-      //       builder: (_) => ActivitiesScreen(
-      //           (settings.arguments! as List<Object>)[0] as ProductionOrder,
-      //           (settings.arguments! as List<Object>)[1] as Operator));
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
