@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import '../../../app/widgets/icon_custom.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
+import '../../app/widgets/dropdown_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 import '../../services/models/responseAPI_model.dart';
 import '../../services/repositories/project_repository.dart';
@@ -24,6 +25,8 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController descriptionController;
+  String selectedType = "";
+  List<String> listeType = ["Type 1", "Type 2", "Type 3", "Type 4"];
   bool _loader = false;
 
   @override
@@ -85,6 +88,19 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                   hintText: "Entrer la description du projet",
                   validator: Validators.validateEmpty,
                   maxLines: 5,
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 20.h),
+                child: CustomDropDown(
+                  labelText: "Type",
+                  hintText: "Choisir le type du projet",
+                  listValue: listeType,
+                  validator: Validators.validateDropDownEmpty,
+                  action: (dynamic value) {
+                    print(value);
+                  },
+                  value: selectedType,
                 ),
               ),
               Padding(

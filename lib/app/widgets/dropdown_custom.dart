@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../theme/color_const.dart';
 
@@ -56,10 +58,11 @@ class _CustomDropDown extends State<CustomDropDown> {
               borderRadius: BorderRadius.circular(10),
             )),
         onChanged: widget.disabled ? null : widget.action,
-        items: widget.listValue.map<DropdownMenuItem<dynamic>>((dynamic value) {
+        items: widget.listValue.map((value) {
+          print(value);
           return DropdownMenuItem<dynamic>(
             value: value,
-            child: Text(value is String ? value : value.name),
+            child: Text(value.toString()),
           );
         }).toList());
   }

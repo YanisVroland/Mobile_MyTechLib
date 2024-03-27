@@ -37,4 +37,11 @@ class Validators {
     return null;
   }
 
+  static String? validateDropDownEmpty(dynamic value) {
+    if (value == null) {
+      return 'Ne peut pas être vide';
+    }
+    return null;
+  }
+
 }

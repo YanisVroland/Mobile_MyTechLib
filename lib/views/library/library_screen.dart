@@ -258,7 +258,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    Navigator.pushNamed(context, AppRouter.LIBRARY,
+                                                    Navigator.pushNamed(context, AppRouter.PROJECT,
                                                         arguments: element);
                                                   },
                                                   child: Container(
