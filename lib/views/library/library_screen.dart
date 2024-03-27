@@ -31,6 +31,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
   late TextEditingController textController;
   late TabController tabBarController;
   List<Project> listProject = [];
+  List<Project> listAPIProject = [];
+  List<Project> listWebProject = [];
+  List<Project> listMobileProject = [];
   bool _loader = false;
 
   @override
@@ -66,6 +69,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
       List<dynamic> result = await response.body.map((doc) => Project.fromJson(doc)).toList();
       setState(() {
         listProject.addAll(result.cast<Project>());
+        listAPIProject = listProject.where((element) => element.type == "API").toList();
+        listWebProject = listProject.where((element) => element.type == "WEB").toList();
+        listMobileProject = listProject.where((element) => element.type == "MOBILE").toList();
       });
     }
     setState(() {
@@ -357,7 +363,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                         'assets/lottie/list_loader.json',
                                       ),
                                     )
-                                  : listProject.isEmpty
+                                  : listAPIProject.isEmpty
                                       ? Center(
                                           child: Lottie.asset(
                                             'assets/lottie/list_empty.json',
@@ -369,9 +375,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
-                                            itemCount: listProject.length,
+                                            itemCount: listAPIProject.length,
                                             itemBuilder: (context, listViewIndex) {
-                                              final element = listProject[listViewIndex];
+                                              final element = listAPIProject[listViewIndex];
                                               return Padding(
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
@@ -475,7 +481,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                         'assets/lottie/list_loader.json',
                                       ),
                                     )
-                                  : listProject.isEmpty
+                                  : listWebProject.isEmpty
                                       ? Center(
                                           child: Lottie.asset(
                                             'assets/lottie/list_empty.json',
@@ -487,9 +493,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
-                                            itemCount: listProject.length,
+                                            itemCount: listWebProject.length,
                                             itemBuilder: (context, listViewIndex) {
-                                              final element = listProject[listViewIndex];
+                                              final element = listWebProject[listViewIndex];
                                               return Padding(
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
@@ -593,7 +599,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                         'assets/lottie/list_loader.json',
                                       ),
                                     )
-                                  : listProject.isEmpty
+                                  : listMobileProject.isEmpty
                                       ? Center(
                                           child: Lottie.asset(
                                             'assets/lottie/list_empty.json',
@@ -605,9 +611,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
-                                            itemCount: listProject.length,
+                                            itemCount: listMobileProject.length,
                                             itemBuilder: (context, listViewIndex) {
-                                              final element = listProject[listViewIndex];
+                                              final element = listMobileProject[listViewIndex];
                                               return Padding(
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(

@@ -26,7 +26,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   String selectedType = "";
-  List<String> listeType = ["Type 1", "Type 2", "Type 3", "Type 4"];
+  List<String> listeType = ["MOBILE", "WEB", "API"];
   bool _loader = false;
 
   @override
@@ -51,6 +51,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
     Project project = Project(
         name: nameController.text,
         description: descriptionController.text,
+        type: selectedType,
         core_library: widget.library.uuid,
         core_company: widget.library.core_company);
 
@@ -93,14 +94,15 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
               Padding(
                 padding: EdgeInsets.only(top: 20.h),
                 child: CustomDropDown(
-                  labelText: "Type",
-                  hintText: "Choisir le type du projet",
-                  listValue: listeType,
+                  hintText: "Type de projet",
+                  listValue:  listeType,
                   validator: Validators.validateDropDownEmpty,
                   action: (dynamic value) {
-                    print(value);
+                    setState(() {
+                      selectedType = value ?? "";
+                    });
                   },
-                  value: selectedType,
+                  value: null,
                 ),
               ),
               Padding(

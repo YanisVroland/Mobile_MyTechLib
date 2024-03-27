@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 import '../theme/color_const.dart';
 
@@ -7,6 +5,8 @@ class CustomDropDown extends StatefulWidget {
   String hintText;
   String? labelText;
   List<dynamic> listValue;
+  final Color fillColor;
+  final Color borderColor;
   bool disabled;
   dynamic value;
   var action;
@@ -22,6 +22,8 @@ class CustomDropDown extends StatefulWidget {
     this.errorStyle,
     this.validator,
     this.suffixIcon,
+    this.borderColor = Colors.white,
+    this.fillColor = Colors.white,
     this.labelText = null,
     this.disabled = false,
   });
@@ -39,30 +41,41 @@ class _CustomDropDown extends State<CustomDropDown> {
         icon: const Icon(Icons.keyboard_arrow_down),
         validator: widget.validator,
         // style: TextStyle(color: widget.disabled ? Colors.grey : Colors.black),
-        decoration: InputDecoration(
-            filled: true,
-            fillColor:
-                widget.disabled ? Colors.grey.withOpacity(0.2) : Colors.white,
-            hintText: widget.hintText,
-            labelText :  widget.labelText,
-            labelStyle:  TextStyle(color: widget.disabled ? Colors.grey :  Colors.blueAccent.withOpacity(0.8)),
-            floatingLabelStyle: TextStyle(fontWeight: FontWeight.bold,color: Colors.black.withOpacity(0.6)),
-            alignLabelWithHint: true,
-            // errorStyle: widget.errorStyle,
-            errorStyle: TextStyle(height: 0),
-            suffixIcon: widget.suffixIcon,
-            hintStyle: TextStyle(
-              color:  widget.disabled ? Colors.grey : ColorConst.primary,
+        decoration:InputDecoration(
+          filled: true,
+          fillColor: widget.disabled ? Colors.grey.withOpacity(0.2) : widget.fillColor,
+          errorMaxLines: 2,
+          labelText: widget.labelText,
+          labelStyle: TextStyle(
+            color: widget.disabled ? Colors.grey : Colors.black.withOpacity(0.6),
+          ),
+          floatingLabelStyle:
+          TextStyle(fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.6)),
+          alignLabelWithHint: true,
+          errorStyle: widget.errorStyle ?? const TextStyle(height: 0),
+          hintText: widget.hintText,
+          suffixIcon: widget.suffixIcon,
+          hintMaxLines: 1,
+          hintStyle:  TextStyle(color: Colors.black.withOpacity(0.5)),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+            borderSide: BorderSide(
+              color: widget.borderColor.withOpacity(0.7),
             ),
-            border: OutlineInputBorder(
-              borderRadius: BorderRadius.circular(10),
-            )),
+          ),
+          disabledBorder: OutlineInputBorder(
+            borderSide: BorderSide(color: Colors.black.withOpacity(0.7)),
+            borderRadius: BorderRadius.circular(10),
+          ),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(10),
+          ),
+        ),
         onChanged: widget.disabled ? null : widget.action,
-        items: widget.listValue.map((value) {
-          print(value);
+        items: widget.listValue.map<DropdownMenuItem<dynamic>>((dynamic value) {
           return DropdownMenuItem<dynamic>(
             value: value,
-            child: Text(value.toString()),
+            child: Text(value is String ? value : value.name),
           );
         }).toList());
   }

@@ -7,6 +7,7 @@ class Project {
   final String uuid;
   final String name;
   final String description;
+  final String type;
   final String? core_company;
   final String core_library;
   final String createdBy;
@@ -17,6 +18,7 @@ class Project {
     this.uuid = '-1',
     this.name = '',
     this.description = '',
+    this.type = '',
     this.core_company = '',
     this.core_library = '',
     this.createdBy = '',
@@ -29,6 +31,7 @@ class Project {
       uuid: json['uuid'] ?? '-1',
       name: json['name'] ?? '',
       description: json['description'] ?? '',
+      type: json['type'] ?? '',
       core_company: json['core_company'],
       core_library: json['core_library'] ?? '' ,
       createdBy: json['created_by']['name'] + ' ' + json['created_by']['lastName'] ?? '',
@@ -42,6 +45,7 @@ class Project {
   Map<String, dynamic> toJson() {
     var json= {
       'name': name,
+      'type': type,
       'description': description,
       'core_company': core_company,
       'core_library': core_library,
