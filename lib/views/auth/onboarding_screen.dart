@@ -52,14 +52,14 @@ class _OnboardingPageState extends State<OnboardingPage> {
                 children: [
                   if (Theme.of(context).brightness == Brightness.dark)
                     Image.asset(
-                      'assets/images/finWallet_logo_landscape.png',
+                      'assets/images/logo_landscape.png',
                       width: 170.0,
                       height: 60.0,
                       fit: BoxFit.fitWidth,
                     ),
                   if (!(Theme.of(context).brightness == Brightness.dark))
                     Image.asset(
-                      'assets/images/finWallet_logo_landscapeDark@3x.png',
+                      'assets/images/logo_landscape.png',
                       width: 170.0,
                       height: 60.0,
                       fit: BoxFit.fitWidth,

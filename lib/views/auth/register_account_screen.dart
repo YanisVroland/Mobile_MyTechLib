@@ -77,7 +77,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Image.asset(
-              'assets/images/finWallet_logo_landscapeDark@3x.png',
+              'assets/images/logo_landscape.png',
               width: 300.0,
               fit: BoxFit.fitWidth,
             ),

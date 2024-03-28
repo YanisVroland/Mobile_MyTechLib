@@ -17,6 +17,14 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       automaticallyImplyLeading: false,
       title: const Text(AppConst.appName,
           style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+      leading: Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, .0, 0.0),
+        child: Image.asset(
+          'assets/images/logo.png',
+          width: 40,
+          height: 40,
+        ),
+      ),
       actions: [
         Padding(
           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
@@ -30,6 +38,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
+
       ],
       centerTitle: true,
       elevation: 5.0,
