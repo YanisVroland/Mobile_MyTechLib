@@ -9,7 +9,9 @@ class Project {
   final String description;
   final String type;
   final String? core_company;
+  final String? companyName;
   final String core_library;
+  final String version;
   final String createdBy;
   final String createdAt;
   final String updatedAt;
@@ -20,7 +22,9 @@ class Project {
     this.description = '',
     this.type = '',
     this.core_company = '',
+    this.companyName = '',
     this.core_library = '',
+    this.version = 'V1.0.0',
     this.createdBy = '',
     this.createdAt = '',
     this.updatedAt = '',
@@ -32,7 +36,9 @@ class Project {
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       type: json['type'] ?? '',
-      core_company: json['core_company'],
+      version: json['version'] ?? 'V?.?.?',
+      core_company: json['core_company'] != null ? json['core_company']['uuid'] : null ,
+      companyName:  json['core_company'] != null ? json['core_company']['name']: null,
       core_library: json['core_library'] ?? '' ,
       createdBy: json['created_by']['name'] + ' ' + json['created_by']['lastName'] ?? '',
       createdAt:
@@ -49,6 +55,7 @@ class Project {
       'description': description,
       'core_company': core_company,
       'core_library': core_library,
+      'version': version,
     };
     return json;
   }

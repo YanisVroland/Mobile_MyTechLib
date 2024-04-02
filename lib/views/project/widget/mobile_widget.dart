@@ -1,3 +1,4 @@
+import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/theme/app_theme.dart';
@@ -15,9 +16,15 @@ class MobileWidget extends StatefulWidget {
   _MobileWidgetState createState() => _MobileWidgetState();
 }
 
-class _MobileWidgetState extends State<MobileWidget>{
+class _MobileWidgetState extends State<MobileWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final unfocusNode = FocusNode();
+  CarouselController buttonCarouselController = CarouselController();
+  final List<String> imageList = [
+    'https://picsum.photos/seed/669/600',
+    'https://picsum.photos/seed/670/600',
+    'https://picsum.photos/seed/671/600',
+  ];
 
   @override
   void initState() {
@@ -38,7 +45,8 @@ class _MobileWidgetState extends State<MobileWidget>{
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Container(
             height: 100.h,
-            padding: EdgeInsets.only( bottom: 10.h),
+            width: double.infinity,
+            padding: EdgeInsets.only(bottom: 10.h),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -67,115 +75,182 @@ class _MobileWidgetState extends State<MobileWidget>{
                     ),
                   ),
                 ),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      widget.project.name,
-                      style: TextStyle(
-                        fontFamily: 'Montserrat',
-                        fontSize: 28,
-                        color: AppTheme.of(context).primary,
-                        fontWeight: FontWeight.w600,
+                Expanded(
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                widget.project.name,
+                                style: TextStyle(
+                                  fontSize: 24,
+                                  color: AppTheme.of(context).primary,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                              if (widget.project.companyName != null)
+                                Text(
+                                  widget.project.companyName!,
+                                  style: TextStyle(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade500,
+                                  ),
+                                ),
+
+                            ],
+                          ),
+
+                          Text(
+                            widget.project.version,
+                            style: TextStyle(
+                              fontSize: 16,
+                              color: Colors.grey.shade500,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    CustomButton(
-                      text: "Obtenir",
-                      width: 90,
-                      height: 30,
-                      onTap: () {},
-                    ),
-                  ],
+                       Column(
+                         mainAxisAlignment: MainAxisAlignment.end,
+                         children: [
+                           CustomButton(
+                             text: "Obtenir",
+                             width: 90,
+                             height: 30,
+                             onTap: () {},
+                           ),
+                        ],
+                      )
+                    ],
+                  ),
                 )
               ],
             ),
           ),
-          SingleChildScrollView(
-            scrollDirection: Axis.horizontal,
-            child: Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 10.0),
-              child: Row(mainAxisSize: MainAxisSize.max, children: [
-               Padding(padding: const EdgeInsets.only(right: 8.0),child : Container(
-              height: 32.0,
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(8.0),
-                border: Border.all(
-                  color: AppTheme.of(context).primary,
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey.shade300,
+          ),
+          Container(
+            padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+            height: 175,
+            width: double.infinity,
+            child: CarouselSlider(
+                carouselController: buttonCarouselController,
+                options: CarouselOptions(
+                  initialPage: 0,
+                  enableInfiniteScroll: false,
+                  autoPlay: true,
+                  autoPlayInterval: const Duration(seconds: 3),
+                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
+                  autoPlayCurve: Curves.fastOutSlowIn,
+                  enlargeCenterPage: true,
                 ),
-              ),
-              child: const Align(
-                alignment: AlignmentDirectional(0.00, 0.00),
-                child: Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
-                  child: Text("website"),
-                ),
-              ),
-            ),),
-               Container(
-                  height: 32.0,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      color: AppTheme.of(context).secondary,
-                    ),
-                  ),
-                  child: const Align(
-                    alignment: AlignmentDirectional(0.00, 0.00),
+                items: imageList.map((imageUrl) {
+                  return Builder(
+                    builder: (BuildContext context) {
+                      return ClipRRect(
+                        borderRadius: BorderRadius.circular(12.0),
+                        child: Image.network(
+                          imageUrl,
+                          width: double.infinity,
+                          fit: BoxFit.cover,
+                        ),
+                      );
+                    },
+                  );
+                }).toList()),
+          ),
+          Divider(
+            height: 1,
+            thickness: 1,
+            color: Colors.grey.shade300,
+          ),
+          Container(
+              padding: EdgeInsets.only(top: 10.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Tags : ",
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 20,
+                        color: AppTheme.of(context).primary,
+                        fontWeight: FontWeight.w600,
+                      )),
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
                     child: Padding(
-                      padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
-                      child: Text("ux"),
-                    ),
+                        padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
+                        child: Row(mainAxisSize: MainAxisSize.max, children: [
+                          Padding(
+                            padding: const EdgeInsets.only(right: 8.0),
+                            child: Container(
+                              height: 32.0,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.circular(8.0),
+                                border: Border.all(
+                                  color: AppTheme.of(context).primary,
+                                ),
+                              ),
+                              child: const Align(
+                                alignment: AlignmentDirectional(0.00, 0.00),
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                                  child: Text("website"),
+                                ),
+                              ),
+                            ),
+                          ),
+                          Container(
+                            height: 32.0,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8.0),
+                              border: Border.all(
+                                color: AppTheme.of(context).secondary,
+                              ),
+                            ),
+                            child: const Align(
+                              alignment: AlignmentDirectional(0.00, 0.00),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(8.0, 0.0, 8.0, 0.0),
+                                child: Text("ux"),
+                              ),
+                            ),
+                          ),
+                        ])),
                   ),
-                ),
-            ])
-            ),
-          ),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey.shade300,
-          ),
+                ],
+              )),
           Container(
-            height: 200.0,
-            padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12.0),
-              child: Image.network(
-                'https://picsum.photos/seed/669/600',
-                width: double.infinity,
-                height: 200.0,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          Divider(
-            height: 1,
-            thickness: 1,
-            color: Colors.grey.shade300,
-          ),
-          Container(
-            height: 200.0,
-            padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text("Description :", style: TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 20,
-                  color: AppTheme.of(context).primary,
-                  fontWeight: FontWeight.w600,
-                )),
-                Text(widget.project.description, style: const TextStyle(
-                  fontFamily: 'Montserrat',
-                  fontSize: 16,
-                  fontWeight: FontWeight.w400,
-                )),
-              ],
-            )
-          ),
-
+              height: 200.0,
+              padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.start,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text("Description :",
+                      style: TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 20,
+                        color: AppTheme.of(context).primary,
+                        fontWeight: FontWeight.w600,
+                      )),
+                  Text(widget.project.description,
+                      style: const TextStyle(
+                        fontFamily: 'Montserrat',
+                        fontSize: 16,
+                        fontWeight: FontWeight.w400,
+                      )),
+                ],
+              )),
         ]
             // .divide(SizedBox(height: 12.0)),
             ));
