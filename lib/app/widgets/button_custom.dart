@@ -8,6 +8,8 @@ class CustomButton extends StatefulWidget {
   final bool isLoading;
   final bool disabled;
   final Color color;
+  final int width;
+  final int height;
   final TextStyle textStyle;
   final Widget? prefix;
   final VoidCallback onTap;
@@ -16,6 +18,8 @@ class CustomButton extends StatefulWidget {
     required this.onTap,
     required this.text,
     this.prefix,
+    this.width = 200,
+    this.height = 40,
     this.isLoading = false,
     this.disabled = false,
     this.color = ColorConst.primary,
@@ -37,8 +41,8 @@ class _CustomButtonState extends State<CustomButton> {
     return InkWell(
       onTap: widget.isLoading || widget.disabled ? null : widget.onTap,
       child: Container(
-        height: 40.h,
-        width: 200.w,
+        height: widget.height.h,
+        width: widget.width.w,
         constraints: BoxConstraints(
           minWidth: 30.w,
         ),
