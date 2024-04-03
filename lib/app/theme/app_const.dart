@@ -25,6 +25,11 @@ class AppConst {
   static String companyGetEndpoint = '/company/';
   static String companyUsersGetEndpoint = '/company/user/';
 
+  // -> Information
+  static String informationByCompanyGetEndpoint = '/information/byCompany/';
+  static String informationCreateEndpoint = '/information/';
+
+
 
   // Messages
   static String errorApiMessage = 'Erreur de fonctionnement, veuillez contacter le support.';
