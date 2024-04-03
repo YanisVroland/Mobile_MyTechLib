@@ -23,9 +23,9 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
   void initState() {
     super.initState();
     listInformation = [
-      Information(id: "1", createdBy: "Yanis", createdAt: "12/12/2001", updatedAt: "12/12/2001"),
-      Information(id: "2", createdBy: "Yanis", createdAt: "12/12/2001", updatedAt: "12/12/2001"),
-      Information(id: "3", createdBy: "Yanis", createdAt: "12/12/2001", updatedAt: "12/12/2001"),
+      Information(uuid: "1", createdBy: "Yanis", createdAt: "12/12/2001"),
+      Information(uuid: "2", createdBy: "Yanis", createdAt: "12/12/2001"),
+      Information(uuid: "3", createdBy: "Yanis", createdAt: "12/12/2001"),
     ];
   }
 
