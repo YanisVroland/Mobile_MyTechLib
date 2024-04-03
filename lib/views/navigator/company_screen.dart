@@ -50,7 +50,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
           ),
         ),
       ),
-      appBar: const CustomAppBar(),
+      appBar:  CustomAppBar(widget.user),
       body: SafeArea(
           top: true,
           child: Stack(

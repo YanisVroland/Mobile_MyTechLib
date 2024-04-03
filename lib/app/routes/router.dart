@@ -19,7 +19,7 @@ import '../../views/navigator/navigator.dart';
 import '../../views/options/edit_profile_widget.dart';
 import '../../views/options/notifications_settings_widget.dart';
 import '../../views/options/privacy_policy_widget.dart';
-import '../../views/options/profile_page_widget.dart';
+import '../../views/options/settings_screen.dart';
 import '../../views/splash_screen.dart';
 
 class AppRouter {
@@ -31,7 +31,7 @@ class AppRouter {
   static const String FORGOT_PASSWORD = '/ForgotPassword';
   static const String CHANGE_PASSWORD = '/ChangePassword';
   static const String EDIT_PROFILE = '/EditProfile';
-  static const String PROFILE = '/Profile';
+  static const String SETTINGS = '/Settings';
   static const String PRIVACY_POLICY = '/PrivacyPolicy';
   static const String NOTIFICATION_SETTINGS = '/Notification';
   static const String ONBOARDING = '/Onboarding';
@@ -65,8 +65,8 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case EDIT_PROFILE:
         return MaterialPageRoute(builder: (_) => const EditProfileWidget());
-      case PROFILE:
-        return MaterialPageRoute(builder: (_) => const ProfilePageWidget());
+      case SETTINGS:
+        return MaterialPageRoute(builder: (_) =>  SettingsPageWidget(settings.arguments as UserModel));
       case PRIVACY_POLICY:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyWidget());
       case NOTIFICATION_SETTINGS:

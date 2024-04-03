@@ -9,11 +9,13 @@ import '../../app/theme/tools.dart';
 import '../../app/widgets/appBar_custom.dart';
 import '../../services/models/information_model.dart';
 import '../../services/models/responseAPI_model.dart';
+import '../../services/models/user_model.dart';
 import '../../services/repositories/information_repository.dart';
 
 class InformationWidget extends StatefulWidget {
-  const InformationWidget(this.company, {Key? key}) : super(key: key);
+  const InformationWidget(this.company,this.user, {Key? key}) : super(key: key);
   final Company? company;
+  final UserModel user;
 
   @override
   _InformationWidgetState createState() => _InformationWidgetState();
@@ -116,7 +118,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
-      appBar: const CustomAppBar(),
+      appBar:  CustomAppBar(widget.user),
       body: SafeArea(
         top: true,
         child: Column(

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_tech_lib/views/auth/login_page_screen.dart';
 
 import 'app/routes/router.dart';
 import 'app/theme/app_const.dart';
@@ -51,7 +52,7 @@ class _MyAppState extends State<MyApp> {
             useMaterial3: true,
           ),
           themeMode: _themeMode,
-          home: MainScreen(null),
+          home: LoginPageWidget(),
         ));
   }
 }

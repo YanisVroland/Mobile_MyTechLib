@@ -112,7 +112,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
           size: 32.0,
         ),
       ),
-      appBar: const CustomAppBar(),
+      appBar:  CustomAppBar(widget.user),
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,

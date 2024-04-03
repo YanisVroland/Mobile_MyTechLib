@@ -1,14 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:my_tech_lib/services/models/user_model.dart';
 
 import '../routes/router.dart';
 import '../theme/app_const.dart';
 import '../theme/app_theme.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-
-  const CustomAppBar({
+  CustomAppBar(
+    this.user, {
     Key? key,
   }) : super(key: key);
+  UserModel user;
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
           child: InkWell(
             onTap: () async {
-              Navigator.pushNamed(context, AppRouter.PROFILE);
+              Navigator.pushNamed(context, AppRouter.SETTINGS, arguments: user);
             },
             child: const Icon(
               Icons.settings,
@@ -38,7 +40,6 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
           ),
         ),
-
       ],
       centerTitle: true,
       elevation: 5.0,
