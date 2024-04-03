@@ -32,7 +32,7 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'information': const InformationWidget(),
+      'information': InformationWidget(widget.company),
       'home':  HomeWidget(widget.user),
       'company': CompanyWidget(widget.user,widget.company),
     };

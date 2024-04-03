@@ -10,7 +10,7 @@ class Information {
   final String? core_project;
   final String core_library;
   final String createdBy;
-  final String createdAt;
+  final DateTime? createdAt;
 
   Information({
     this.uuid = '-1',
@@ -19,19 +19,19 @@ class Information {
     this.core_library = '',
     this.core_project = '',
     this.createdBy = '',
-    this.createdAt = '',
+    this.createdAt = null,
   });
 
   factory Information.fromJson(Map<String, dynamic> json) {
     return Information(
       uuid: json['uuid'] ?? '-1',
       type: json['type'] ?? '',
-      core_company: json['core_company'] != null ? json['core_company']['uuid'] : null ,
-      core_library: json['core_library'] ?? '' ,
+      core_company: json['core_company'] ?? '' ,
+      core_library: json['core_library'] != null ? json['core_library']['name']: '' ,
       core_project: json['core_project'] ?? '' ,
-      createdBy: json['created_by']['type'] + ' ' + json['created_by']['lasttype'] ?? '',
+      createdBy: json['created_by'] != null ? json['created_by']['name'] + ' ' + json['created_by']['lastName'] : '' ,
       createdAt:
-          json['created_at'] != null ? Tools.formatDate(DateTime.parse(json['created_at'])) : '',
+          json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
     );
   }
 

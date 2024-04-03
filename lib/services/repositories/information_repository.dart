@@ -7,12 +7,11 @@ import 'package:my_tech_lib/services/repositories/utils_repository.dart';
 
 import '../../app/theme/app_const.dart';
 import '../models/responseAPI_model.dart';
-import '../models/information_model.dart';
 
 class InformationRepository {
   UtilsRepository utilsRepository = UtilsRepository();
 
-  Future<ResponseApi?> IetinformationByCompany(BuildContext context, String uuidCompany) async {
+  Future<ResponseApi?> getInformationByCompany(BuildContext context, String uuidCompany) async {
     try {
       return utilsRepository.requestGet(context, AppConst.informationByCompanyGetEndpoint + uuidCompany);
     } catch (e) {
@@ -21,7 +20,7 @@ class InformationRepository {
     }
   }
 
-  Future<ResponseApi?> Ireateinformation(BuildContext context, Information information) async {
+  Future<ResponseApi?> createInformation(BuildContext context, Information information) async {
     try {
       return utilsRepository.requestPost(context, AppConst.informationCreateEndpoint, information.toJson());
     } catch (e) {

@@ -1,13 +1,19 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
+import 'package:my_tech_lib/services/models/company_model.dart';
 
 import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../app/theme/tools.dart';
 import '../../app/widgets/appBar_custom.dart';
 import '../../services/models/information_model.dart';
+import '../../services/models/responseAPI_model.dart';
+import '../../services/repositories/information_repository.dart';
 
 class InformationWidget extends StatefulWidget {
-  const InformationWidget({Key? key}) : super(key: key);
+  const InformationWidget(this.company, {Key? key}) : super(key: key);
+  final Company? company;
 
   @override
   _InformationWidgetState createState() => _InformationWidgetState();
@@ -17,16 +23,87 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
   int filterIdx = 1;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  late List<Information> listInformation;
+  List<Information> listInformation = [];
+  List<Information> listInformationTmp = [];
+  bool _loader = true;
+  bool hadCompany = false;
+  int nbNewInformation = 0;
+  int nbDeleteInformation = 0;
+  int nbUpdateInformation = 0;
 
   @override
   void initState() {
     super.initState();
-    listInformation = [
-      Information(uuid: "1", createdBy: "Yanis", createdAt: "12/12/2001"),
-      Information(uuid: "2", createdBy: "Yanis", createdAt: "12/12/2001"),
-      Information(uuid: "3", createdBy: "Yanis", createdAt: "12/12/2001"),
-    ];
+    hadCompany = widget.company != null;
+    if (hadCompany) {
+      initInformation();
+    }
+  }
+
+  Future<void> initInformation() async {
+    setState(() {
+      _loader = true;
+    });
+
+    ResponseApi? response =
+        await InformationRepository().getInformationByCompany(context, widget.company!.uuid);
+    if (response != null && response.status == 200) {
+      List<dynamic> result = await response.body.map((doc) => Information.fromJson(doc)).toList();
+
+      setState(() {
+        listInformationTmp = result.cast<Information>();
+        listInformation = result.cast<Information>();
+        updateGlobalList();
+      });
+    }
+
+    setState(() {
+      _loader = false;
+    });
+  }
+
+  updateGlobalList() {
+    DateTime now = DateTime.now();
+
+    switch (filterIdx) {
+      case 1:
+        DateTime startOfDay = DateTime(now.year, now.month, now.day);
+        DateTime endOfDay = DateTime(now.year, now.month, now.day + 1);
+
+        listInformation = listInformationTmp
+            .where((element) =>
+        element.createdAt!.isAfter(startOfDay) &&
+            element.createdAt!.isBefore(endOfDay))
+            .toList();
+        break;
+      case 2:
+        DateTime sevenDaysAgo = now.subtract(const Duration(days: 7));
+
+        listInformation = listInformationTmp
+            .where((element) =>
+                element.createdAt!.isAfter(sevenDaysAgo) && element.createdAt!.isBefore(now))
+            .toList();
+        break;
+      case 3:
+        int currentMonth = now.month;
+        DateTime firstDayOfMonth = DateTime(now.year, currentMonth, 1);
+        DateTime firstDayOfNextMonth = DateTime(now.year, currentMonth + 1, 1);
+
+        listInformation = listInformationTmp
+            .where((element) =>
+        element.createdAt!.isAfter(firstDayOfMonth) &&
+            element.createdAt!.isBefore(firstDayOfNextMonth))
+            .toList();
+        break;
+    }
+
+
+    setState(() {
+      nbNewInformation = listInformation.where((element) => element.type == 'NEW').length;
+      nbDeleteInformation = listInformation.where((element) => element.type == 'DELETE').length;
+      nbUpdateInformation = listInformation.where((element) => element.type == 'UPDATE').length;
+    });
+
   }
 
   @override
@@ -43,13 +120,11 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
       body: SafeArea(
         top: true,
         child: Column(
-          mainAxisSize: MainAxisSize.max,
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(10.0, 20.0, 10.0, 0.0),
               child: Row(
-                mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Expanded(
@@ -59,9 +134,12 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        setState(() {
-                          filterIdx = 1;
-                        });
+                        if (filterIdx != 1) {
+                          setState(() {
+                            filterIdx = 1;
+                            updateGlobalList();
+                          });
+                        }
                       },
                       child: Container(
                         height: 50.0,
@@ -103,9 +181,12 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        setState(() {
-                          filterIdx = 2;
-                        });
+                        if (filterIdx != 2) {
+                          setState(() {
+                            filterIdx = 2;
+                            updateGlobalList();
+                          });
+                        }
                       },
                       child: Container(
                         height: 50.0,
@@ -143,9 +224,12 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                       hoverColor: Colors.transparent,
                       highlightColor: Colors.transparent,
                       onTap: () async {
-                        setState(() {
-                          filterIdx = 3;
-                        });
+                        if (filterIdx != 3) {
+                          setState(() {
+                            filterIdx = 3;
+                            updateGlobalList();
+                          });
+                        }
                       },
                       child: Container(
                         height: 50.0,
@@ -217,10 +301,10 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                               fontSize: 12.0,
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                             child: Text(
-                              "12",
+                              nbNewInformation.toString(),
                               textAlign: TextAlign.start,
                             ),
                           ),
@@ -259,7 +343,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                           Padding(
                             padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                             child: Text(
-                              filterIdx.toString(),
+                              nbUpdateInformation.toString(),
                               textAlign: TextAlign.start,
                             ),
                           ),
@@ -288,17 +372,17 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            "Supression",
+                            "Suppression",
                             textAlign: TextAlign.start,
                             style: TextStyle(
                               color: AppTheme.of(context).secondary,
                               fontSize: 12.0,
                             ),
                           ),
-                          const Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                          Padding(
+                            padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                             child: Text(
-                              "23",
+                              nbDeleteInformation.toString(),
                               textAlign: TextAlign.start,
                             ),
                           ),
@@ -319,82 +403,123 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                     fontWeight: FontWeight.bold,
                   ),
                 )),
-            Expanded(
-              child: Padding(
-                padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                child: ListView.builder(
-                  padding: EdgeInsets.zero,
-                  shrinkWrap: true,
-                  scrollDirection: Axis.vertical,
-                  itemCount: listInformation.length,
-                  itemBuilder: (context, listViewIndex) {
-                    final element = listInformation[listViewIndex];
-                    return Padding(
-                      padding: EdgeInsets.only(bottom: 10.h),
-                      child: Container(
-                        height: 70.0,
-                        decoration: BoxDecoration(
-                          color: AppTheme.of(context).secondaryBackground,
-                          boxShadow: const [
-                            BoxShadow(
-                              blurRadius: 4.0,
-                              color: Color(0x3F14181B),
-                              offset: Offset(0.0, 3.0),
-                            )
-                          ],
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        child: const Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              Expanded(
-                                child: Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                                  child: Column(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.start,
-                                    crossAxisAlignment: CrossAxisAlignment.start,
-                                    children: [
-                                      Flexible(
-                                        child: Text("Client : Microsoft "),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                                        child: Text("Nouveau shelf : Amazon "),
-                                      ),
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(0.0, 4.0, 0.0, 0.0),
-                                        child: Text("Par : Yanis Vroland "),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                                child: Column(
-                                  mainAxisSize: MainAxisSize.max,
-                                  mainAxisAlignment: MainAxisAlignment.start,
-                                  crossAxisAlignment: CrossAxisAlignment.end,
-                                  children: [
-                                    Text(
-                                      " 12/07/2022 ",
-                                      textAlign: TextAlign.end,
+            hadCompany
+                ? Expanded(
+                    child: _loader
+                        ? Center(
+                            child: Lottie.asset(
+                              'assets/lottie/list_loader.json',
+                            ),
+                          )
+                        : Padding(
+                            padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                            child: listInformation.isEmpty
+                                ? Center(
+                                    child: Lottie.asset(
+                                      'assets/lottie/list_empty.json',
                                     ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                                  )
+                                : ListView.builder(
+                                    padding: EdgeInsets.zero,
+                                    shrinkWrap: true,
+                                    scrollDirection: Axis.vertical,
+                                    itemCount: listInformation.length,
+                                    itemBuilder: (context, listViewIndex) {
+                                      final element = listInformation[listViewIndex];
+                                      return Padding(
+                                        padding: EdgeInsets.only(bottom: 10.h),
+                                        child: Container(
+                                          height: 70.0,
+                                          decoration: BoxDecoration(
+                                            color: AppTheme.of(context).secondaryBackground,
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                blurRadius: 4.0,
+                                                color: Color(0x3F14181B),
+                                                offset: Offset(0.0, 3.0),
+                                              )
+                                            ],
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                          child: Padding(
+                                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 5.0, 0.0, 10.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                          12.0, 0.0, 0.0, 0.0),
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment.spaceBetween,
+                                                        crossAxisAlignment:
+                                                            CrossAxisAlignment.start,
+                                                        children: [
+                                                          Flexible(
+                                                            child: Text(
+                                                                "Client : " + element.core_library),
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsetsDirectional
+                                                                .fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                            child: Text("Type : " + element.type),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                                        12.0, 0.0, 12.0, 0.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.spaceBetween,
+                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      children: [
+                                                        Text(
+                                                          Tools.formatDate(element.createdAt!),
+                                                          textAlign: TextAlign.end,
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                  0.0, 4.0, 0.0, 0.0),
+                                                          child: Text("Par : " + element.createdBy),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
+                                        ),
+                                      );
+                                    },
+                                  ),
+                          ),
+                  )
+                : Column(
+                    children: [
+                      Lottie.asset(
+                        'assets/lottie/without_company.json',
+                        height: 200.h,
+                        width: 300.w,
+                      ),
+                      Padding(
+                        padding: EdgeInsets.all(10.w),
+                        child: Text(
+                          "Vous n'avez pas encore d'entreprise",
+                          style: TextStyle(
+                            color: AppTheme.of(context).primary,
+                            fontSize: 16.0,
+                            fontWeight: FontWeight.w500,
                           ),
                         ),
                       ),
-                    );
-                  },
-                ),
-              ),
-            ),
+                    ],
+                  ),
           ],
         ),
       ),
