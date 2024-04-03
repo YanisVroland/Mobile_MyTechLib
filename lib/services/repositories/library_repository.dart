@@ -2,17 +2,18 @@ import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:my_tech_lib/services/models/information_model.dart';
 import 'package:my_tech_lib/services/models/library_model.dart';
+import 'package:my_tech_lib/services/repositories/information_repository.dart';
 import 'package:my_tech_lib/services/repositories/utils_repository.dart';
 
 import '../../app/theme/app_const.dart';
-import '../../app/theme/snackBar_const.dart';
 import '../local/pref.dart';
 import '../models/responseAPI_model.dart';
-import '../models/user_model.dart';
 
 class LibraryRepository {
   UtilsRepository utilsRepository = UtilsRepository();
+  InformationRepository informationRepository = InformationRepository();
 
   Future<ResponseApi?> getPersonalLibrary(BuildContext context) async {
     String uuidUser = await LocalPref().getString("uuid_user");
@@ -35,7 +36,16 @@ class LibraryRepository {
 
   Future<ResponseApi?> createLibrary(BuildContext context, Library library) async {
     try {
-      return utilsRepository.requestPost(context, AppConst.libraryCreateEndpoint, library.toJson());
+      ResponseApi? responseApi = await utilsRepository.requestPost(
+          context, AppConst.libraryCreateEndpoint, library.toJson());
+      if (library.core_company != null && responseApi != null && responseApi.status == 201) {
+        informationRepository.createInformation(context, Information(
+          core_company: library.core_company,
+          core_library: responseApi.body["uuid"],
+          type: "NEW",
+        ));
+      }
+      return responseApi;
     } catch (e) {
       log(e.toString());
       return null;

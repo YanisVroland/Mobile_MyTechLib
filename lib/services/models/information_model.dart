@@ -15,9 +15,9 @@ class Information {
   Information({
     this.uuid = '-1',
     this.type = '',
-    this.core_company = '',
+    this.core_company = null,
     this.core_library = '',
-    this.core_project = '',
+    this.core_project = null,
     this.createdBy = '',
     this.createdAt = null,
   });
