@@ -112,7 +112,11 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                                         color: Colors.white,
                                         size: 24.0,
                                       ),
-                                      onPressed: () async {},
+                                      onPressed: () async {
+
+                                        Navigator.pushNamedAndRemoveUntil(
+                                            context, '/Login', (Route<dynamic> route) => false);
+                                      },
                                     ),
                                   ),
                                 ),
@@ -147,9 +151,9 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only( top: 20.h,  bottom: 20.h),
-              child:
-                 const Text("Mon compte", style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+              padding: EdgeInsets.only(top: 20.h, bottom: 20.h),
+              child: const Text("Mon compte",
+                  style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
             ),
             InkWell(
               onTap: () async {
@@ -194,183 +198,178 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
             ),
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child:
-                  InkWell(
-                    onTap: () async {
-                      Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD);
-                    },
-                    child:  Container(
-                      width: MediaQuery.sizeOf(context).width * 0.9,
-                      height: 60.0,
-                      decoration: BoxDecoration(
-                        color: AppTheme.of(context).background,
-                        borderRadius: BorderRadius.circular(8.0),
-                        border: Border.all(
-                          width: 1.0,
-                        ),
-                      ),
-                      child: Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                        child: Row(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            const Text(
-                              "Changer le mot de passe",
-                            ),
-                            IconCustom(
-                              borderColor: Colors.transparent,
-                              borderRadius: 30.0,
-                              buttonSize: 46.0,
-                              icon: const Icon(
-                                Icons.chevron_right_rounded,
-                                color: Color(0xFF95A1AC),
-                                size: 20.0,
-                              ),
-                              onPressed: () {
-                                Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD);
-                              },
-                            ),
-                          ],
-                        ),
-                      ),
-                    )
-                  ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child:
-                  InkWell(
-                    onTap: () async {
-                      Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
-                    },
-                    child:Container(
-                        width: MediaQuery.sizeOf(context).width * 0.9,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          color: AppTheme.of(context).background,
-                          borderRadius: BorderRadius.circular(8.0),
-                          border: Border.all(
-                            width: 1.0,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Paramètres de notification",
-                              ),
-                              IconCustom(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30.0,
-                                buttonSize: 46.0,
-                                icon: const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: Color(0xFF95A1AC),
-                                  size: 20.0,
-                                ),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                  ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child:
-                  InkWell(
-                    onTap: () async {
-                      Navigator.pushNamed(context, AppRouter.ONBOARDING);
-                    },
-                    child:  Container(
-                        width: MediaQuery.sizeOf(context).width * 0.9,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          color: AppTheme.of(context).background,
-                          borderRadius: BorderRadius.circular(8.0),
-                          border: Border.all(
-                            width: 1.0,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Tutoriel",
-                              ),
-                              IconCustom(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30.0,
-                                buttonSize: 46.0,
-                                icon: const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: Color(0xFF95A1AC),
-                                  size: 20.0,
-                                ),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, AppRouter.ONBOARDING);
-                                },
-                              ),
-                            ],
-                          ),
-                        ),
-                      ),
-                  ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child:
-                  InkWell(
-                    onTap: () async {
-                      Navigator.pushNamed(context, AppRouter.PRIVACY_POLICY);
-                    },
-                    child: Container(
-                        width: MediaQuery.sizeOf(context).width * 0.9,
-                        height: 60.0,
-                        decoration: BoxDecoration(
-                          color: AppTheme.of(context).background,
-                          borderRadius: BorderRadius.circular(8.0),
-                          border: Border.all(
-                            width: 1.0,
-                          ),
-                        ),
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              const Text(
-                                "Politique de confidentialité",
-                              ),
-                              IconCustom(
-                                borderColor: Colors.transparent,
-                                borderRadius: 30.0,
-                                buttonSize: 46.0,
-                                icon: const Icon(
-                                  Icons.chevron_right_rounded,
-                                  color: Color(0xFF95A1AC),
-                                  size: 20.0,
-                                ),
-                                onPressed: () {
-                                  Navigator.pushNamed(context, AppRouter.PRIVACY_POLICY);
-                                },
-                              ),
-                            ],
-                          ),
+              child: InkWell(
+                  onTap: () async {
+                    Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD);
+                  },
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width * 0.9,
+                    height: 60.0,
+                    decoration: BoxDecoration(
+                      color: AppTheme.of(context).background,
+                      borderRadius: BorderRadius.circular(8.0),
+                      border: Border.all(
+                        width: 1.0,
                       ),
                     ),
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.max,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          const Text(
+                            "Changer le mot de passe",
+                          ),
+                          IconCustom(
+                            borderColor: Colors.transparent,
+                            borderRadius: 30.0,
+                            buttonSize: 46.0,
+                            icon: const Icon(
+                              Icons.chevron_right_rounded,
+                              color: Color(0xFF95A1AC),
+                              size: 20.0,
+                            ),
+                            onPressed: () {
+                              Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD);
+                            },
+                          ),
+                        ],
+                      ),
+                    ),
+                  )),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+              child: InkWell(
+                onTap: () async {
+                  Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
+                },
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 0.9,
+                  height: 60.0,
+                  decoration: BoxDecoration(
+                    color: AppTheme.of(context).background,
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(
+                      width: 1.0,
+                    ),
                   ),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Paramètres de notification",
+                        ),
+                        IconCustom(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30.0,
+                          buttonSize: 46.0,
+                          icon: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Color(0xFF95A1AC),
+                            size: 20.0,
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+              child: InkWell(
+                onTap: () async {
+                  Navigator.pushNamed(context, AppRouter.ONBOARDING);
+                },
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 0.9,
+                  height: 60.0,
+                  decoration: BoxDecoration(
+                    color: AppTheme.of(context).background,
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(
+                      width: 1.0,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Tutoriel",
+                        ),
+                        IconCustom(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30.0,
+                          buttonSize: 46.0,
+                          icon: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Color(0xFF95A1AC),
+                            size: 20.0,
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRouter.ONBOARDING);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+              child: InkWell(
+                onTap: () async {
+                  Navigator.pushNamed(context, AppRouter.PRIVACY_POLICY);
+                },
+                child: Container(
+                  width: MediaQuery.sizeOf(context).width * 0.9,
+                  height: 60.0,
+                  decoration: BoxDecoration(
+                    color: AppTheme.of(context).background,
+                    borderRadius: BorderRadius.circular(8.0),
+                    border: Border.all(
+                      width: 1.0,
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Politique de confidentialité",
+                        ),
+                        IconCustom(
+                          borderColor: Colors.transparent,
+                          borderRadius: 30.0,
+                          buttonSize: 46.0,
+                          icon: const Icon(
+                            Icons.chevron_right_rounded,
+                            color: Color(0xFF95A1AC),
+                            size: 20.0,
+                          ),
+                          onPressed: () {
+                            Navigator.pushNamed(context, AppRouter.PRIVACY_POLICY);
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
             ),
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(20.0, 30.0, 20.0, 16.0),

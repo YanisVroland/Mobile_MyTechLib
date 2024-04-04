@@ -43,6 +43,20 @@ class UtilsRepository {
     }
   }
 
+  Future<ResponseApi?> requestDelete(BuildContext context, String endpoint) async {
+    try {
+      String accessToken = await LocalPref().getString("access_token");
+
+      var response = await http.delete(
+        Uri.parse(AppConst.baseUrl + endpoint),
+        headers: <String, String>{'Authorization': 'Bearer ' + accessToken},
+      );
+      return await verificationResponse(context, response, endpoint);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<ResponseApi?> verificationResponse(
       BuildContext context, dynamic response, String endpoint) async {
     print("$endpoint => Status : ${response.statusCode} Body : ${response.body}");

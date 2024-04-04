@@ -51,4 +51,13 @@ class LibraryRepository {
       return null;
     }
   }
+
+  Future<ResponseApi?> deleteLibrary(BuildContext context, String uuid) async {
+    try {
+      return utilsRepository.requestDelete(context, AppConst.libraryDeleteEndpoint + uuid);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
 }

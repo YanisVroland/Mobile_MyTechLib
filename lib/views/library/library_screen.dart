@@ -1,4 +1,3 @@
-
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_tech_lib/services/models/project_model.dart';
@@ -13,6 +12,7 @@ import '../../app/widgets/icon_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 import '../../services/models/library_model.dart';
 import '../../services/models/responseAPI_model.dart';
+import '../../services/repositories/library_repository.dart';
 import '../../services/repositories/project_repository.dart';
 
 class LibraryWidget extends StatefulWidget {
@@ -79,6 +79,37 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
     });
   }
 
+  Future<void> deleteLibrary() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text("Delete Library"),
+          content: const Text("Are you sure you want to delete this library?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () async {
+                Navigator.of(context).pop();
+                ResponseApi? response = await LibraryRepository().deleteLibrary(context, widget.library.uuid);
+                if (response != null && response.status == 200) {
+                  Navigator.pop(context);
+                }
+              },
+              child: const Text("Delete"),
+            ),
+          ],
+        );
+      },
+    );
+
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -125,7 +156,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                             size: 30.0,
                           ),
                           onPressed: () async {
-                            Navigator.pop(context);
+                            deleteLibrary();
                           },
                         ),
                       ),
@@ -167,16 +198,33 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
               decoration: BoxDecoration(
                 color: AppTheme.of(context).primary,
               ),
-              child: const Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 16.0, 0.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.start,
+              child: Padding(
+                padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 16.0, 5.0),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Text(
+                    const Text(
                       "12 Projects",
                     ),
+                    Container(
+                      width: 40.0,
+                      height: 40.0,
+                      decoration: BoxDecoration(
+                        color: ColorConst.delete,
+                        borderRadius: BorderRadius.circular(8.0),
+                      ),
+                      child: IconCustom(
+                        onPressed: () async {
+
+                          Navigator.pop(context);
+                        },
+                        icon: const Icon(
+                          Icons.delete_forever_rounded,
+                          color: Colors.white,
+                          size: 25.0,
+                        ),
+                      ),
+                    )
                   ],
                 ),
               ),
