@@ -1,4 +1,6 @@
 // ignore_for_file: overridden_fields, annotate_overrides
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/app/theme/color_const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -9,6 +11,7 @@ SharedPreferences? _prefs;
 abstract class AppTheme {
   static Future initialize() async =>
       _prefs = await SharedPreferences.getInstance();
+
   static ThemeMode get themeMode {
     final darkMode = _prefs?.getBool(kThemeModeKey);
     return darkMode == null

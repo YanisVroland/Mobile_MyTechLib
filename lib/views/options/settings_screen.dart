@@ -1,5 +1,9 @@
+import 'dart:math';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_tech_lib/app/theme/color_const.dart';
 import 'package:my_tech_lib/services/models/user_model.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
@@ -7,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/icon_custom.dart';
+import '../../main.dart';
 
 class SettingsPageWidget extends StatefulWidget {
   const SettingsPageWidget(this.user, {Key? key}) : super(key: key);
@@ -28,6 +33,43 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
   void dispose() {
     super.dispose();
   }
+
+  void setDarkModeSetting(BuildContext context, ThemeMode mode) {
+    showDialog(context: context, builder: (context) => AlertDialog(
+      title: const Text('Changer de mode'),
+      content: const Text('Vous allez être déconnecté. Voulez-vous continuer ?'),
+      actions: [
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+          },
+          child: const Text('NON'),
+        ),
+        TextButton(
+          onPressed: () {
+            Navigator.of(context).pop();
+            AppTheme.saveThemeMode(mode);
+            SharedPreferences.getInstance().then((prefs) {
+              if (prefs != null) {
+                prefs.setBool(kThemeModeKey, mode == ThemeMode.dark);
+                AppTheme.saveThemeMode(mode);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => MyApp()),
+                );
+              }
+            });
+          },
+          child: const Text('OUI'),
+        ),
+      ],
+    ));
+
+
+
+
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -84,10 +126,13 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                                 decoration: const BoxDecoration(
                                   shape: BoxShape.circle,
                                 ),
-                                child: Image.asset(
+                                child: widget.user.profile_url.isEmpty ? Image.asset(
                                   'assets/images/tlchargement.png',
                                   fit: BoxFit.cover,
-                                ),
+                                ) : Image.network(
+                                  widget.user.profile_url,
+                                  fit: BoxFit.cover,
+                                )
                               ),
                             ),
                           ),
@@ -103,7 +148,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                                     width: 44.0,
                                     height: 44.0,
                                     decoration: BoxDecoration(
-                                      color: Colors.red.shade400,
+                                      color: ColorConst.delete,
                                       borderRadius: BorderRadius.circular(8.0),
                                     ),
                                     child: IconCustom(
@@ -131,7 +176,10 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                       child: Row(
                         mainAxisSize: MainAxisSize.max,
                         children: [
-                          Text(widget.user.name + " " + widget.user.lastname),
+                          Text(widget.user.name + " " + widget.user.lastname,
+                              style: const TextStyle(
+                                  fontSize: 20.0, fontWeight: FontWeight.bold)
+                          ),
                         ],
                       ),
                     ),
@@ -142,6 +190,8 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                           child: Text(
                             widget.user.email,
+                            style: const TextStyle(
+                                fontSize: 16.0, fontWeight: FontWeight.normal),
                           ),
                         ),
                       ],
@@ -396,7 +446,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            // setDarkModeSetting(context, ThemeMode.light);
+                            setDarkModeSetting(context, ThemeMode.light);
                           },
                           child: Container(
                             width: 115.0,
@@ -442,7 +492,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                           hoverColor: Colors.transparent,
                           highlightColor: Colors.transparent,
                           onTap: () async {
-                            // setDarkModeSetting(context, ThemeMode.dark);
+                            setDarkModeSetting(context, ThemeMode.dark);
                           },
                           child: Container(
                             width: 115.0,

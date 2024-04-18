@@ -12,7 +12,7 @@ import 'main_screen.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-
+  await AppTheme.initialize();
   runApp(MyApp());
 }
 
@@ -43,12 +43,12 @@ class _MyAppState extends State<MyApp> {
           onGenerateRoute: AppRouter.generateRoute,
           theme: ThemeData(
             brightness: Brightness.light,
-            scrollbarTheme: ScrollbarThemeData(),
+            scrollbarTheme: const ScrollbarThemeData(),
             useMaterial3: true,
           ),
           darkTheme: ThemeData(
             brightness: Brightness.dark,
-            scrollbarTheme: ScrollbarThemeData(),
+            scrollbarTheme: const ScrollbarThemeData(),
             useMaterial3: true,
           ),
           themeMode: _themeMode,
