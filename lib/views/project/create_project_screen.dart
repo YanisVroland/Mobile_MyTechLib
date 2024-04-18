@@ -55,7 +55,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
         core_library: widget.library.uuid,
         core_company: widget.library.core_company);
 
-    ResponseApi? response = await libraryRepository.createProject(context, project);
+    ResponseApi? response = await libraryRepository.createProject(context, project,widget.library);
 
     if (response != null && response.status == 201) {
       Navigator.pop(context);

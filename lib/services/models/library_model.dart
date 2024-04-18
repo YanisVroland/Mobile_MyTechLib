@@ -40,6 +40,14 @@ class Library {
     );
   }
 
+  factory Library.fromJsonInformation(Map<String, dynamic> json) {
+    return Library(
+      uuid: json['uuid'] ?? '-1',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+    );
+  }
+
   Map<String, dynamic> toJson() {
     var json= {
       'name': name,

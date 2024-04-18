@@ -462,7 +462,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                         children: [
                                                           Flexible(
                                                             child: Text(
-                                                                "Client : " + element.core_library),
+                                                                "Client : " + element.core_library!.name),
                                                           ),
                                                           Padding(
                                                             padding: const EdgeInsetsDirectional

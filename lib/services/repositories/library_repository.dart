@@ -38,13 +38,15 @@ class LibraryRepository {
     try {
       ResponseApi? responseApi = await utilsRepository.requestPost(
           context, AppConst.libraryCreateEndpoint, library.toJson());
+
       if (library.core_company != null && responseApi != null && responseApi.status == 201) {
         informationRepository.createInformation(context, Information(
           core_company: library.core_company,
-          core_library: responseApi.body["uuid"],
+          core_library: library,
           type: "NEW",
         ));
       }
+
       return responseApi;
     } catch (e) {
       log(e.toString());

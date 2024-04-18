@@ -27,14 +27,14 @@ class ProjectRepository {
     }
   }
 
-  Future<ResponseApi?> createProject(BuildContext context, Project project) async {
+  Future<ResponseApi?> createProject(BuildContext context, Project project, Library library) async {
     try {
       ResponseApi? responseApi =await utilsRepository.requestPost(context, AppConst.projectCreateEndpoint, project.toJson());
       if (project.core_company != null && responseApi != null && responseApi.status == 201) {
         informationRepository.createInformation(context, Information(
           core_company: project.core_company,
-          core_library: project.core_library,
-          core_project: responseApi.body["uuid"],
+          core_library: library,
+          core_project: responseApi.body['uuid'],
           type: "NEW",
         ));
       }
