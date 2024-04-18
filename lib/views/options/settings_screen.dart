@@ -35,41 +35,38 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
   }
 
   void setDarkModeSetting(BuildContext context, ThemeMode mode) {
-    showDialog(context: context, builder: (context) => AlertDialog(
-      title: const Text('Changer de mode'),
-      content: const Text('Vous allez être déconnecté. Voulez-vous continuer ?'),
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          },
-          child: const Text('NON'),
-        ),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-            AppTheme.saveThemeMode(mode);
-            SharedPreferences.getInstance().then((prefs) {
-              if (prefs != null) {
-                prefs.setBool(kThemeModeKey, mode == ThemeMode.dark);
-                AppTheme.saveThemeMode(mode);
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => MyApp()),
-                );
-              }
-            });
-          },
-          child: const Text('OUI'),
-        ),
-      ],
-    ));
-
-
-
-
+    showDialog(
+        context: context,
+        builder: (context) => AlertDialog(
+              title: const Text('Changer de mode'),
+              content: const Text('Vous allez être déconnecté. Voulez-vous continuer ?'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('NON'),
+                ),
+                TextButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                    AppTheme.saveThemeMode(mode);
+                    SharedPreferences.getInstance().then((prefs) {
+                      if (prefs != null) {
+                        prefs.setBool(kThemeModeKey, mode == ThemeMode.dark);
+                        AppTheme.saveThemeMode(mode);
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => MyApp()),
+                        );
+                      }
+                    });
+                  },
+                  child: const Text('OUI'),
+                ),
+              ],
+            ));
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -120,20 +117,21 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                             child: Padding(
                               padding: const EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                               child: Container(
-                                width: 60.0,
-                                height: 60.0,
-                                clipBehavior: Clip.antiAlias,
-                                decoration: const BoxDecoration(
-                                  shape: BoxShape.circle,
-                                ),
-                                child: widget.user.profile_url.isEmpty ? Image.asset(
-                                  'assets/images/tlchargement.png',
-                                  fit: BoxFit.cover,
-                                ) : Image.network(
-                                  widget.user.profile_url,
-                                  fit: BoxFit.cover,
-                                )
-                              ),
+                                  width: 60.0,
+                                  height: 60.0,
+                                  clipBehavior: Clip.antiAlias,
+                                  decoration: const BoxDecoration(
+                                    shape: BoxShape.circle,
+                                  ),
+                                  child: widget.user.profile_url.isEmpty
+                                      ? Image.asset(
+                                          'assets/images/tlchargement.png',
+                                          fit: BoxFit.cover,
+                                        )
+                                      : Image.network(
+                                          widget.user.profile_url,
+                                          fit: BoxFit.cover,
+                                        )),
                             ),
                           ),
                           Padding(
@@ -158,7 +156,6 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                                         size: 24.0,
                                       ),
                                       onPressed: () async {
-
                                         Navigator.pushNamedAndRemoveUntil(
                                             context, '/Login', (Route<dynamic> route) => false);
                                       },
@@ -177,9 +174,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(widget.user.name + " " + widget.user.lastname,
-                              style: const TextStyle(
-                                  fontSize: 20.0, fontWeight: FontWeight.bold)
-                          ),
+                              style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
                         ],
                       ),
                     ),
@@ -190,8 +185,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                           child: Text(
                             widget.user.email,
-                            style: const TextStyle(
-                                fontSize: 16.0, fontWeight: FontWeight.normal),
+                            style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
                           ),
                         ),
                       ],
@@ -426,10 +420,9 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
               child: Container(
                 height: 50.0,
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF1F4F8),
+                  color: AppTheme.of(context).background,
                   borderRadius: BorderRadius.circular(12.0),
                   border: Border.all(
-                    color: const Color(0xFFE0E3E7),
                     width: 1.0,
                   ),
                 ),
@@ -449,20 +442,21 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                             setDarkModeSetting(context, ThemeMode.light);
                           },
                           child: Container(
-                            width: 115.0,
                             height: 100.0,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.light
-                                  ? Colors.white
-                                  : const Color(0xFFF1F4F8),
-                              borderRadius: BorderRadius.circular(10.0),
-                              border: Border.all(
-                                color: Theme.of(context).brightness == Brightness.light
-                                    ? const Color(0xFFE0E3E7)
-                                    : const Color(0xFFF1F4F8),
-                                width: 1.0,
-                              ),
-                            ),
+                            decoration: Theme.of(context).brightness != Brightness.dark
+                                ? BoxDecoration(
+                                    color: Theme.of(context).brightness == Brightness.light
+                                        ? Colors.white
+                                        : const Color(0xFFF1F4F8),
+                                    borderRadius: BorderRadius.circular(10.0),
+                                    border: Border.all(
+                                      color: Theme.of(context).brightness == Brightness.light
+                                          ? const Color(0xFFE0E3E7)
+                                          : const Color(0xFFF1F4F8),
+                                      width: 1.0,
+                                    ),
+                                  )
+                                : null,
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -495,20 +489,18 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                             setDarkModeSetting(context, ThemeMode.dark);
                           },
                           child: Container(
-                            width: 115.0,
                             height: 100.0,
-                            decoration: BoxDecoration(
-                              color: Theme.of(context).brightness == Brightness.dark
-                                  ? Colors.white
-                                  : const Color(0xFFF1F4F8),
+                            decoration: Theme.of(context).brightness == Brightness.dark
+                                ? BoxDecoration(
+                              color:  Theme.of(context).brightness == Brightness.dark
+                                ? const Color(0xFF14181B)
+                                : const Color(0xFF57636C),
                               borderRadius: BorderRadius.circular(10.0),
                               border: Border.all(
-                                color: Theme.of(context).brightness == Brightness.dark
-                                    ? const Color(0xFFE0E3E7)
-                                    : const Color(0xFFF1F4F8),
                                 width: 1.0,
                               ),
-                            ),
+                            )
+                                : null,
                             child: Row(
                               mainAxisSize: MainAxisSize.max,
                               mainAxisAlignment: MainAxisAlignment.center,
@@ -516,8 +508,8 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                                 Icon(
                                   Icons.nightlight_round,
                                   color: Theme.of(context).brightness == Brightness.dark
-                                      ? const Color(0xFF14181B)
-                                      : const Color(0xFF57636C),
+                                      ? const Color(0xFF57636C)
+                                      : const Color(0xFF14181B),
                                   size: 16.0,
                                 ),
                                 const Padding(

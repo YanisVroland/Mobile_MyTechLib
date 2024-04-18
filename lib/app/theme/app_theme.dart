@@ -15,7 +15,7 @@ abstract class AppTheme {
   static ThemeMode get themeMode {
     final darkMode = _prefs?.getBool(kThemeModeKey);
     return darkMode == null
-        ? ThemeMode.system
+        ? ThemeMode.light
         : darkMode
         ? ThemeMode.dark
         : ThemeMode.light;

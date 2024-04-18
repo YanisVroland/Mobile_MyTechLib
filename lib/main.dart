@@ -6,7 +6,6 @@ import 'package:my_tech_lib/views/auth/login_page_screen.dart';
 import 'app/routes/router.dart';
 import 'app/theme/app_const.dart';
 import 'app/theme/app_theme.dart';
-import 'main_screen.dart';
 
 
 void main() async {
