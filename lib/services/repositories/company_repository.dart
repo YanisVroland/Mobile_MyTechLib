@@ -30,6 +30,15 @@ class CompanyRepository {
     }
   }
 
+  Future<ResponseApi?> getStatistiqueCompany(BuildContext context, String companyUuid) async {
+    try {
+      return utilsRepository.requestGet(context, AppConst.companyStatistiqueGetEndpoint + companyUuid);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   Future<ResponseApi?> changeCodeCompany(BuildContext context, String companyUuid) async {
     try {
       String newCode = Uuid().v4();

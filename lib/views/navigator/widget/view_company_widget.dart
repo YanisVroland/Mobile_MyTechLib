@@ -20,12 +20,29 @@ class ViewCompany extends StatefulWidget {
 }
 
 class _ViewCompanyState extends State<ViewCompany> {
-  int? countCompany;
-  int? countParticipant;
+  int? projectCpt;
+  int? libraryCpt;
+  bool _loaderStat = false;
 
   @override
   void initState() {
     super.initState();
+    getStatistiques();
+  }
+
+
+  getStatistiques() async {
+    setState(() {
+      _loaderStat = true;
+    });
+    final ResponseApi? response = await CompanyRepository().getStatistiqueCompany(context,widget.company.uuid);
+    if (response != null && response.status == 200) {
+      projectCpt = response.body["projectCpt"];
+      libraryCpt = response.body["libraryCpt"];
+    }
+    setState(() {
+      _loaderStat = false;
+    });
   }
 
   @override
@@ -159,7 +176,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 20.0),
                     child: Row(
                       mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
                       children: [
                         Container(
                           width: MediaQuery.sizeOf(context).width * 0.25,
@@ -186,55 +203,17 @@ class _ViewCompanyState extends State<ViewCompany> {
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     color: AppTheme.of(context).secondary,
+                                    fontWeight: FontWeight.bold,
                                     fontSize: 12.0,
                                   ),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                                 Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                   child: Text(
-                                    "0",
+                                    _loaderStat ? "~~~" :libraryCpt.toString(),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Container(
-                          width: MediaQuery.sizeOf(context).width * 0.25,
-                          decoration: BoxDecoration(
-                            color: AppTheme.of(context).secondaryBackground,
-                            boxShadow: const [
-                              BoxShadow(
-                                blurRadius: 4.0,
-                                color: Color(0x3F14181B),
-                                offset: Offset(0.0, 3.0),
-                              )
-                            ],
-                            borderRadius: BorderRadius.circular(8.0),
-                          ),
-                          child: Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Text(
-                                  "Dépenses",
-                                  textAlign: TextAlign.start,
-                                  style: TextStyle(
-                                    color: AppTheme.of(context).secondary,
-                                    fontSize: 12.0,
-                                  ),
-                                ),
-                                const Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
-                                  child: Text(
-                                    "0",
-                                    textAlign: TextAlign.start,
-                                  ),
-                                )
                               ],
                             ),
                           ),
@@ -264,13 +243,14 @@ class _ViewCompanyState extends State<ViewCompany> {
                                   textAlign: TextAlign.start,
                                   style: TextStyle(
                                     color: AppTheme.of(context).secondary,
+                                    fontWeight: FontWeight.bold,
                                     fontSize: 12.0,
                                   ),
                                 ),
-                                const Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                                 Padding(
+                                  padding:const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                   child: Text(
-                                    "0",
+                                    _loaderStat ? "~~~" : projectCpt.toString(),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
@@ -440,6 +420,11 @@ class _ViewCompanyState extends State<ViewCompany> {
                       alignment: AlignmentDirectional(0.00, 0.00),
                       child: Text(
                         "Admin",
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontWeight: FontWeight.bold,
+                          fontSize: 12.0,
+                        ),
                       ),
                     ),
                   ),
