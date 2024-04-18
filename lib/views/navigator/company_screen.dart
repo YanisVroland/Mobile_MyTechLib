@@ -35,21 +35,6 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
-      floatingActionButton: Visibility(
-        visible: hasCompany,
-        child: FloatingActionButton(
-          onPressed: () async {
-            //TODO Nav 'createCompanyLibrary',
-          },
-          backgroundColor: AppTheme.of(context).primary,
-          elevation: 8.0,
-          child: Icon(
-            Icons.post_add_rounded,
-            color: AppTheme.of(context).background,
-            size: 32.0,
-          ),
-        ),
-      ),
       appBar:  CustomAppBar(widget.user),
       body: SafeArea(
           top: true,

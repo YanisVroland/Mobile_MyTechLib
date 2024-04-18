@@ -1,3 +1,5 @@
+import 'dart:math';
+
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -401,9 +403,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                             decoration: const BoxDecoration(
                               shape: BoxShape.circle,
                             ),
-                            child: Image.network(
-                              // stackCompaniesRecord.urlPicture,
-                              'https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol-thumbnail.png',
+                            child: Image.network( widget.company.logoUrl,
                               fit: BoxFit.cover,
                             ),
                           ),
