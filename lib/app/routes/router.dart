@@ -78,7 +78,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const CompanyEditWidget());
       case COMPANY_LIST_POEPLE:
         return MaterialPageRoute(
-            builder: (_) => CompanyListPeopleWidget(settings.arguments as List<UserModel>));
+            builder: (_) => CompanyListPeopleWidget(settings.arguments as Company));
 
       case LIBRARY:
         return MaterialPageRoute(builder: (_) =>  LibraryWidget(settings.arguments as Library));

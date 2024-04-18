@@ -9,7 +9,6 @@ import '../../../app/widgets/DeleteDialog_custom.dart';
 import '../../../services/local/pref.dart';
 import '../../../services/models/company_model.dart';
 import '../../../services/models/responseAPI_model.dart';
-import '../../../services/models/user_model.dart';
 import '../../../services/repositories/company_repository.dart';
 
 class ViewCompany extends StatefulWidget {
@@ -21,21 +20,12 @@ class ViewCompany extends StatefulWidget {
 }
 
 class _ViewCompanyState extends State<ViewCompany> {
-  List<UserModel> listCompanyUser = [];
   int? countCompany;
   int? countParticipant;
 
   @override
   void initState() {
     super.initState();
-  }
-
-  Future<void> getUserCompany() async {
-    ResponseApi? response = await CompanyRepository().getUserCompany(context, widget.company.uuid);
-    if (response != null && response.status == 200) {
-      List<dynamic> result = await response.body.map((doc) => UserModel.fromJson(doc)).toList();
-      listCompanyUser.addAll(result.cast<UserModel>());
-    }
   }
 
   @override
@@ -137,7 +127,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                   InkWell(
                                       onTap: () {
                                         Navigator.pushNamed(context, AppRouter.COMPANY_LIST_POEPLE,
-                                            arguments: listCompanyUser);
+                                            arguments: widget.company);
                                       },
                                       child: Container(
                                         width: 35.0,

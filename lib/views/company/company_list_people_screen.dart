@@ -1,4 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:lottie/lottie.dart';
 import 'package:my_tech_lib/services/models/user_model.dart';
 
 import '../../app/theme/app_theme.dart';
@@ -7,12 +8,14 @@ import 'package:flutter/material.dart';
 import '../../app/theme/color_const.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/textField_custom.dart';
+import '../../services/local/pref.dart';
+import '../../services/models/company_model.dart';
 import '../../services/models/responseAPI_model.dart';
 import '../../services/repositories/company_repository.dart';
 
 class CompanyListPeopleWidget extends StatefulWidget {
-  CompanyListPeopleWidget(this.listCompanyUser, {Key? key}) : super(key: key);
-  List<UserModel> listCompanyUser = [];
+  CompanyListPeopleWidget(this.company, {Key? key}) : super(key: key);
+  Company company;
 
   @override
   _CompanyListPeopleWidgetState createState() => _CompanyListPeopleWidgetState();
@@ -21,10 +24,30 @@ class CompanyListPeopleWidget extends StatefulWidget {
 class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   TextEditingController textController = TextEditingController();
+  List<UserModel> listCompanyUser = [];
+  String uuidUser = '';
+  bool _loader = false;
 
   @override
   void initState() {
     super.initState();
+    getUserCompany();
+  }
+
+  Future<void> getUserCompany() async {
+    setState(() {
+      _loader = true;
+    });
+    ResponseApi? response = await CompanyRepository().getUserCompany(context, widget.company.uuid);
+    if (response != null && response.status == 200) {
+      List<dynamic> result = await response.body.map((doc) => UserModel.fromJson(doc)).toList();
+      listCompanyUser.addAll(result.cast<UserModel>());
+    }
+
+    uuidUser = await LocalPref().getString("uuid_user");
+    setState(() {
+      _loader = false;
+    });
   }
 
   @override
@@ -38,7 +61,6 @@ class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
-      //TODO changr la appbar
       appBar: AppBar(
         backgroundColor: AppTheme.of(context).background,
         automaticallyImplyLeading: true,
@@ -50,13 +72,17 @@ class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget> {
           onTap: () async {
             Navigator.pop(context);
           },
-          child: Icon(
+          child: const Icon(
             Icons.arrow_back_ios,
             size: 24.0,
           ),
         ),
-        title: const Text(
-          "Compagnie",
+        title: Text(
+          widget.company.name,
+          style: const TextStyle(
+            fontSize: 20.0,
+            fontWeight: FontWeight.bold,
+          ),
         ),
         actions: [],
         centerTitle: true,
@@ -111,64 +137,94 @@ class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget> {
                 padding: EdgeInsets.zero,
                 shrinkWrap: true,
                 scrollDirection: Axis.vertical,
-                itemCount: widget.listCompanyUser.length,
+                itemCount: listCompanyUser.length,
                 itemBuilder: (context, listViewIndex) {
-                  final element = widget.listCompanyUser[listViewIndex];
-                  return Container(
-                    height: 50.0,
-                    decoration: BoxDecoration(
-                      color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x3F14181B),
-                          offset: Offset(0.0, 3.0),
+                  final element = listCompanyUser[listViewIndex];
+                  return _loader
+                      ? Center(
+                          child: Lottie.asset(
+                            'assets/lottie/list_loader.json',
+                          ),
                         )
-                      ],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.fromSTEB(0.0, 3.0, 0.0, 0.0),
-                      child: Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Padding(
-                            padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Flexible(
-                                  child: Text("Name : " + element.name + " " + element.lastname,
-                                      style: TextStyle(
-                                        color: AppTheme.of(context).primary,
-                                        fontSize: 16.0,
-                                        fontWeight: FontWeight.bold,
-                                      )),
+                      : listCompanyUser.isEmpty
+                          ? Center(
+                              child: Lottie.asset(
+                                'assets/lottie/list_empty.json',
+                              ),
+                            )
+                          : Padding(
+                              padding: EdgeInsets.only(bottom: 10.h),
+                              child: Container(
+                                height: 50.0,
+                                decoration: BoxDecoration(
+                                  color: AppTheme.of(context).secondaryBackground,
+                                  boxShadow: const [
+                                    BoxShadow(
+                                      blurRadius: 4.0,
+                                      color: Color(0x3F14181B),
+                                      offset: Offset(0.0, 3.0),
+                                    )
+                                  ],
+                                  borderRadius: BorderRadius.circular(8.0),
                                 ),
-                              ],
-                            ),
-                          ),
-                          const Spacer(),
-                          const Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 12.0, 0.0),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.end,
-                              children: [
-                                Text(
-                                  " 12/07/2022 ",
-                                  textAlign: TextAlign.end,
+                                child: Padding(
+                                  padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    children: [
+                                      Padding(
+                                        padding: EdgeInsets.only(right: 10.w),
+                                        child: Container(
+                                          width: 40,
+                                          padding: const EdgeInsets.all(2.0),
+                                          clipBehavior: Clip.antiAlias,
+                                          decoration: const BoxDecoration(
+                                            shape: BoxShape.circle,
+                                          ),
+                                          child: element.profile_url.isEmpty
+                                              ? Image.asset(
+                                                  'assets/images/tlchargement.png',
+                                                  fit: BoxFit.cover,
+                                                )
+                                              : Image.network(
+                                                  element.profile_url,
+                                                  fit: BoxFit.cover,
+                                                ),
+                                        ),
+                                      ),
+                                      Text(element.name + " " + element.lastname,
+                                          style: TextStyle(
+                                            color: AppTheme.of(context).primary,
+                                            fontSize: 16.0,
+                                            fontWeight: FontWeight.bold,
+                                          )),
+                                      const Spacer(),
+                                      if (uuidUser == element.uuid)
+                                        Padding(
+                                          padding: EdgeInsets.only(right: 10.w),
+                                          child: Container(
+                                            width: 50,
+                                            height: 20,
+                                            decoration: BoxDecoration(
+                                              color: AppTheme.of(context).primary,
+                                              borderRadius: BorderRadius.circular(10),
+                                            ),
+                                            child: Center(
+                                              child: Text(
+                                                "Moi",
+                                                style: TextStyle(
+                                                  color: AppTheme.of(context).secondaryBackground,
+                                                  fontSize: 10.0,
+                                                  fontWeight: FontWeight.bold,
+                                                ),
+                                              ),
+                                            ),
+                                          ),
+                                        ),
+                                    ],
+                                  ),
                                 ),
-                              ],
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  );
+                              ));
                 },
               ),
             ),

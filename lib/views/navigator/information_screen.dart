@@ -475,6 +475,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                                     element.type,
                                                                     style: const TextStyle(
                                                                       fontSize: 12,
+                                                                      color: Colors.white,
                                                                       fontWeight: FontWeight.bold,
                                                                     ),
                                                                   ),
@@ -571,6 +572,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                                       element.type,
                                                                       style: const TextStyle(
                                                                         fontSize: 12,
+                                                                        color: Colors.white,
                                                                         fontWeight: FontWeight.bold,
                                                                       ),
                                                                     ),
