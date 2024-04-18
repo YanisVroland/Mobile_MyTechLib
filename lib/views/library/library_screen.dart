@@ -66,6 +66,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
     ResponseApi? response =
         await ProjectRepository().getProjectByLibrary(context, widget.library.uuid);
     if (response != null && response.status == 200) {
+      listProject.clear();
       List<dynamic> result = await response.body.map((doc) => Project.fromJson(doc)).toList();
       setState(() {
         listProject.addAll(result.cast<Project>());
@@ -96,6 +97,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
             TextButton(
               onPressed: () async {
                  await LibraryRepository().deleteLibrary(context, widget.library.uuid);
+                 await initProjects();
                 Navigator.of(context).pop();
                 Navigator.of(context).pop();
 
@@ -116,7 +118,8 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
       backgroundColor: AppTheme.of(context).background,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.pushNamed(context, AppRouter.CREATE_PROJECT, arguments: widget.library);
+          await Navigator.pushNamed(context, AppRouter.CREATE_PROJECT, arguments: widget.library);
+          await initProjects();
         },
         backgroundColor: AppTheme.of(context).primary,
         child: const Icon(
@@ -311,8 +314,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                   await Navigator.pushNamed(context, AppRouter.PROJECT,
                                                         arguments: element);
+                                                   await initProjects();
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
@@ -429,8 +433,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                    await Navigator.pushNamed(context, AppRouter.PROJECT,
                                                         arguments: element);
+                                                    await initProjects();
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
@@ -547,8 +552,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                   await Navigator.pushNamed(context, AppRouter.PROJECT,
                                                         arguments: element);
+                                                    await initProjects();
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
@@ -665,8 +671,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                   await Navigator.pushNamed(context, AppRouter.PROJECT,
                                                         arguments: element);
+                                                   await initProjects();
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(

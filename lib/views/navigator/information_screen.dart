@@ -430,7 +430,86 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                       final element = listInformation[listViewIndex];
                                       return Padding(
                                         padding: EdgeInsets.only(bottom: 10.h),
-                                        child: Container(
+                                        child: element.isProject ?
+                                        Container(
+                                          height: 100.0,
+                                          decoration: BoxDecoration(
+                                            color: AppTheme.of(context).secondaryBackground,
+                                            boxShadow: const [
+                                              BoxShadow(
+                                                blurRadius: 4.0,
+                                                color: Color(0x3F14181B),
+                                                offset: Offset(0.0, 3.0),
+                                              )
+                                            ],
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                          child: Padding(
+                                              padding: const EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 5.0, 0.0, 10.0),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.min,
+                                                children: [
+                                                  Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                          12.0, 0.0, 0.0, 0.0),
+                                                      child: Column(
+                                                        mainAxisSize: MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                        MainAxisAlignment.spaceBetween,
+                                                        crossAxisAlignment:
+                                                        CrossAxisAlignment.start,
+                                                        children: [
+                                                          Container(
+                                                            width: 100,
+                                                            decoration: const BoxDecoration(
+                                                              shape: BoxShape.circle,
+                                                              color: Colors.green,
+                                                            ),
+                                                            child: Center(
+                                                              child: Text(element.type,style: const TextStyle(
+                                                                fontSize: 18,
+                                                                fontWeight: FontWeight.bold,
+                                                                color: Colors.white,
+                                                              ),)),
+                                                          ),
+                                                          Text(
+                                                                "Projet : " + element.core_project!.name),
+                                                          Text(
+                                                              "Type : " + element.core_project!.type),
+                                                          Text(
+                                                              "Version : " + element.core_project!.version),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                  ),
+                                                  Padding(
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                                        12.0, 0.0, 12.0, 0.0),
+                                                    child: Column(
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceBetween,
+                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      children: [
+                                                        Text(
+                                                          Tools.formatDate(element.createdAt!),
+                                                          textAlign: TextAlign.end,
+                                                          style: TextStyle(fontSize: 12.0, color: AppTheme.of(context).primary),
+                                                        ),
+                                                        Padding(
+                                                          padding:
+                                                          const EdgeInsetsDirectional.fromSTEB(
+                                                              0.0, 4.0, 0.0, 0.0),
+                                                          child: Text("Par : " + element.createdBy, style: TextStyle(fontSize: 12.0)),
+                                                        ),
+                                                      ],
+                                                    ),
+                                                  ),
+                                                ],
+                                              )),
+                                        )
+                                        :Container(
                                           height: 70.0,
                                           decoration: BoxDecoration(
                                             color: AppTheme.of(context).secondaryBackground,
@@ -484,12 +563,13 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                         Text(
                                                           Tools.formatDate(element.createdAt!),
                                                           textAlign: TextAlign.end,
+                                                          style: TextStyle(fontSize: 12.0, color: AppTheme.of(context).primary),
                                                         ),
                                                         Padding(
                                                           padding:
                                                               const EdgeInsetsDirectional.fromSTEB(
                                                                   0.0, 4.0, 0.0, 0.0),
-                                                          child: Text("Par : " + element.createdBy),
+                                                          child: Text("Par : " + element.createdBy, style: TextStyle(fontSize: 12.0)),
                                                         ),
                                                       ],
                                                     ),

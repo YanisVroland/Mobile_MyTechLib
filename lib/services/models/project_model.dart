@@ -48,6 +48,16 @@ class Project {
     );
   }
 
+  factory Project.fromJsonInformation(Map<String, dynamic> json) {
+    return Project(
+      uuid: json['uuid'] ?? '-1',
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      type: json['type'] ?? '',
+      version: json['version'] ?? 'V?.?.?',
+    );
+  }
+
   Map<String, dynamic> toJson() {
     var json= {
       'name': name,

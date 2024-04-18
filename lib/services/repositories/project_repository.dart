@@ -34,7 +34,7 @@ class ProjectRepository {
         informationRepository.createInformation(context, Information(
           core_company: project.core_company,
           core_library: library,
-          core_project: responseApi.body['uuid'],
+          core_project: project,
           type: "NEW",
         ));
       }
