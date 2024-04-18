@@ -64,7 +64,7 @@ class AppRouter {
       case CHANGE_PASSWORD:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case EDIT_PROFILE:
-        return MaterialPageRoute(builder: (_) => const EditProfileWidget());
+        return MaterialPageRoute(builder: (_) =>  EditProfileWidget(settings.arguments as UserModel));
       case SETTINGS:
         return MaterialPageRoute(builder: (_) =>  SettingsPageWidget(settings.arguments as UserModel));
       case PRIVACY_POLICY:

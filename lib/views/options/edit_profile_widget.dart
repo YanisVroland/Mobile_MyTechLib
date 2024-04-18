@@ -1,79 +1,155 @@
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_tech_lib/services/models/user_model.dart';
 
 import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
+import '../../app/widgets/textField_custom.dart';
 
 class EditProfileWidget extends StatefulWidget {
-  const EditProfileWidget({Key? key}) : super(key: key);
+  EditProfileWidget(this.user, {Key? key}) : super(key: key);
+  UserModel user;
 
   @override
   _EditProfileWidgetState createState() => _EditProfileWidgetState();
 }
 
-class _EditProfileWidgetState extends State<EditProfileWidget>
-    with TickerProviderStateMixin {
+class _EditProfileWidgetState extends State<EditProfileWidget> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool isDataUploading = false;
   String uploadedFileUrl = '';
+  final _formKey = GlobalKey<FormState>();
+  bool _loader = false;
 
-  // State field(s) for yourName widget.
-  TextEditingController? yourNameController1;
-  String? Function(BuildContext, String?)? yourNameController1Validator;
-
-  // State field(s) for yourName widget.
-  TextEditingController? yourNameController2;
-  String? Function(BuildContext, String?)? yourNameController2Validator;
-
-  // State field(s) for yourEmail widget.
-  TextEditingController? yourEmailController;
-  String? Function(BuildContext, String?)? yourEmailControllerValidator;
-
+  late TextEditingController lastNameController;
+  late TextEditingController firstNameController;
 
   @override
   void initState() {
     super.initState();
 
-    //yourNameController1 ??= TextEditingController(text: valueOrDefault(currentUserDocument?.lastName, ''));
-//     yourNameController2 ??= TextEditingController(text: valueOrDefault(currentUserDocument?.firstName, ''));
-    //    yourEmailController ??= TextEditingController(text: currentUserEmail);
+    lastNameController = TextEditingController();
+    firstNameController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
-    yourNameController1?.dispose();
-    yourNameController2?.dispose();
-    yourEmailController?.dispose();
+    lastNameController.dispose();
+    firstNameController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
+
+    Widget formRegister = Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Image.asset(
+              'assets/images/logo_landscape.png',
+              width: 300.0,
+              fit: BoxFit.fitWidth,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 30.h, bottom: 20.h),
+              child: const Row(
+                mainAxisSize: MainAxisSize.max,
+                children: [
+                  Text("Créez votre compte ci-dessous."),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
+                    child: CustomTextField(
+                      controller: lastNameController,
+                      obscureText: false,
+                      labelText: "Nom",
+                      hintText: "Entrer votre nom...",
+                      validator: Validators.validateEmpty,
+                    ),
+                  ),
+                ),
+                Expanded(
+                  child: CustomTextField(
+                    controller: firstNameController,
+                    obscureText: false,
+                    labelText: "Prénom",
+                    hintText: "Entrer votre prénom...",
+                    validator: Validators.validateEmpty,
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                      text: "Créer un compte",
+                      isLoading: _loader,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          // await validButton();
+                        }
+                      }),
+                ],
+              ),
+            ),
+            Row(
+              mainAxisSize: MainAxisSize.max,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                InkWell(
+                  onTap: () {
+                    // Navigator.pushNamed(context, AppRouter.LOGIN);
+                  },
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width * 0.8,
+                    height: 44.0,
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(8.0),
+                    ),
+                    child: Row(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.arrow_back_rounded,
+                          color: AppTheme.of(context).primary,
+                          size: 24.0,
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(4.0, 0.0, 22.0, 0.0),
+                          child: Text("Connexion",
+                              style: TextStyle(
+                                  fontFamily: 'Lexend', color: AppTheme.of(context).primary)),
+                        ),
+                        const Text(
+                          "Vous avez déjà un compte ?",
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ],
+        ));
+
     return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: AppTheme.of(context).secondaryBackground,
-      appBar: AppBar(
-        backgroundColor: AppTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        leading: InkWell(
-          splashColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () async {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.chevron_left_rounded,
-            size: 32.0,
-          ),
-        ),
-        title: const Text("Modifier le profil"),
-        actions: [],
-        centerTitle: false,
-        elevation: 0.0,
-      ),
+      backgroundColor: AppTheme.of(context).background,
       body: Container(
         width: MediaQuery.sizeOf(context).width * 1.0,
         height: MediaQuery.sizeOf(context).height * 1.0,
@@ -81,238 +157,17 @@ class _EditProfileWidgetState extends State<EditProfileWidget>
           image: DecorationImage(
             fit: BoxFit.fitWidth,
             image: Image.asset(
-              'assets/images/login_bg@2x.png',
+              'assets/images/createAccount_bg@2x.png',
             ).image,
           ),
         ),
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              // if (valueOrDefault<bool>(
-              //   currentUserPhoto != null && currentUserPhoto != '',
-              //   false,
-              // ))
-              Align(
-                alignment: const AlignmentDirectional(0.00, -1.00),
-                child: Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                  child: Container(
-                    width: 90.0,
-                    height: 90.0,
-                    decoration: BoxDecoration(
-                      color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: [
-                        const BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x33000000),
-                          offset: Offset(0.0, 2.0),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(40.0),
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.network(
-                        "currentUserPhoto",
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              // if (valueOrDefault<bool>(
-              //   currentUserPhoto == null || currentUserPhoto == '',
-              //   true,
-              // ))
-              Align(
-                alignment: const AlignmentDirectional(0.00, -1.00),
-                child: Padding(
-                  padding:
-                      const EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                  child: Container(
-                    width: 90.0,
-                    height: 90.0,
-                    decoration: BoxDecoration(
-                      color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: [
-                        const BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x33000000),
-                          offset: Offset(0.0, 2.0),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(40.0),
-                    ),
-                    child: Container(
-                      width: double.infinity,
-                      height: double.infinity,
-                      clipBehavior: Clip.antiAlias,
-                      decoration: const BoxDecoration(
-                        shape: BoxShape.circle,
-                      ),
-                      child: Image.asset(
-                        'assets/images/tlchargement.png',
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(0.0, 16.0, 0.0, 0.0),
-                child: CustomButton(
-                  text: "Change Photo",
-                  onTap: () async {},
-                ),
-              ),
-              Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(
-                      20.0, 20.0, 20.0, 0.0),
-                  child: TextFormField(
-                    controller: yourNameController1,
-                    obscureText: false,
-                    decoration: InputDecoration(
-                      labelText: "Nom :",
-                      enabledBorder: OutlineInputBorder(
-                        borderSide: BorderSide(
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      errorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      focusedErrorBorder: OutlineInputBorder(
-                        borderSide: const BorderSide(
-                          color: Color(0x00000000),
-                          width: 2.0,
-                        ),
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      filled: true,
-                      fillColor: AppTheme.of(context).secondaryBackground,
-                      contentPadding: const EdgeInsetsDirectional.fromSTEB(
-                          20.0, 24.0, 20.0, 24.0),
-                    ),
-                    validator: Validators.validateEmpty,
-                  )),
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 0.0),
-                child: TextFormField(
-                  controller: yourNameController2,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    labelText: "Prénom :",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    filled: true,
-                    fillColor: AppTheme.of(context).secondaryBackground,
-                    contentPadding: const EdgeInsetsDirectional.fromSTEB(
-                        20.0, 24.0, 20.0, 24.0),
-                  ),
-                  validator: Validators.validateEmpty,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 0.0),
-                child: TextFormField(
-                  controller: yourEmailController,
-                  obscureText: false,
-                  decoration: InputDecoration(
-                    labelText: "Email :",
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    errorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    focusedErrorBorder: OutlineInputBorder(
-                      borderSide: const BorderSide(
-                        color: Color(0x00000000),
-                        width: 2.0,
-                      ),
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    filled: true,
-                    fillColor: AppTheme.of(context).secondaryBackground,
-                    contentPadding: const EdgeInsetsDirectional.fromSTEB(
-                        20.0, 24.0, 20.0, 24.0),
-                  ),
-                  keyboardType: TextInputType.emailAddress,
-                  validator: Validators.validateEmpty,
-                ),
-              ),
-              Padding(
-                padding:
-                    const EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
-                child: CustomButton(
-                  text: "Enregistrer",
-                  onTap: () async {
-                    Navigator.pop(context);
-                  },
-                ),
-              ),
-            ],
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 30.w,
+            vertical: 70.h,
+          ),
+          child: SingleChildScrollView(
+            child: formRegister,
           ),
         ),
       ),
