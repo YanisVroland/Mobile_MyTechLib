@@ -46,7 +46,6 @@ class UtilsRepository {
   Future<ResponseApi?> requestDelete(BuildContext context, String endpoint) async {
     try {
       String accessToken = await LocalPref().getString("access_token");
-
       var response = await http.delete(
         Uri.parse(AppConst.baseUrl + endpoint),
         headers: <String, String>{'Authorization': 'Bearer ' + accessToken},
@@ -62,15 +61,15 @@ class UtilsRepository {
     print("$endpoint => Status : ${response.statusCode} Body : ${response.body}");
 
     if (response.statusCode >= 200 && response.statusCode <= 204) {
-      if (response.statusCode == 204) {
-        SnackConst.SnackCustom(AppConst.missingDataMessage, context,
-            duration: 3, color: Colors.blue);
-      }
+      // if (response.statusCode == 204) {
+      //   SnackConst.SnackCustom(AppConst.missingDataMessage, context,
+      //       duration: 3, color: Colors.blue);
+      // }
       return ResponseApi.fromRequest(response);
     } else {
       if (response.body.contains("message")) {
-        SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
-            duration: 3, color: Colors.red);
+        // SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
+        //     duration: 3, color: Colors.red);
       } else {
         SnackConst.SnackCustom(AppConst.errorApiMessage, context, duration: 3);
       }

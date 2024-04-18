@@ -54,6 +54,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
   Future<void> initData() async {
     setState(() {
       _loader = true;
+      listPersonalLibrairies.clear();
+      globalListLibrairies.clear();
+      listCompanyLibrairies.clear();
     });
     await getPersonalLibraries();
     if (inCompany) {
@@ -103,7 +106,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       backgroundColor: AppTheme.of(context).background,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          Navigator.pushNamed(context, AppRouter.CREATE_LIBRARY, arguments: widget.user);
+          await Navigator.pushNamed(context, AppRouter.CREATE_LIBRARY, arguments: widget.user);
+          await initData();
         },
         backgroundColor: AppTheme.of(context).primary,
         child: const Icon(
@@ -112,7 +116,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
           size: 32.0,
         ),
       ),
-      appBar:  CustomAppBar(widget.user),
+      appBar: CustomAppBar(widget.user),
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -190,134 +194,23 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                             'assets/lottie/list_empty.json',
                                           ),
                                         )
-                                  : Padding(
-                                      padding: EdgeInsets.all(10.w),
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: globalListLibrairies.length,
-                                        itemBuilder: (context, listViewIndex) {
-                                          final element = globalListLibrairies[listViewIndex];
-                                          return Padding(
-                                            padding: EdgeInsets.only(bottom: 10.h),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                Navigator.pushNamed(context, AppRouter.LIBRARY, arguments: element);
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: AppTheme.of(context).secondaryBackground,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      blurRadius: 4.0,
-                                                      color: Color(0x3F14181B),
-                                                      offset: Offset(0.0, 3.0),
-                                                    )
-                                                  ],
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                                      0.0, 5.0, 0.0, 10.0),
-                                                  child: Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsetsDirectional.fromSTEB(
-                                                                  12.0, 0.0, 0.0, 0.0),
-                                                          child: Column(
-                                                            mainAxisSize: MainAxisSize.max,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment.start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment.start,
-                                                            children: [
-                                                              Text(
-                                                                element.name,
-                                                              ),
-                                                              Padding(
-                                                                padding: const EdgeInsetsDirectional
-                                                                    .fromSTEB(0.0, 10.0, 0.0, 0.0),
-                                                                child: Row(
-                                                                  mainAxisSize: MainAxisSize.max,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment.center,
-                                                                  children: [
-                                                                    const Padding(
-                                                                        padding:
-                                                                            EdgeInsetsDirectional
-                                                                                .fromSTEB(0.0, 0.0,
-                                                                                    4.0, 0.0),
-                                                                        child: Text("Créée par :")),
-                                                                    Text(
-                                                                      element.createdBy,
-                                                                    ),
-                                                                  ],
-                                                                ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsetsDirectional.fromSTEB(
-                                                                12.0, 0.0, 12.0, 0.0),
-                                                        child: Column(
-                                                          mainAxisSize: MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment.start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment.end,
-                                                          children: [
-                                                            Text(
-                                                              element.createdAt,
-                                                              textAlign: TextAlign.end,
-                                                            ),
-                                                          ],
-                                                        ),
-                                                      ),
-                                                    ],
-                                                  ),
-                                                ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
-                              _loader
-                                  ? Expanded(
-                                      child: Center(
-                                        child: Lottie.asset(
-                                          'assets/lottie/list_loader.json',
-                                        ),
-                                      ),
-                                    )
-                                  : inCompany
-                                      ?  listCompanyLibrairies.isEmpty
-                                  ? Center(
-                                child: Lottie.asset(
-                                  'assets/lottie/list_empty.json',
-                                ),
-                              )
-                                  :Padding(
-                                           padding: EdgeInsets.all(10.w),
+                                      : Padding(
+                                          padding: EdgeInsets.all(10.w),
                                           child: ListView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
                                             scrollDirection: Axis.vertical,
-                                            itemCount: listCompanyLibrairies.length,
+                                            itemCount: globalListLibrairies.length,
                                             itemBuilder: (context, listViewIndex) {
-                                              final element = listCompanyLibrairies[listViewIndex];
+                                              final element = globalListLibrairies[listViewIndex];
                                               return Padding(
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    Navigator.pushNamed(context, AppRouter.LIBRARY, arguments: element);
+                                                    await Navigator.pushNamed(
+                                                        context, AppRouter.LIBRARY,
+                                                        arguments: element);
+                                                    await initData();
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
@@ -407,7 +300,135 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                 ),
                                               );
                                             },
-                                          ))
+                                          ),
+                                        ),
+                              _loader
+                                  ? Expanded(
+                                      child: Center(
+                                        child: Lottie.asset(
+                                          'assets/lottie/list_loader.json',
+                                        ),
+                                      ),
+                                    )
+                                  : inCompany
+                                      ? listCompanyLibrairies.isEmpty
+                                          ? Center(
+                                              child: Lottie.asset(
+                                                'assets/lottie/list_empty.json',
+                                              ),
+                                            )
+                                          : Padding(
+                                              padding: EdgeInsets.all(10.w),
+                                              child: ListView.builder(
+                                                padding: EdgeInsets.zero,
+                                                shrinkWrap: true,
+                                                scrollDirection: Axis.vertical,
+                                                itemCount: listCompanyLibrairies.length,
+                                                itemBuilder: (context, listViewIndex) {
+                                                  final element =
+                                                      listCompanyLibrairies[listViewIndex];
+                                                  return Padding(
+                                                    padding: EdgeInsets.only(bottom: 10.h),
+                                                    child: InkWell(
+                                                      onTap: () async {
+                                                        await Navigator.pushNamed(
+                                                            context, AppRouter.LIBRARY,
+                                                            arguments: element);
+                                                        await initData();
+                                                      },
+                                                      child: Container(
+                                                        decoration: BoxDecoration(
+                                                          color: AppTheme.of(context)
+                                                              .secondaryBackground,
+                                                          boxShadow: const [
+                                                            BoxShadow(
+                                                              blurRadius: 4.0,
+                                                              color: Color(0x3F14181B),
+                                                              offset: Offset(0.0, 3.0),
+                                                            )
+                                                          ],
+                                                          borderRadius: BorderRadius.circular(8.0),
+                                                        ),
+                                                        child: Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                  0.0, 5.0, 0.0, 10.0),
+                                                          child: Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            children: [
+                                                              Expanded(
+                                                                child: Padding(
+                                                                  padding:
+                                                                      const EdgeInsetsDirectional
+                                                                          .fromSTEB(
+                                                                          12.0, 0.0, 0.0, 0.0),
+                                                                  child: Column(
+                                                                    mainAxisSize: MainAxisSize.max,
+                                                                    mainAxisAlignment:
+                                                                        MainAxisAlignment.start,
+                                                                    crossAxisAlignment:
+                                                                        CrossAxisAlignment.start,
+                                                                    children: [
+                                                                      Text(
+                                                                        element.name,
+                                                                      ),
+                                                                      Padding(
+                                                                        padding:
+                                                                            const EdgeInsetsDirectional
+                                                                                .fromSTEB(0.0, 10.0,
+                                                                                0.0, 0.0),
+                                                                        child: Row(
+                                                                          mainAxisSize:
+                                                                              MainAxisSize.max,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment
+                                                                                  .center,
+                                                                          children: [
+                                                                            const Padding(
+                                                                                padding:
+                                                                                    EdgeInsetsDirectional
+                                                                                        .fromSTEB(
+                                                                                            0.0,
+                                                                                            0.0,
+                                                                                            4.0,
+                                                                                            0.0),
+                                                                                child: Text(
+                                                                                    "Créée par :")),
+                                                                            Text(
+                                                                              element.createdBy,
+                                                                            ),
+                                                                          ],
+                                                                        ),
+                                                                      ),
+                                                                    ],
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsetsDirectional
+                                                                    .fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                                child: Column(
+                                                                  mainAxisSize: MainAxisSize.max,
+                                                                  mainAxisAlignment:
+                                                                      MainAxisAlignment.start,
+                                                                  crossAxisAlignment:
+                                                                      CrossAxisAlignment.end,
+                                                                  children: [
+                                                                    Text(
+                                                                      element.createdAt,
+                                                                      textAlign: TextAlign.end,
+                                                                    ),
+                                                                  ],
+                                                                ),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        ),
+                                                      ),
+                                                    ),
+                                                  );
+                                                },
+                                              ))
                                       : Column(
                                           children: [
                                             Lottie.asset(
@@ -443,104 +464,113 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                           ),
                                         )
                                       : Padding(
-                                      padding: EdgeInsets.all(10.w),
-                                      child: ListView.builder(
-                                        padding: EdgeInsets.zero,
-                                        shrinkWrap: true,
-                                        scrollDirection: Axis.vertical,
-                                        itemCount: listPersonalLibrairies.length,
-                                        itemBuilder: (context, listViewIndex) {
-                                          final element = listPersonalLibrairies[listViewIndex];
-                                          return Padding(
-                                            padding: EdgeInsets.only(bottom: 10.h),
-                                            child: InkWell(
-                                              onTap: () async {
-                                                Navigator.pushNamed(context, AppRouter.LIBRARY, arguments: element);
-                                              },
-                                              child: Container(
-                                                decoration: BoxDecoration(
-                                                  color: AppTheme.of(context).secondaryBackground,
-                                                  boxShadow: const [
-                                                    BoxShadow(
-                                                      blurRadius: 4.0,
-                                                      color: Color(0x3F14181B),
-                                                      offset: Offset(0.0, 3.0),
-                                                    )
-                                                  ],
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
-                                                child: Padding(
-                                                  padding: const EdgeInsetsDirectional.fromSTEB(
-                                                      0.0, 5.0, 0.0, 10.0),
-                                                  child: Row(
-                                                    mainAxisSize: MainAxisSize.min,
-                                                    children: [
-                                                      Expanded(
-                                                        child: Padding(
-                                                          padding:
-                                                              const EdgeInsetsDirectional.fromSTEB(
-                                                                  12.0, 0.0, 0.0, 0.0),
-                                                          child: Column(
-                                                            mainAxisSize: MainAxisSize.max,
-                                                            mainAxisAlignment:
-                                                                MainAxisAlignment.start,
-                                                            crossAxisAlignment:
-                                                                CrossAxisAlignment.start,
-                                                            children: [
-                                                              Text(
-                                                                element.name,
-                                                              ),
-                                                              Padding(
-                                                                padding: const EdgeInsetsDirectional
-                                                                    .fromSTEB(0.0, 10.0, 0.0, 0.0),
-                                                                child: Row(
-                                                                  mainAxisSize: MainAxisSize.max,
-                                                                  crossAxisAlignment:
-                                                                      CrossAxisAlignment.center,
-                                                                  children: [
-                                                                    const Padding(
-                                                                        padding:
-                                                                            EdgeInsetsDirectional
-                                                                                .fromSTEB(0.0, 0.0,
-                                                                                    4.0, 0.0),
-                                                                        child: Text("Créée par :")),
-                                                                    Text(
-                                                                      element.createdBy,
+                                          padding: EdgeInsets.all(10.w),
+                                          child: ListView.builder(
+                                            padding: EdgeInsets.zero,
+                                            shrinkWrap: true,
+                                            scrollDirection: Axis.vertical,
+                                            itemCount: listPersonalLibrairies.length,
+                                            itemBuilder: (context, listViewIndex) {
+                                              final element = listPersonalLibrairies[listViewIndex];
+                                              return Padding(
+                                                padding: EdgeInsets.only(bottom: 10.h),
+                                                child: InkWell(
+                                                  onTap: () async {
+                                                    await Navigator.pushNamed(
+                                                        context, AppRouter.LIBRARY,
+                                                        arguments: element);
+                                                    await initData();
+                                                  },
+                                                  child: Container(
+                                                    decoration: BoxDecoration(
+                                                      color:
+                                                          AppTheme.of(context).secondaryBackground,
+                                                      boxShadow: const [
+                                                        BoxShadow(
+                                                          blurRadius: 4.0,
+                                                          color: Color(0x3F14181B),
+                                                          offset: Offset(0.0, 3.0),
+                                                        )
+                                                      ],
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                    ),
+                                                    child: Padding(
+                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                          0.0, 5.0, 0.0, 10.0),
+                                                      child: Row(
+                                                        mainAxisSize: MainAxisSize.min,
+                                                        children: [
+                                                          Expanded(
+                                                            child: Padding(
+                                                              padding: const EdgeInsetsDirectional
+                                                                  .fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                                              child: Column(
+                                                                mainAxisSize: MainAxisSize.max,
+                                                                mainAxisAlignment:
+                                                                    MainAxisAlignment.start,
+                                                                crossAxisAlignment:
+                                                                    CrossAxisAlignment.start,
+                                                                children: [
+                                                                  Text(
+                                                                    element.name,
+                                                                  ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        const EdgeInsetsDirectional
+                                                                            .fromSTEB(
+                                                                            0.0, 10.0, 0.0, 0.0),
+                                                                    child: Row(
+                                                                      mainAxisSize:
+                                                                          MainAxisSize.max,
+                                                                      crossAxisAlignment:
+                                                                          CrossAxisAlignment.center,
+                                                                      children: [
+                                                                        const Padding(
+                                                                            padding:
+                                                                                EdgeInsetsDirectional
+                                                                                    .fromSTEB(
+                                                                                        0.0,
+                                                                                        0.0,
+                                                                                        4.0,
+                                                                                        0.0),
+                                                                            child: Text(
+                                                                                "Créée par :")),
+                                                                        Text(
+                                                                          element.createdBy,
+                                                                        ),
+                                                                      ],
                                                                     ),
-                                                                  ],
-                                                                ),
+                                                                  ),
+                                                                ],
                                                               ),
-                                                            ],
-                                                          ),
-                                                        ),
-                                                      ),
-                                                      Padding(
-                                                        padding:
-                                                            const EdgeInsetsDirectional.fromSTEB(
-                                                                12.0, 0.0, 12.0, 0.0),
-                                                        child: Column(
-                                                          mainAxisSize: MainAxisSize.max,
-                                                          mainAxisAlignment:
-                                                              MainAxisAlignment.start,
-                                                          crossAxisAlignment:
-                                                              CrossAxisAlignment.end,
-                                                          children: [
-                                                            Text(
-                                                              element.createdAt,
-                                                              textAlign: TextAlign.end,
                                                             ),
-                                                          ],
-                                                        ),
+                                                          ),
+                                                          Padding(
+                                                            padding: const EdgeInsetsDirectional
+                                                                .fromSTEB(12.0, 0.0, 12.0, 0.0),
+                                                            child: Column(
+                                                              mainAxisSize: MainAxisSize.max,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment.start,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment.end,
+                                                              children: [
+                                                                Text(
+                                                                  element.createdAt,
+                                                                  textAlign: TextAlign.end,
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ],
                                                       ),
-                                                    ],
+                                                    ),
                                                   ),
                                                 ),
-                                              ),
-                                            ),
-                                          );
-                                        },
-                                      ),
-                                    ),
+                                              );
+                                            },
+                                          ),
+                                        ),
                             ],
                           ),
                         ),

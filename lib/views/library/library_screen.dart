@@ -95,11 +95,10 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
             ),
             TextButton(
               onPressed: () async {
+                 await LibraryRepository().deleteLibrary(context, widget.library.uuid);
                 Navigator.of(context).pop();
-                ResponseApi? response = await LibraryRepository().deleteLibrary(context, widget.library.uuid);
-                if (response != null && response.status == 200) {
-                  Navigator.pop(context);
-                }
+                Navigator.of(context).pop();
+
               },
               child: const Text("Delete"),
             ),
@@ -156,7 +155,8 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                             size: 30.0,
                           ),
                           onPressed: () async {
-                            deleteLibrary();
+                            Navigator.pop(context);
+
                           },
                         ),
                       ),
@@ -215,8 +215,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                       ),
                       child: IconCustom(
                         onPressed: () async {
-
-                          Navigator.pop(context);
+                          deleteLibrary();
                         },
                         icon: const Icon(
                           Icons.delete_forever_rounded,
