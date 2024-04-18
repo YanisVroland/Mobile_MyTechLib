@@ -8,6 +8,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/color_const.dart';
 import '../../app/theme/validators.dart';
+import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 import '../../services/models/library_model.dart';
@@ -84,31 +85,21 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
     showDialog(
       context: context,
       builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text("Delete Library"),
-          content: const Text("Are you sure you want to delete this library?"),
-          actions: <Widget>[
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-              child: const Text("Cancel"),
-            ),
-            TextButton(
-              onPressed: () async {
-                 await LibraryRepository().deleteLibrary(context, widget.library.uuid);
-                 await initProjects();
-                Navigator.of(context).pop();
-                Navigator.of(context).pop();
-
-              },
-              child: const Text("Delete"),
-            ),
-          ],
+        return DeleteDialog(
+          title: "Supprimer le Client ?",
+          content: "Etes-vous sûr de vouloir supprimer ?",
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+          onDelete: () async {
+            await LibraryRepository().deleteLibrary(context, widget.library.uuid);
+            await initProjects();
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
         );
       },
     );
-
   }
 
   @override
@@ -159,7 +150,6 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                           ),
                           onPressed: () async {
                             Navigator.pop(context);
-
                           },
                         ),
                       ),
@@ -314,9 +304,10 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                   await Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                    await Navigator.pushNamed(
+                                                        context, AppRouter.PROJECT,
                                                         arguments: element);
-                                                   await initProjects();
+                                                    await initProjects();
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(
@@ -433,7 +424,8 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    await Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                    await Navigator.pushNamed(
+                                                        context, AppRouter.PROJECT,
                                                         arguments: element);
                                                     await initProjects();
                                                   },
@@ -552,7 +544,8 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                   await Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                    await Navigator.pushNamed(
+                                                        context, AppRouter.PROJECT,
                                                         arguments: element);
                                                     await initProjects();
                                                   },
@@ -671,9 +664,10 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                   await Navigator.pushNamed(context, AppRouter.PROJECT,
+                                                    await Navigator.pushNamed(
+                                                        context, AppRouter.PROJECT,
                                                         arguments: element);
-                                                   await initProjects();
+                                                    await initProjects();
                                                   },
                                                   child: Container(
                                                     decoration: BoxDecoration(

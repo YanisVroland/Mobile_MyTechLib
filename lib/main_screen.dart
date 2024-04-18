@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       await initUser();
       if (user != null) {
-        if(user!.companyUuid != null){
+        if(user!.companyUuid != null && user!.companyUuid != ""){
           await initCompany();
         }
         setState(() {

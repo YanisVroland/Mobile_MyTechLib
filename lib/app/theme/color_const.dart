@@ -16,7 +16,7 @@ class ColorConst {
   static const Color info =  Color(0xFF1C4494);
 
 
-  static const Color delete =  Color(0xD8EC0C30);
+  static const Color delete =  Color(0xD8FA3C63);
 
 
 

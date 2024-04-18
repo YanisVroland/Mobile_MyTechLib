@@ -29,6 +29,25 @@ class UtilsRepository {
     }
   }
 
+  Future<ResponseApi?> requestPatch(
+      BuildContext context, String endpoint, Map<String, dynamic> bodyJson) async {
+    try {
+      String accessToken = await LocalPref().getString("access_token");
+      final response = await http.patch(
+        Uri.parse(AppConst.baseUrl + endpoint),
+        headers: <String, String>{
+          'Content-Type': 'application/json; charset=UTF-8',
+          'Authorization': 'Bearer ' + (accessToken.isNotEmpty ? accessToken : AppConst.anonToken),
+        },
+        body: jsonEncode(bodyJson),
+      );
+
+      return await verificationResponse(context, response, endpoint);
+    } catch (e) {
+      throw Exception(e);
+    }
+  }
+
   Future<ResponseApi?> requestGet(BuildContext context, String endpoint) async {
     try {
       String accessToken = await LocalPref().getString("access_token");
@@ -68,8 +87,8 @@ class UtilsRepository {
       return ResponseApi.fromRequest(response);
     } else {
       if (response.body.contains("message")) {
-        // SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
-        //     duration: 3, color: Colors.red);
+        SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
+            duration: 3, color: Colors.red);
       } else {
         SnackConst.SnackCustom(AppConst.errorApiMessage, context, duration: 3);
       }

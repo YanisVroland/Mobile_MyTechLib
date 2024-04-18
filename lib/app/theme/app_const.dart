@@ -11,6 +11,7 @@ class AppConst {
   static String signInPostEndpoint = '/user/auth';
   static String signUpPostEndpoint = '/user/registration';
   static String userGetEndpoint = '/user/';
+  static String companyLeaveCompanyPostEndpoint = '/user/leaveCompany/';
 
   // -> Library
   static String libraryUserGetEndpoint = '/library/byUser/';
@@ -25,6 +26,7 @@ class AppConst {
   // -> Company
   static String companyGetEndpoint = '/company/';
   static String companyUsersGetEndpoint = '/company/user/';
+  static String companyUpdateCodePostEndpoint = '/company/updateCode/';
 
   // -> Information
   static String informationByCompanyGetEndpoint = '/information/byCompany/';

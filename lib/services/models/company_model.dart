@@ -6,7 +6,7 @@ class Company {
   final String uuid;
   final String name;
   final String description;
-  final String code;
+  String code;
   final String createdBy;
   final String createdAt;
   final String updatedAt;
