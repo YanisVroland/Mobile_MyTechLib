@@ -13,7 +13,7 @@ import '../../services/models/user_model.dart';
 import '../../services/repositories/information_repository.dart';
 
 class InformationWidget extends StatefulWidget {
-  const InformationWidget(this.company,this.user, {Key? key}) : super(key: key);
+  const InformationWidget(this.company, this.user, {Key? key}) : super(key: key);
   final Company? company;
   final UserModel user;
 
@@ -74,8 +74,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
 
         listInformation = listInformationTmp
             .where((element) =>
-        element.createdAt!.isAfter(startOfDay) &&
-            element.createdAt!.isBefore(endOfDay))
+                element.createdAt!.isAfter(startOfDay) && element.createdAt!.isBefore(endOfDay))
             .toList();
         break;
       case 2:
@@ -93,19 +92,17 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
 
         listInformation = listInformationTmp
             .where((element) =>
-        element.createdAt!.isAfter(firstDayOfMonth) &&
-            element.createdAt!.isBefore(firstDayOfNextMonth))
+                element.createdAt!.isAfter(firstDayOfMonth) &&
+                element.createdAt!.isBefore(firstDayOfNextMonth))
             .toList();
         break;
     }
-
 
     setState(() {
       nbNewInformation = listInformation.where((element) => element.type == 'NEW').length;
       nbDeleteInformation = listInformation.where((element) => element.type == 'DELETE').length;
       nbUpdateInformation = listInformation.where((element) => element.type == 'UPDATE').length;
     });
-
   }
 
   @override
@@ -118,7 +115,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
-      appBar:  CustomAppBar(widget.user),
+      appBar: CustomAppBar(widget.user),
       body: SafeArea(
         top: true,
         child: Column(
@@ -430,153 +427,197 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                       final element = listInformation[listViewIndex];
                                       return Padding(
                                         padding: EdgeInsets.only(bottom: 10.h),
-                                        child: element.isProject ?
-                                        Container(
-                                          height: 100.0,
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.of(context).secondaryBackground,
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                blurRadius: 4.0,
-                                                color: Color(0x3F14181B),
-                                                offset: Offset(0.0, 3.0),
-                                              )
-                                            ],
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          ),
-                                          child: Padding(
-                                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 5.0, 0.0, 10.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                                          12.0, 0.0, 0.0, 0.0),
-                                                      child: Column(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                        MainAxisAlignment.spaceBetween,
-                                                        crossAxisAlignment:
-                                                        CrossAxisAlignment.start,
-                                                        children: [
-                                                          Container(
-                                                            width: 100,
-                                                            decoration: const BoxDecoration(
-                                                              shape: BoxShape.circle,
-                                                              color: Colors.green,
-                                                            ),
-                                                            child: Center(
-                                                              child: Text(element.type,style: const TextStyle(
-                                                                fontSize: 18,
-                                                                fontWeight: FontWeight.bold,
-                                                                color: Colors.white,
-                                                              ),)),
-                                                          ),
-                                                          Text(
-                                                                "Projet : " + element.core_project!.name),
-                                                          Text(
-                                                              "Type : " + element.core_project!.type),
-                                                          Text(
-                                                              "Version : " + element.core_project!.version),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
+                                        child: element.isProject
+                                            ? Container(
+                                                height: 70.0,
+                                                decoration: BoxDecoration(
+                                                  color: AppTheme.of(context).secondaryBackground,
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                      blurRadius: 4.0,
+                                                      color: Color(0x3F14181B),
+                                                      offset: Offset(0.0, 3.0),
+                                                    )
+                                                  ],
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                ),
+                                                child: Padding(
                                                     padding: const EdgeInsetsDirectional.fromSTEB(
-                                                        12.0, 0.0, 12.0, 0.0),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                                      children: [
-                                                        Text(
-                                                          Tools.formatDate(element.createdAt!),
-                                                          textAlign: TextAlign.end,
-                                                          style: TextStyle(fontSize: 12.0, color: AppTheme.of(context).primary),
-                                                        ),
-                                                        Padding(
-                                                          padding:
-                                                          const EdgeInsetsDirectional.fromSTEB(
-                                                              0.0, 4.0, 0.0, 0.0),
-                                                          child: Text("Par : " + element.createdBy, style: TextStyle(fontSize: 12.0)),
-                                                        ),
-                                                      ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
-                                        )
-                                        :Container(
-                                          height: 70.0,
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.of(context).secondaryBackground,
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                blurRadius: 4.0,
-                                                color: Color(0x3F14181B),
-                                                offset: Offset(0.0, 3.0),
-                                              )
-                                            ],
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          ),
-                                          child: Padding(
-                                              padding: const EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 5.0, 0.0, 10.0),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                                          12.0, 0.0, 0.0, 0.0),
-                                                      child: Column(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment.spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment.start,
-                                                        children: [
-                                                          Flexible(
-                                                            child: Text(
-                                                                "Client : " + element.core_library!.name),
-                                                          ),
-                                                          Padding(
-                                                            padding: const EdgeInsetsDirectional
-                                                                .fromSTEB(0.0, 4.0, 0.0, 0.0),
-                                                            child: Text("Type : " + element.type),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ),
-                                                  Padding(
-                                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                                        12.0, 0.0, 12.0, 0.0),
-                                                    child: Column(
+                                                        0.0, 5.0, 0.0, 10.0),
+                                                    child: Row(
+                                                      mainAxisSize: MainAxisSize.min,
                                                       mainAxisAlignment:
                                                           MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
                                                       children: [
-                                                        Text(
-                                                          Tools.formatDate(element.createdAt!),
-                                                          textAlign: TextAlign.end,
-                                                          style: TextStyle(fontSize: 12.0, color: AppTheme.of(context).primary),
-                                                        ),
-                                                        Padding(
+                                                        Expanded(
+                                                            child: Padding(
                                                           padding:
                                                               const EdgeInsetsDirectional.fromSTEB(
-                                                                  0.0, 4.0, 0.0, 0.0),
-                                                          child: Text("Par : " + element.createdBy, style: TextStyle(fontSize: 12.0)),
-                                                        ),
+                                                                  12.0, 0.0, 0.0, 0.0),
+                                                          child: Column(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment.start,
+                                                            children: [
+                                                              Container(
+                                                                width: 50.w,
+                                                                decoration: BoxDecoration(
+                                                                  color:
+                                                                      AppTheme.of(context).primary,
+                                                                  borderRadius:
+                                                                      BorderRadius.circular(8.0),
+                                                                ),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    element.type,
+                                                                    style: const TextStyle(
+                                                                      fontSize: 12,
+                                                                      fontWeight: FontWeight.bold,
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ),
+                                                              Text(
+                                                                  "Version : " +
+                                                                      element.core_project!.version,
+                                                                  style: TextStyle(fontSize: 12.0)),
+                                                            ],
+                                                          ),
+                                                        )),
+                                                        Text(element.core_project!.name,
+                                                            style: const TextStyle(
+                                                                fontSize: 14.0,
+                                                                fontWeight: FontWeight.bold)),
+                                                        Expanded(
+                                                            child: Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                  12.0, 0.0, 12.0, 0.0),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment.end,
+                                                            children: [
+                                                              Text(
+                                                                Tools.formatDate(
+                                                                    element.createdAt!),
+                                                                textAlign: TextAlign.end,
+                                                                style: TextStyle(
+                                                                    fontSize: 12.0,
+                                                                    color: AppTheme.of(context)
+                                                                        .primary),
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsetsDirectional
+                                                                    .fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                child: Text(
+                                                                    "Par : " + element.createdBy,
+                                                                    style:
+                                                                        TextStyle(fontSize: 12.0)),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )),
                                                       ],
-                                                    ),
-                                                  ),
-                                                ],
-                                              )),
-                                        ),
+                                                    )),
+                                              )
+                                            : Container(
+                                                height: 70.0,
+                                                decoration: BoxDecoration(
+                                                  color: AppTheme.of(context).secondaryBackground,
+                                                  boxShadow: const [
+                                                    BoxShadow(
+                                                      blurRadius: 4.0,
+                                                      color: Color(0x3F14181B),
+                                                      offset: Offset(0.0, 3.0),
+                                                    )
+                                                  ],
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                ),
+                                                child: Padding(
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                                        0.0, 5.0, 0.0, 10.0),
+                                                    child: Row(
+                                                      mainAxisSize: MainAxisSize.min,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment.spaceBetween,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Expanded(
+                                                          child: Padding(
+                                                            padding: const EdgeInsetsDirectional
+                                                                .fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                                            child: Column(
+                                                              mainAxisSize: MainAxisSize.max,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment.spaceBetween,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment.start,
+                                                              children: [
+                                                                Container(
+                                                                  width: 50.w,
+                                                                  decoration: BoxDecoration(
+                                                                    color: AppTheme.of(context)
+                                                                        .primary,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(8.0),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      element.type,
+                                                                      style: const TextStyle(
+                                                                        fontSize: 12,
+                                                                        fontWeight: FontWeight.bold,
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ),
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                        Text(element.core_library!.name,
+                                                            style: const TextStyle(
+                                                                fontSize: 14.0,
+                                                                fontWeight: FontWeight.bold)),
+                                                        Expanded(
+                                                            child: Padding(
+                                                          padding:
+                                                              const EdgeInsetsDirectional.fromSTEB(
+                                                                  12.0, 0.0, 12.0, 0.0),
+                                                          child: Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment.end,
+                                                            children: [
+                                                              Text(
+                                                                Tools.formatDate(
+                                                                    element.createdAt!),
+                                                                textAlign: TextAlign.end,
+                                                                style: TextStyle(
+                                                                    fontSize: 12.0,
+                                                                    color: AppTheme.of(context)
+                                                                        .primary),
+                                                              ),
+                                                              Padding(
+                                                                padding: const EdgeInsetsDirectional
+                                                                    .fromSTEB(0.0, 4.0, 0.0, 0.0),
+                                                                child: Text(
+                                                                    "Par : " + element.createdBy,
+                                                                    style:
+                                                                        TextStyle(fontSize: 12.0)),
+                                                              ),
+                                                            ],
+                                                          ),
+                                                        )),
+                                                      ],
+                                                    )),
+                                              ),
                                       );
                                     },
                                   ),
