@@ -1,11 +1,19 @@
+import 'dart:io';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:my_tech_lib/services/repositories/company_repository.dart';
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
-
+import '../../app/theme/snackBar_const.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
+import '../../app/widgets/textField_custom.dart';
+import '../../services/models/company_model.dart';
+import '../../services/models/responseAPI_model.dart';
 
 class CompanyEditWidget extends StatefulWidget {
-  const CompanyEditWidget({Key? key}) : super(key: key);
+  CompanyEditWidget(this.company, {Key? key}) : super(key: key);
+  Company company;
 
   @override
   _CompanyEditWidgetState createState() => _CompanyEditWidgetState();
@@ -13,37 +21,186 @@ class CompanyEditWidget extends StatefulWidget {
 
 class _CompanyEditWidgetState extends State<CompanyEditWidget> with TickerProviderStateMixin {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-
-  // State field(s) for TextField widget.
-  TextEditingController? textController1;
-  String? Function(BuildContext, String?)? textController1Validator;
-
-  // State field(s) for TextField widget.
-  TextEditingController? textController2;
-  String? Function(BuildContext, String?)? textController2Validator;
   bool isDataUploading = false;
-  String uploadedFileUrl = '';
+  String? uploadedFileUrl;
+  final _formKey = GlobalKey<FormState>();
+  bool _loader = false;
+
+  late TextEditingController nameController;
+  late TextEditingController descriptionController;
 
   @override
   void initState() {
     super.initState();
+
+    nameController = TextEditingController();
+    nameController.text = widget.company.name;
+    descriptionController = TextEditingController();
+    descriptionController.text = widget.company.description;
   }
 
   @override
   void dispose() {
-    textController1?.dispose();
-    textController2?.dispose();
     super.dispose();
+    nameController.dispose();
+    descriptionController.dispose();
+  }
+
+  validButton() async {
+    setState(() {
+      _loader = true;
+    });
+    if (_formKey.currentState!.validate()) {
+      if (uploadedFileUrl != null) {
+        ResponseApi? response =
+            await CompanyRepository().updateLogoCompany(context, widget.company, uploadedFileUrl!);
+        if (response == null || response.status != 201) {
+          SnackConst.SnackCustom("Erreur lors du changement d'image", context,
+              duration: 3, color: Colors.red);
+        }
+      }
+      widget.company.name = nameController.text;
+      widget.company.description = descriptionController.text;
+      ResponseApi? response = await CompanyRepository().updateCompany(context, widget.company);
+      if (response == null || response.status != 200) {
+        SnackConst.SnackCustom("Erreur lors de la mise à jour", context,
+            duration: 3, color: Colors.red);
+      } else {
+        SnackConst.SnackCustom("Entreprise mise à jour", context, duration: 3, color: Colors.green);
+        Company result = Company.fromJsonUpdate(response.body);
+        setState(() {
+          widget.company = result;
+        });
+
+        Navigator.pop(context);
+      }
+    }
+    setState(() {
+      _loader = false;
+    });
+  }
+
+  Future<void> getImageFromGallery() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery, requestFullMetadata: false);
+
+    if (pickedFile != null) {
+      setState(() {
+        uploadedFileUrl = pickedFile.path;
+      });
+    }
   }
 
   @override
   Widget build(BuildContext context) {
+    Widget formRegister = Form(
+        key: _formKey,
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.center,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 30.h),
+              child: Stack(
+                children: [
+                  Card(
+                    clipBehavior: Clip.antiAliasWithSaveLayer,
+                    color: AppTheme.of(context).primary,
+                    elevation: 2.0,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(50.0),
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                      child: Container(
+                        width: 90.0,
+                        height: 90.0,
+                        clipBehavior: Clip.antiAlias,
+                        decoration: const BoxDecoration(
+                          shape: BoxShape.circle,
+                        ),
+                        child: uploadedFileUrl != null
+                            ? Image.file(
+                                File(uploadedFileUrl!),
+                                height: 200,
+                                fit: BoxFit.cover,
+                              )
+                            : widget.company.logoUrl.isEmpty
+                                ? Image.asset(
+                                    'assets/images/tlchargement.png',
+                                    fit: BoxFit.cover,
+                                  )
+                                : Image.network(
+                                    widget.company.logoUrl,
+                                    fit: BoxFit.cover,
+                                  ),
+                      ),
+                    ),
+                  ),
+                  Positioned(
+                    bottom: 5,
+                    right: 5,
+                    child: Container(
+                      height: 35.0,
+                      width: 35.0,
+                      decoration: BoxDecoration(
+                        color: AppTheme.of(context).primary,
+                        shape: BoxShape.circle,
+                      ),
+                      child: InkWell(
+                        onTap: () async {
+                          getImageFromGallery();
+                        },
+                        child: const Icon(
+                          Icons.edit,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            CustomTextField(
+              controller: nameController,
+              obscureText: false,
+              labelText: "Nom",
+              hintText: "Entrer votre nom...",
+              validator: Validators.validateEmpty,
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 30.h),
+              child: CustomTextField(
+                controller: descriptionController,
+                obscureText: false,
+                labelText: "Description",
+                hintText: "Entrer votre description...",
+                validator: Validators.validateEmpty,
+                maxLines: 5,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                      text: "Valider",
+                      isLoading: _loader,
+                      onTap: () async {
+                        await validButton();
+                      }),
+                ],
+              ),
+            ),
+          ],
+        ));
+
     return Scaffold(
-      key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppTheme.of(context).background,
-        automaticallyImplyLeading: true,
+        backgroundColor: AppTheme.of(context).secondaryBackground,
+        automaticallyImplyLeading: false,
         leading: InkWell(
           splashColor: Colors.transparent,
           focusColor: Colors.transparent,
@@ -52,333 +209,38 @@ class _CompanyEditWidgetState extends State<CompanyEditWidget> with TickerProvid
           onTap: () async {
             Navigator.pop(context);
           },
-          child: Icon(
-            Icons.arrow_back_ios,
-            size: 24.0,
+          child: const Icon(
+            Icons.chevron_left_rounded,
+            size: 32.0,
           ),
         ),
-        title: Text(
-          "Compagnie",
+        title: const Text(
+          "Modifier entreprise",
         ),
-        actions: [
-          Padding(
-            padding: EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 15.0, 0.0),
-            child: InkWell(
-              splashColor: Colors.transparent,
-              focusColor: Colors.transparent,
-              hoverColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              onTap: () async {
-                //TODO Navigation
-                // context.pushNamed('profilePage');
-              },
-              child: Icon(
-                Icons.settings,
-                size: 26.0,
-              ),
-            ),
-          ),
-        ],
-        centerTitle: true,
-        elevation: 5.0,
+        actions: [],
+        centerTitle: false,
+        elevation: 0.0,
       ),
-      body: Stack(
-        children: [
-          Column(
-            mainAxisSize: MainAxisSize.max,
-            children: [
-              Expanded(
-                child: Padding(
-                    padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                    child: Stack(
-                      children: [
-                        Padding(
-                          padding: EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
-                          child: Container(
-                            decoration: BoxDecoration(
-                              color: AppTheme.of(context).secondaryBackground,
-                              boxShadow: [
-                                BoxShadow(
-                                  blurRadius: 4.0,
-                                  color: Color(0x33000000),
-                                  offset: Offset(0.0, 2.0),
-                                )
-                              ],
-                              borderRadius: BorderRadius.only(
-                                bottomLeft: Radius.circular(0.0),
-                                bottomRight: Radius.circular(0.0),
-                                topLeft: Radius.circular(70.0),
-                                topRight: Radius.circular(70.0),
-                              ),
-                            ),
-                            child: Column(
-                              mainAxisSize: MainAxisSize.max,
-                              mainAxisAlignment: MainAxisAlignment.start,
-                              crossAxisAlignment: CrossAxisAlignment.center,
-                              children: [
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 40.0, 0.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Text("Création"),
-                                      Text(
-                                        'd/M/y',
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Expanded(
-                                  child: Padding(
-                                    padding: EdgeInsetsDirectional.fromSTEB(20.0, 10.0, 20.0, 20.0),
-                                    child: Container(
-                                      decoration: BoxDecoration(
-                                        color: AppTheme.of(context).secondaryBackground,
-                                      ),
-                                      child: Column(
-                                        mainAxisSize: MainAxisSize.max,
-                                        children: [
-                                          TextFormField(
-                                            controller: textController1 ??= TextEditingController(
-                                              text: "name",
-                                            ),
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: "Nom",
-                                              enabledBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius: BorderRadius.circular(8.0),
-                                              ),
-                                              focusedBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: AppTheme.of(context).primary,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius: BorderRadius.circular(8.0),
-                                              ),
-                                              errorBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: AppTheme.of(context).error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius: BorderRadius.circular(8.0),
-                                              ),
-                                              focusedErrorBorder: UnderlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: AppTheme.of(context).error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius: BorderRadius.circular(8.0),
-                                              ),
-                                            ),
-                                            validator: Validators.validateEmpty,
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                                            child: TextFormField(
-                                              controller: textController2 ??= TextEditingController(
-                                                text: "description",
-                                              ),
-                                              obscureText: false,
-                                              decoration: InputDecoration(
-                                                labelText: "Description",
-                                                enabledBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    width: 2.0,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
-                                                focusedBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: AppTheme.of(context).primary,
-                                                    width: 2.0,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
-                                                errorBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: AppTheme.of(context).error,
-                                                    width: 2.0,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
-                                                focusedErrorBorder: UnderlineInputBorder(
-                                                  borderSide: BorderSide(
-                                                    color: AppTheme.of(context).error,
-                                                    width: 2.0,
-                                                  ),
-                                                  borderRadius: BorderRadius.circular(8.0),
-                                                ),
-                                              ),
-                                              maxLines: 5,
-                                              validator: Validators.validateEmpty,
-                                            ),
-                                          ),
-                                          Padding(
-                                            padding:
-                                                EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                                            child: CustomButton(
-                                              text: "Modifier",
-                                              onTap: () async {
-                                                // await stackCompaniesRecord
-                                                //     .reference
-                                                //     .update(
-                                                //         createCompaniesRecordData(
-                                                //   name: _model
-                                                //       .textController1.text,
-                                                //   description: _model
-                                                //       .textController2.text,
-                                                // ));
-                                                ScaffoldMessenger.of(context).showSnackBar(
-                                                  SnackBar(
-                                                    content: Text(
-                                                      'Informations mis à jour',
-                                                      style: TextStyle(
-                                                      ),
-                                                    ),
-                                                    duration: Duration(milliseconds: 4000),
-                                                    backgroundColor: AppTheme.of(context).secondary,
-                                                  ),
-                                                );
-                                              },
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        Align(
-                          alignment: AlignmentDirectional(0.00, -1.00),
-                          child: Padding(
-                            padding: EdgeInsetsDirectional.fromSTEB(0.0, 20.0, 0.0, 0.0),
-                            child: InkWell(
-                              splashColor: Colors.transparent,
-                              focusColor: Colors.transparent,
-                              hoverColor: Colors.transparent,
-                              highlightColor: Colors.transparent,
-                              onTap: () async {
-                                // final selectedMedia = await selectMedia(
-                                //   imageQuality: 60,
-                                //   mediaSource: MediaSource.photoGallery,
-                                //   multiImage: false,
-                                // );
-                                // if (selectedMedia != null &&
-                                //     selectedMedia.every((m) =>
-                                //         validateFileFormat(
-                                //             m.storagePath, context))) {
-                                //   setState(
-                                //       () => isDataUploading = true);
-                                //   var selectedUploadedFiles =
-                                //       <FFUploadedFile>[];
-                                //
-                                //   var downloadUrls = <String>[];
-                                //   try {
-                                //     showUploadMessage(
-                                //       context,
-                                //       'Uploading file...',
-                                //       showLoading: true,
-                                //     );
-                                //     selectedUploadedFiles = selectedMedia
-                                //         .map((m) => FFUploadedFile(
-                                //               name: m.storagePath
-                                //                   .split('/')
-                                //                   .last,
-                                //           bytes: m.bytes,
-                                //           height: m.dimensions?.height,
-                                //           width: m.dimensions?.width,
-                                //           blurHash: m.blurHash,
-                                //         ))
-                                //     .toList();
-                                //
-                                // downloadUrls = (await Future.wait(
-                                //   selectedMedia.map(
-                                //     (m) async => await uploadData(
-                                //         m.storagePath, m.bytes),
-                                //   ),
-                                // ))
-                                //     .where((u) => u != null)
-                                //     .map((u) => u!)
-                                //     .toList();
-                                // } finally {
-                                //   ScaffoldMessenger.of(context)
-                                //       .hideCurrentSnackBar();
-                                //   isDataUploading = false;
-                                // }
-                                // if (selectedUploadedFiles.length ==
-                                //         selectedMedia.length &&
-                                //     downloadUrls.length ==
-                                //         selectedMedia.length) {
-                                //   setState(() {
-                                //       uploadedLocalFile =
-                                //           selectedUploadedFiles.first;
-                                //       uploadedFileUrl =
-                                //           downloadUrls.first;
-                                //     });
-                                //     showUploadMessage(context, 'Success!');
-                                //   } else {
-                                //     setState(() {});
-                                //     showUploadMessage(
-                                //         context, 'Failed to upload data');
-                                //     return;
-                                //   }
-                                // }
-                                //
-                                // if (uploadedFileUrl != null &&
-                                //     uploadedFileUrl != '') {
-                                //   await actions.deleteImage(
-                                //     stackCompaniesRecord.urlPicture,
-                                //   );
-                                //
-                                //   await stackCompaniesRecord.reference
-                                //       .update(createCompaniesRecordData(
-                                //     urlPicture: uploadedFileUrl,
-                                //   ));
-                                // }
-                              },
-                              child: Container(
-                                width: 70.0,
-                                height: 70.0,
-                                decoration: BoxDecoration(
-                                  color: AppTheme.of(context).secondaryBackground,
-                                  boxShadow: [
-                                    BoxShadow(
-                                      blurRadius: 4.0,
-                                      color: Color(0x33000000),
-                                      offset: Offset(0.0, 2.0),
-                                    )
-                                  ],
-                                  borderRadius: BorderRadius.circular(33.0),
-                                ),
-                                child: Container(
-                                  width: double.infinity,
-                                  height: double.infinity,
-                                  clipBehavior: Clip.antiAlias,
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.circle,
-                                  ),
-                                  child: Image.network(
-                                    'https://w7.pngwing.com/pngs/981/645/png-transparent-default-profile-united-states-computer-icons-desktop-free-high-quality-person-icon-miscellaneous-silhouette-symbol-thumbnail.png',
-                                  ),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    )),
-              ),
-            ],
+      body: Container(
+        width: MediaQuery.sizeOf(context).width * 1.0,
+        height: MediaQuery.sizeOf(context).height * 1.0,
+        decoration: BoxDecoration(
+          image: DecorationImage(
+            fit: BoxFit.fitWidth,
+            image: Image.asset(
+              'assets/images/createAccount_bg@2x.png',
+            ).image,
           ),
-        ],
+        ),
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 30.w,
+            vertical: 50.h,
+          ),
+          child: SingleChildScrollView(
+            child: formRegister,
+          ),
+        ),
       ),
     );
   }

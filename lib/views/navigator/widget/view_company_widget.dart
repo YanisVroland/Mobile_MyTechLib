@@ -30,12 +30,12 @@ class _ViewCompanyState extends State<ViewCompany> {
     getStatistiques();
   }
 
-
   getStatistiques() async {
     setState(() {
       _loaderStat = true;
     });
-    final ResponseApi? response = await CompanyRepository().getStatistiqueCompany(context,widget.company.uuid);
+    final ResponseApi? response =
+        await CompanyRepository().getStatistiqueCompany(context, widget.company.uuid);
     if (response != null && response.status == 200) {
       projectCpt = response.body["projectCpt"];
       libraryCpt = response.body["libraryCpt"];
@@ -85,8 +85,11 @@ class _ViewCompanyState extends State<ViewCompany> {
                               Column(
                                 children: [
                                   InkWell(
-                                      onTap: () {
-                                        Navigator.pushNamed(context, AppRouter.COMPANY_EDIT);
+                                      onTap: () async {
+                                        await Navigator.pushNamed(context, AppRouter.COMPANY_EDIT,
+                                            arguments: widget.company);
+
+                                        setState(() {});
                                       },
                                       child: Container(
                                         width: 35.0,
@@ -207,10 +210,10 @@ class _ViewCompanyState extends State<ViewCompany> {
                                     fontSize: 12.0,
                                   ),
                                 ),
-                                 Padding(
+                                Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                   child: Text(
-                                    _loaderStat ? "~~~" :libraryCpt.toString(),
+                                    _loaderStat ? "~~~" : libraryCpt.toString(),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
@@ -247,8 +250,8 @@ class _ViewCompanyState extends State<ViewCompany> {
                                     fontSize: 12.0,
                                   ),
                                 ),
-                                 Padding(
-                                  padding:const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
+                                Padding(
+                                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                   child: Text(
                                     _loaderStat ? "~~~" : projectCpt.toString(),
                                     textAlign: TextAlign.start,
@@ -433,22 +436,23 @@ class _ViewCompanyState extends State<ViewCompany> {
                         await showDialog(
                             context: context,
                             builder: (BuildContext context) {
-                          return DeleteDialog(
-                            title: "Partir de l'entreprise ?",
-                            content: "Êtes-vous sûr ?",
-                            onCancel: () {
-                              Navigator.of(context).pop();
-                            },
-                            onDelete: () async {
-                              String uuidUser = await LocalPref().getString("uuid_user");
-                              ResponseApi? response =
-                                  await CompanyRepository().leaveCompany(context, uuidUser);
-                              if (response != null && response.status == 200) {
-                                await Navigator.pushNamed(context, AppRouter.MAIN, arguments: uuidUser);
-                              }
-                            },
-                          );
-                        });
+                              return DeleteDialog(
+                                title: "Partir de l'entreprise ?",
+                                content: "Êtes-vous sûr ?",
+                                onCancel: () {
+                                  Navigator.of(context).pop();
+                                },
+                                onDelete: () async {
+                                  String uuidUser = await LocalPref().getString("uuid_user");
+                                  ResponseApi? response =
+                                      await CompanyRepository().leaveCompany(context, uuidUser);
+                                  if (response != null && response.status == 200) {
+                                    await Navigator.pushNamed(context, AppRouter.MAIN,
+                                        arguments: uuidUser);
+                                  }
+                                },
+                              );
+                            });
                       },
                       child: Container(
                         width: 35.0,

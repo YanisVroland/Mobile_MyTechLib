@@ -75,7 +75,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
 
       case COMPANY_EDIT:
-        return MaterialPageRoute(builder: (_) => const CompanyEditWidget());
+        return MaterialPageRoute(builder: (_) =>  CompanyEditWidget(settings.arguments as Company));
       case COMPANY_LIST_POEPLE:
         return MaterialPageRoute(
             builder: (_) => CompanyListPeopleWidget(settings.arguments as Company));

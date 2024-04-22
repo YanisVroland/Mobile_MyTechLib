@@ -4,8 +4,8 @@ import '../../app/theme/tools.dart';
 
 class Company {
   final String uuid;
-  final String name;
-  final String description;
+  String name;
+  String description;
   String code;
   final String createdBy;
   final String createdAt;
@@ -35,6 +35,14 @@ class Company {
           json['created_at'] != null ? Tools.formatDate(DateTime.parse(json['created_at'])) : '',
       updatedAt:
           json['updated_at'] != null ? Tools.formatDate(DateTime.parse(json['updated_at'])) : '',
+    );
+  }
+  factory Company.fromJsonUpdate(Map<String, dynamic> json) {
+    return Company(
+      name: json['name'] ?? '',
+      description: json['description'] ?? '',
+      code: json['code'] ?? '',
+      logoUrl: json['logo_url'] ?? '',
     );
   }
 }

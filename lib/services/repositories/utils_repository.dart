@@ -98,6 +98,8 @@ class UtilsRepository {
   Future<ResponseApi> requestImagePost(
       BuildContext context, String endpoint, Map<String, Object> bodyJson) async {
     try {
+
+
       String accessToken = await LocalPref().getString("access_token");
       final dio = Dio();
       dio.options.contentType = "multipart/form-data";

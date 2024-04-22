@@ -201,7 +201,9 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
             ),
             InkWell(
               onTap: () async {
-                Navigator.pushNamed(context, AppRouter.EDIT_PROFILE, arguments: widget.user);
+                await Navigator.pushNamed(context, AppRouter.EDIT_PROFILE, arguments: widget.user);
+                setState(() {
+                });
               },
               child: Container(
                 width: MediaQuery.sizeOf(context).width * 0.9,
@@ -231,9 +233,10 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                           color: Color(0xFF95A1AC),
                           size: 20.0,
                         ),
-                        onPressed: () {
-                          Navigator.pushNamed(context, AppRouter.EDIT_PROFILE, arguments: widget.user);
-                        },
+                        onPressed: () async {
+                          await Navigator.pushNamed(context, AppRouter.EDIT_PROFILE, arguments: widget.user);
+                          setState(() {
+                          });                        },
                       ),
                     ],
                   ),
