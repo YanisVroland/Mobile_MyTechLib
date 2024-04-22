@@ -29,6 +29,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
   List<Library> listPersonalLibrairies = [];
   List<Library> listCompanyLibrairies = [];
   List<Library> globalListLibrairies = [];
+  List<Library> searchListLibrairies = [];
   late bool inCompany;
   bool _loader = true;
 
@@ -57,11 +58,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       listPersonalLibrairies.clear();
       globalListLibrairies.clear();
       listCompanyLibrairies.clear();
+      searchListLibrairies.clear();
     });
     await getPersonalLibraries();
     if (inCompany) {
       await getCompanyLibraries();
     }
+    globalListLibrairies.addAll(searchListLibrairies);
     setState(() {
       _loader = false;
     });
@@ -74,7 +77,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
       setState(() {
         listPersonalLibrairies.addAll(result.cast<Library>());
-        globalListLibrairies.addAll(result.cast<Library>());
+        searchListLibrairies.addAll(result.cast<Library>());
       });
     }
   }
@@ -87,7 +90,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
 
       setState(() {
         listCompanyLibrairies.addAll(result.cast<Library>());
-        globalListLibrairies.addAll(result.cast<Library>());
+        searchListLibrairies.addAll(result.cast<Library>());
       });
     }
   }
@@ -147,6 +150,21 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                     size: 24.0,
                   ),
                   validator: Validators.validateEmpty,
+                  onChanged: (value) {
+                    List<Library> filteredLibraries = searchListLibrairies.where((library) {
+                      return library.name.toLowerCase().contains(value.toLowerCase());
+                    }).toList();
+
+                    setState(() {
+                      globalListLibrairies = filteredLibraries;
+                      listCompanyLibrairies = filteredLibraries.where((library) {
+                        return library.core_company != null && library.core_company!.isNotEmpty;
+                      }).toList();
+                      listPersonalLibrairies = filteredLibraries.where((library) {
+                        return library.core_company == null || library.core_company!.isEmpty;
+                      }).toList();
+                    });
+                  },
                 ),
               ),
             ),

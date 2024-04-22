@@ -143,8 +143,8 @@ class UtilsRepository {
           LocalPref().saveString("user", "");
           Navigator.pushNamedAndRemoveUntil(context, "/Login", (route) => false);
         }
-        SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
-            duration: 3, color: Colors.red);
+        // SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
+        //     duration: 3, color: Colors.red);
       } else {
         SnackConst.SnackCustom(AppConst.errorApiMessage, context, duration: 3);
       }

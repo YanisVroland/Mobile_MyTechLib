@@ -35,6 +35,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
   List<Project> listAPIProject = [];
   List<Project> listWebProject = [];
   List<Project> listMobileProject = [];
+  List<Project> searchListMobileProject = [];
   bool _loader = false;
 
   @override
@@ -67,10 +68,11 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
     ResponseApi? response =
         await ProjectRepository().getProjectByLibrary(context, widget.library.uuid);
     if (response != null && response.status == 200) {
-      listProject.clear();
+      searchListMobileProject.clear();
       List<dynamic> result = await response.body.map((doc) => Project.fromJson(doc)).toList();
       setState(() {
-        listProject.addAll(result.cast<Project>());
+        searchListMobileProject.addAll(result.cast<Project>());
+        listProject = searchListMobileProject;
         listAPIProject = listProject.where((element) => element.type == "API").toList();
         listWebProject = listProject.where((element) => element.type == "WEB").toList();
         listMobileProject = listProject.where((element) => element.type == "MOBILE").toList();
@@ -247,6 +249,17 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                     size: 24.0,
                   ),
                   validator: Validators.validateEmpty,
+                  onChanged: (value) {
+                    List<Project> filteredLibraries = searchListMobileProject.where((project) {
+                      return project.name.toLowerCase().contains(value.toLowerCase());
+                    }).toList();
+                    setState(() {
+                      listProject = filteredLibraries;
+                      listAPIProject = filteredLibraries.where((element) => element.type == "API").toList();
+                      listWebProject = filteredLibraries.where((element) => element.type == "WEB").toList();
+                      listMobileProject = filteredLibraries.where((element) => element.type == "MOBILE").toList();
+                    });
+                  },
                 ),
               ),
             ),
