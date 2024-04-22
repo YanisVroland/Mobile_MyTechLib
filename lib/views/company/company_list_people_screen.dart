@@ -181,13 +181,13 @@ class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget> {
                                           decoration: const BoxDecoration(
                                             shape: BoxShape.circle,
                                           ),
-                                          child: element.profile_url.isEmpty
+                                          child: element.profileUrl.isEmpty
                                               ? Image.asset(
                                                   'assets/images/tlchargement.png',
                                                   fit: BoxFit.cover,
                                                 )
                                               : Image.network(
-                                                  element.profile_url,
+                                                  element.profileUrl,
                                                   fit: BoxFit.cover,
                                                 ),
                                         ),

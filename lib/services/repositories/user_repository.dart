@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/repositories/utils_repository.dart';
@@ -9,6 +10,7 @@ import '../../app/theme/snackBar_const.dart';
 import '../local/pref.dart';
 import '../models/responseAPI_model.dart';
 import '../models/user_model.dart';
+import 'package:path/path.dart' as path;
 
 class UserRepository {
   UtilsRepository utilsRepository = UtilsRepository();
@@ -60,6 +62,37 @@ class UserRepository {
   Future<ResponseApi?> getUser(BuildContext context, String uuidUser) async {
     try {
       return utilsRepository.requestGet(context, AppConst.userGetEndpoint + uuidUser);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> updateProfileImageUser(BuildContext context, UserModel user, String uploadedFileUrl) async {
+    try {
+      String extension = path.extension(uploadedFileUrl);
+      final url = await MultipartFile.fromFile(
+        uploadedFileUrl,
+        filename: "logo"+extension,
+      );
+
+      Map<String, Object> bodyJson = {"file": url};
+
+
+      return utilsRepository.requestImagePost(context, AppConst.userImageProfilePatchEndpoint + user.uuid, bodyJson);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> updateUser(BuildContext context, UserModel user) async {
+    try {
+      var requestBody = {
+        'name': user.name.trim(),
+        'lastName': user.lastname.trim(),
+      };
+      return utilsRepository.requestPut(context, AppConst.userUpdatePutEndpoint + user.uuid, requestBody);
     } catch (e) {
       log(e.toString());
       return null;

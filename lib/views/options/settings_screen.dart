@@ -123,13 +123,13 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                                   decoration: const BoxDecoration(
                                     shape: BoxShape.circle,
                                   ),
-                                  child: widget.user.profile_url.isEmpty
+                                  child: widget.user.profileUrl.isEmpty
                                       ? Image.asset(
                                           'assets/images/tlchargement.png',
                                           fit: BoxFit.cover,
                                         )
                                       : Image.network(
-                                          widget.user.profile_url,
+                                          widget.user.profileUrl,
                                           fit: BoxFit.cover,
                                         )),
                             ),

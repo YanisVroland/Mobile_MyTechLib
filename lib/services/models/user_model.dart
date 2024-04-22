@@ -5,7 +5,7 @@ class UserModel {
   late String lastname;
   late String password;
   late String companyUuid;
-  late String profile_url;
+  late String profileUrl;
 
   UserModel({
     this.uuid = '',
@@ -13,7 +13,7 @@ class UserModel {
     this.name = '',
     this.lastname = '',
     this.password = '',
-    this.profile_url = '',
+    this.profileUrl = '',
     this.companyUuid = '',
   });
 
@@ -23,5 +23,5 @@ class UserModel {
         name = map["name"] ?? "",
         lastname = map["lastName"] ?? "",
         companyUuid = map["core_company"] ?? "",
-        profile_url = map["profile_url"] ?? "";
+        profileUrl = map["profile_url"] ?? "";
 }
