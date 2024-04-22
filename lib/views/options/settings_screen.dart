@@ -222,7 +222,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       const Text(
-                        "Editer le profil",
+                        "Modifier le profil",
                       ),
                       IconCustom(
                         borderColor: Colors.transparent,
@@ -286,94 +286,98 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                     ),
                   )),
             ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child: InkWell(
-                onTap: () async {
-                  Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
-                },
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width * 0.9,
-                  height: 60.0,
-                  decoration: BoxDecoration(
-                    color: AppTheme.of(context).background,
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      width: 1.0,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Paramètres de notification",
-                        ),
-                        IconCustom(
-                          borderColor: Colors.transparent,
-                          borderRadius: 30.0,
-                          buttonSize: 46.0,
-                          icon: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: Color(0xFF95A1AC),
-                            size: 20.0,
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
-              child: InkWell(
-                onTap: () async {
-                  Navigator.pushNamed(context, AppRouter.ONBOARDING);
-                },
-                child: Container(
-                  width: MediaQuery.sizeOf(context).width * 0.9,
-                  height: 60.0,
-                  decoration: BoxDecoration(
-                    color: AppTheme.of(context).background,
-                    borderRadius: BorderRadius.circular(8.0),
-                    border: Border.all(
-                      width: 1.0,
-                    ),
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          "Tutoriel",
-                        ),
-                        IconCustom(
-                          borderColor: Colors.transparent,
-                          borderRadius: 30.0,
-                          buttonSize: 46.0,
-                          icon: const Icon(
-                            Icons.chevron_right_rounded,
-                            color: Color(0xFF95A1AC),
-                            size: 20.0,
-                          ),
-                          onPressed: () {
-                            Navigator.pushNamed(context, AppRouter.ONBOARDING);
-                          },
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ),
-            ),
+
+            //TODO A Ajouter plus tard
+            // Padding(
+            //   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+            //   child: InkWell(
+            //     onTap: () async {
+            //       Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
+            //     },
+            //     child: Container(
+            //       width: MediaQuery.sizeOf(context).width * 0.9,
+            //       height: 60.0,
+            //       decoration: BoxDecoration(
+            //         color: AppTheme.of(context).background,
+            //         borderRadius: BorderRadius.circular(8.0),
+            //         border: Border.all(
+            //           width: 1.0,
+            //         ),
+            //       ),
+            //       child: Padding(
+            //         padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
+            //         child: Row(
+            //           mainAxisSize: MainAxisSize.max,
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             const Text(
+            //               "Paramètres de notification",
+            //             ),
+            //             IconCustom(
+            //               borderColor: Colors.transparent,
+            //               borderRadius: 30.0,
+            //               buttonSize: 46.0,
+            //               icon: const Icon(
+            //                 Icons.chevron_right_rounded,
+            //                 color: Color(0xFF95A1AC),
+            //                 size: 20.0,
+            //               ),
+            //               onPressed: () {
+            //                 Navigator.pushNamed(context, AppRouter.NOTIFICATION_SETTINGS);
+            //               },
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
+
+            //TODO A Ajouter TUTORAL
+            // Padding(
+            //   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
+            //   child: InkWell(
+            //     onTap: () async {
+            //       Navigator.pushNamed(context, AppRouter.ONBOARDING);
+            //     },
+            //     child: Container(
+            //       width: MediaQuery.sizeOf(context).width * 0.9,
+            //       height: 60.0,
+            //       decoration: BoxDecoration(
+            //         color: AppTheme.of(context).background,
+            //         borderRadius: BorderRadius.circular(8.0),
+            //         border: Border.all(
+            //           width: 1.0,
+            //         ),
+            //       ),
+            //       child: Padding(
+            //         padding: const EdgeInsetsDirectional.fromSTEB(16.0, 0.0, 4.0, 0.0),
+            //         child: Row(
+            //           mainAxisSize: MainAxisSize.max,
+            //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            //           children: [
+            //             const Text(
+            //               "Tutoriel",
+            //             ),
+            //             IconCustom(
+            //               borderColor: Colors.transparent,
+            //               borderRadius: 30.0,
+            //               buttonSize: 46.0,
+            //               icon: const Icon(
+            //                 Icons.chevron_right_rounded,
+            //                 color: Color(0xFF95A1AC),
+            //                 size: 20.0,
+            //               ),
+            //               onPressed: () {
+            //                 Navigator.pushNamed(context, AppRouter.ONBOARDING);
+            //               },
+            //             ),
+            //           ],
+            //         ),
+            //       ),
+            //     ),
+            //   ),
+            // ),
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
               child: InkWell(
