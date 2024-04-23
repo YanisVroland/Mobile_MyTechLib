@@ -19,11 +19,7 @@ class _MobileWidgetState extends State<MobileWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final unfocusNode = FocusNode();
   CarouselController buttonCarouselController = CarouselController();
-  final List<String> imageList = [
-    'https://picsum.photos/seed/669/600',
-    'https://picsum.photos/seed/670/600',
-    'https://picsum.photos/seed/671/600',
-  ];
+
 
   @override
   void initState() {
@@ -139,7 +135,7 @@ class _MobileWidgetState extends State<MobileWidget> {
             thickness: 1,
             color: Colors.grey.shade300,
           ),
-          Container(
+          Visibility(visible: widget.project.illustrationsUrl.isNotEmpty, child: Container(
             padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
             height: 175,
             width: double.infinity,
@@ -154,7 +150,7 @@ class _MobileWidgetState extends State<MobileWidget> {
                   autoPlayCurve: Curves.fastOutSlowIn,
                   enlargeCenterPage: true,
                 ),
-                items: imageList.map((imageUrl) {
+                items: widget.project.illustrationsUrl.map((imageUrl) {
                   return Builder(
                     builder: (BuildContext context) {
                       return ClipRRect(
@@ -168,7 +164,7 @@ class _MobileWidgetState extends State<MobileWidget> {
                     },
                   );
                 }).toList()),
-          ),
+          ),),
           Divider(
             height: 1,
             thickness: 1,

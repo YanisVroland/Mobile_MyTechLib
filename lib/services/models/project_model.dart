@@ -1,4 +1,3 @@
-
 import 'dart:math';
 
 import '../../app/theme/tools.dart';
@@ -13,6 +12,7 @@ class Project {
   final String core_library;
   final String version;
   final String logoUrl;
+  final List<String> illustrationsUrl;
   final String createdBy;
   final String createdAt;
   final String updatedAt;
@@ -23,6 +23,7 @@ class Project {
     this.description = '',
     this.type = '',
     this.core_company = '',
+    this.illustrationsUrl = const [],
     this.companyName = '',
     this.core_library = '',
     this.logoUrl = '',
@@ -39,10 +40,13 @@ class Project {
       description: json['description'] ?? '',
       type: json['type'] ?? '',
       version: json['version'] ?? 'V?.?.?',
-      core_company: json['core_company'] != null ? json['core_company']['uuid'] : null ,
-      companyName:  json['core_company'] != null ? json['core_company']['name']: null,
-      core_library: json['core_library'] ?? '' ,
-      logoUrl: json['logo_url'] ?? '' ,
+      core_company: json['core_company'] != null ? json['core_company']['uuid'] : null,
+      companyName: json['core_company'] != null ? json['core_company']['name'] : null,
+      core_library: json['core_library'] ?? '',
+      logoUrl: json['logo_url'] ?? '',
+      illustrationsUrl: json['illustrations_url'] != null
+          ? json['illustrations_url'].toString().split(',')
+          : [],
       createdBy: json['created_by']['name'] + ' ' + json['created_by']['lastName'] ?? '',
       createdAt:
           json['created_at'] != null ? Tools.formatDate(DateTime.parse(json['created_at'])) : '',
@@ -62,7 +66,7 @@ class Project {
   }
 
   Map<String, dynamic> toJson() {
-    var json= {
+    var json = {
       'name': name,
       'type': type,
       'description': description,

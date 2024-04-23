@@ -58,7 +58,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
       await ProjectRepository().updateLogoProject(context, projectUuid, logoImage);
     }
     if (imageList.isNotEmpty) {
-      // await ProjectRepository().updateLogoProject(context, projectUuid, logoImage);
+      await ProjectRepository().uploadIllustrations(context, projectUuid, imageList);
     }
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
@@ -100,11 +100,9 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
   }
 
   nextPart() {
-    if (formKey.currentState!.validate()) {
-      setState(() {
-        _isFirstFormCollapsed = true;
-      });
-    }
+    setState(() {
+      _isFirstFormCollapsed = true;
+    });
   }
 
   addPicture() async {
@@ -139,10 +137,10 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
               ),
               child: e == ""
                   ? Center(
-                  child: SvgPicture.asset(
-                    "assets/icons/camera.svg",
-                    width: 30.w,
-                  ))
+                      child: SvgPicture.asset(
+                      "assets/icons/camera.svg",
+                      width: 30.w,
+                    ))
                   : ClipRRect(
                       borderRadius: BorderRadius.all(Radius.circular(12)),
                       child: Image.file(
@@ -231,11 +229,11 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                     ),
                     child: logoImage == ""
                         ? Center(
-                          child: SvgPicture.asset(
-                            "assets/icons/camera.svg",
-                            width: 30.w,
-                          ),
-                        )
+                            child: SvgPicture.asset(
+                              "assets/icons/camera.svg",
+                              width: 30.w,
+                            ),
+                          )
                         : ClipRRect(
                             borderRadius: BorderRadius.all(Radius.circular(12)),
                             child: Image.file(
@@ -255,17 +253,14 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                 style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
               ),
             ),
-
             Container(
-                padding: EdgeInsets.only(top: 10.h),
-                height: 100,
-                child:
-                    ListView(
-                        scrollDirection: Axis.horizontal,
-                        shrinkWrap: true,
-                        children: imageList.map((e) => oneImageWidget(e)).toList()),
-
-                ),
+              padding: EdgeInsets.only(top: 10.h),
+              height: 100,
+              child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  children: imageList.map((e) => oneImageWidget(e)).toList()),
+            ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 30.h),
               child: Row(
@@ -359,7 +354,9 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                         text: 'Continuer',
                         isLoading: _loader,
                         onTap: () async {
-                          await nextPart();
+                          if (formKey.currentState!.validate()) {
+                            await nextPart();
+                          }
                         }),
                   ],
                 ),

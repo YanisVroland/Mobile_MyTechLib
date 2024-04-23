@@ -26,6 +26,7 @@ class AppConst {
   static String projectGetEndpoint = '/project/byLibrary/';
   static String projectCreateEndpoint = '/project/';
   static String projectLogoPostEndpoint = '/project/uploadLogo/';
+  static String projectIllustrationsPostEndpoint = '/project/uploadIllustrations/';
 
 
   // -> Company

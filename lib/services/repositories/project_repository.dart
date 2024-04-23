@@ -28,14 +28,17 @@ class ProjectRepository {
 
   Future<ResponseApi?> createProject(BuildContext context, Project project, Library library) async {
     try {
-      ResponseApi? responseApi =await utilsRepository.requestPost(context, AppConst.projectCreateEndpoint, project.toJson());
+      ResponseApi? responseApi = await utilsRepository.requestPost(
+          context, AppConst.projectCreateEndpoint, project.toJson());
       if (project.core_company != null && responseApi != null && responseApi.status == 201) {
-        informationRepository.createInformation(context, Information(
-          core_company: project.core_company,
-          core_library: library,
-          core_project: project,
-          type: "NEW",
-        ));
+        informationRepository.createInformation(
+            context,
+            Information(
+              core_company: project.core_company,
+              core_library: library,
+              core_project: project,
+              type: "NEW",
+            ));
       }
       return responseApi;
     } catch (e) {
@@ -44,19 +47,47 @@ class ProjectRepository {
     }
   }
 
-
-  Future<ResponseApi?> updateLogoProject(BuildContext context, String projectUuid, String uploadedFileUrl) async {
+  Future<ResponseApi?> updateLogoProject(
+      BuildContext context, String projectUuid, String uploadedFileUrl) async {
     try {
       String extension = path.extension(uploadedFileUrl);
 
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
-        filename: "logo"+extension,
+        filename: "logo" + extension,
       );
 
       Map<String, Object> bodyJson = {"file": url};
 
-      return utilsRepository.requestImagePost(context, AppConst.projectLogoPostEndpoint + projectUuid, bodyJson);
+      return utilsRepository.requestImagePost(
+          context, AppConst.projectLogoPostEndpoint + projectUuid, bodyJson);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> uploadIllustrations(
+      BuildContext context, String projectUuid, List<String> illustrations) async {
+    try {
+      List<MultipartFile> files = [];
+      for(int i = 0, len = illustrations.length; i < len; i++) {
+        if(illustrations[i].isNotEmpty) {
+          String extension = path.extension(illustrations[i]);
+
+          final url = await MultipartFile.fromFile(
+            illustrations[i],
+            filename: "illustration_$i" + extension,
+          );
+
+          files.add(url);
+        }
+      }
+
+      Map<String, Object> bodyJson = {"files": files};
+
+      return utilsRepository.requestImagePost(
+          context, AppConst.projectIllustrationsPostEndpoint + projectUuid, bodyJson);
     } catch (e) {
       log(e.toString());
       return null;
