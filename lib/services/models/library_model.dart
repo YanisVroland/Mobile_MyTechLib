@@ -1,12 +1,11 @@
-
 import '../../app/theme/tools.dart';
 
 class Library {
   final String uuid;
   final String name;
   final String description;
-  final String? core_company;
-  final String belongsTo;
+  String? core_company;
+  late String belongsTo;
   final String createdBy;
   final String createdAt;
   final String updatedAt;
@@ -49,13 +48,13 @@ class Library {
   }
 
   Map<String, dynamic> toJson() {
-    var json= {
+    var json = {
       'name': name,
       'description': description,
       'core_company': core_company,
       'is_personal': isPersonal,
     };
-    if(isPersonal){
+    if (isPersonal) {
       json.remove('core_company');
       json['belongs_to'] = belongsTo;
     }

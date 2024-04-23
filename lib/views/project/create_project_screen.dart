@@ -57,9 +57,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
     if (logoImage != "") {
       await ProjectRepository().updateLogoProject(context, projectUuid, logoImage);
     }
-    if (imageList.isNotEmpty) {
       await ProjectRepository().uploadIllustrations(context, projectUuid, imageList);
-    }
 
     ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
       content: Text("Projet mobile créé avec succès"),

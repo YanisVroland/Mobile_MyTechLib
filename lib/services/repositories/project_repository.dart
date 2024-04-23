@@ -71,8 +71,8 @@ class ProjectRepository {
       BuildContext context, String projectUuid, List<String> illustrations) async {
     try {
       List<MultipartFile> files = [];
-      for(int i = 0, len = illustrations.length; i < len; i++) {
-        if(illustrations[i].isNotEmpty) {
+      for (int i = 0, len = illustrations.length; i < len; i++) {
+        if (illustrations[i].isNotEmpty) {
           String extension = path.extension(illustrations[i]);
 
           final url = await MultipartFile.fromFile(
@@ -83,7 +83,7 @@ class ProjectRepository {
           files.add(url);
         }
       }
-
+      if (files.isEmpty) return null;
       Map<String, Object> bodyJson = {"files": files};
 
       return utilsRepository.requestImagePost(
