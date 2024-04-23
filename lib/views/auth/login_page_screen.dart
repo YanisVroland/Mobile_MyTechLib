@@ -54,6 +54,13 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(360, 690),
+        orientation: Orientation.portrait);
+
     Widget formLogin = Form(
       key: _formKey,
       child: Column(
@@ -75,6 +82,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
             ),
           ),
           CustomTextField(
+            key: const Key('emailTextField'),
             controller: emailAddressLoginController,
             labelText: "Email",
             hintText: "Entrer votre email",
@@ -83,6 +91,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
           Padding(
             padding: EdgeInsets.only(top: 20.h),
             child: CustomTextField(
+              key: const Key('passwordTextField'),
               controller: passwordLoginController,
               obscureText: !passwordLoginVisibility,
               labelText: "Mot de passe",

@@ -70,6 +70,13 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(360, 690),
+        orientation: Orientation.portrait);
+
     Widget formRegister = Form(
         key: _formKey,
         child: Column(
@@ -98,6 +105,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                   child: Padding(
                     padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 10.0, 0.0),
                     child: CustomTextField(
+                      key: const Key('lastNameTextField'),
                       controller: lastNameController,
                       obscureText: false,
                       labelText: "Nom",
@@ -108,6 +116,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                 ),
                 Expanded(
                   child: CustomTextField(
+                    key: const Key('firstNameTextField'),
                     controller: firstNameController,
                     obscureText: false,
                     labelText: "Prénom",
@@ -120,6 +129,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
             Padding(
                 padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
                 child: CustomTextField(
+                  key: const Key('emailTextField'),
                   controller: emailAddressController,
                   obscureText: false,
                   labelText: "Adresse e-mail",
@@ -129,6 +139,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
               child: CustomTextField(
+                key: const Key('passwordCreateTextField'),
                 controller: passwordCreateController,
                 obscureText: !_passwordCreateVisibility,
                 labelText: "Mot de passe",
@@ -150,6 +161,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
             Padding(
               padding: const EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
               child: CustomTextField(
+                key: const Key('passwordConfirmTextField'),
                 controller: passwordConfirmController,
                 obscureText: !_passwordConfirmVisibility,
                 labelText: "Confirmer le mot de passe",
