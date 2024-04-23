@@ -72,7 +72,7 @@ class CompanyRepository {
 
       Map<String, Object> bodyJson = {"file": url};
 
-      return utilsRepository.requestImagePost(context, AppConst.companyLogoPatchEndpoint + company.uuid, bodyJson);
+      return utilsRepository.requestImagePost(context, AppConst.companyLogoPostEndpoint + company.uuid, bodyJson);
     } catch (e) {
       log(e.toString());
       return null;

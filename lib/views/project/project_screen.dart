@@ -1,10 +1,8 @@
 import 'package:my_tech_lib/views/project/widget/mobile_widget.dart';
 
 import '../../app/theme/app_theme.dart';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
-import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 import '../../services/models/project_model.dart';
 
@@ -20,7 +18,7 @@ class _ProjectWidgetState extends State<ProjectWidget> with TickerProviderStateM
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   final unfocusNode = FocusNode();
-  // State field(s) for TabBar widget.
+
   TabController? tabBarController;
   int get tabBarCurrentIndex =>
       tabBarController != null ? tabBarController!.index : 0;

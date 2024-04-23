@@ -1,4 +1,9 @@
+import 'dart:io';
+
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/svg.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:my_tech_lib/app/theme/color_const.dart';
 import 'package:my_tech_lib/services/models/library_model.dart';
 import 'package:my_tech_lib/services/models/project_model.dart';
 import '../../../app/theme/app_theme.dart';
@@ -6,6 +11,7 @@ import 'package:flutter/material.dart';
 
 import '../../../app/widgets/icon_custom.dart';
 import '../../app/theme/validators.dart';
+import '../../app/widgets/alert_app.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/dropdown_custom.dart';
 import '../../app/widgets/textField_custom.dart';
@@ -23,11 +29,15 @@ class CreateProjectWidget extends StatefulWidget {
 class _CreateProjectWidgetState extends State<CreateProjectWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  GlobalKey<FormState> secondFormKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController descriptionController;
+  bool _isFirstFormCollapsed = false;
   String selectedType = "";
   List<String> listeType = ["MOBILE", "WEB", "API"];
   bool _loader = false;
+  List<String> imageList = ["", "", "", "", ""];
+  String logoImage = "";
 
   @override
   void initState() {
@@ -43,11 +53,25 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
     descriptionController.dispose();
   }
 
+  validMobileButton(String projectUuid) async {
+    if (logoImage != "") {
+      await ProjectRepository().updateLogoProject(context, projectUuid, logoImage);
+    }
+    if (imageList.isNotEmpty) {
+      // await ProjectRepository().updateLogoProject(context, projectUuid, logoImage);
+    }
+
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      content: Text("Projet mobile créé avec succès"),
+      backgroundColor: ColorConst.success,
+    ));
+    Navigator.pop(context);
+  }
+
   validButton() async {
     setState(() {
       _loader = true;
     });
-    ProjectRepository libraryRepository = ProjectRepository();
     Project project = Project(
         name: nameController.text,
         description: descriptionController.text,
@@ -55,15 +79,101 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
         core_library: widget.library.uuid,
         core_company: widget.library.core_company);
 
-    ResponseApi? response = await libraryRepository.createProject(context, project,widget.library);
-
+    ResponseApi? response =
+        await ProjectRepository().createProject(context, project, widget.library);
     if (response != null && response.status == 201) {
-      Navigator.pop(context);
+      if (selectedType == "MOBILE") {
+        await validMobileButton(response.body["uuid"]);
+      } else if (selectedType == "WEB") {
+      } else if (selectedType == "API") {
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+          content: Text("Projet mobile créé avec succès"),
+          backgroundColor: ColorConst.success,
+        ));
+        Navigator.pop(context);
+      }
     }
     setState(() {
       _loader = false;
     });
   }
+
+  nextPart() {
+    if (formKey.currentState!.validate()) {
+      setState(() {
+        _isFirstFormCollapsed = true;
+      });
+    }
+  }
+
+  addPicture() async {
+    final pickedFile =
+        await ImagePicker().pickImage(source: ImageSource.gallery, requestFullMetadata: false);
+    if (!this.mounted) return;
+    for (int i = 0; i < imageList.length; i++) {
+      if (imageList[i] == "") {
+        setState(() {
+          imageList[i] = pickedFile!.path;
+        });
+        break;
+      }
+    }
+  }
+
+  Widget oneImageWidget(String e) => InkWell(
+      onTap: () async {
+        if (e == "") {
+          addPicture();
+        }
+      },
+      child: Row(
+        children: [
+          Stack(children: [
+            Container(
+              width: 90.w,
+              height: 60.w,
+              decoration: BoxDecoration(
+                color: ColorConst.background,
+                borderRadius: BorderRadius.circular(20.0.r),
+              ),
+              child: e == ""
+                  ? Center(
+                  child: SvgPicture.asset(
+                    "assets/icons/camera.svg",
+                    width: 30.w,
+                  ))
+                  : ClipRRect(
+                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                      child: Image.file(
+                        File(e),
+                        fit: BoxFit.cover,
+                        width: ScreenUtil().setWidth(70),
+                        height: ScreenUtil().setWidth(70),
+                      )),
+            ),
+            Visibility(
+                visible: e.isNotEmpty,
+                child: InkWell(
+                  child: Container(
+                      decoration:
+                          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.r))),
+                      child: SvgPicture.asset(
+                        "assets/icons/close.svg",
+                        width: 15.w,
+                      )),
+                  onTap: () {
+                    Alerts.alert_image(context, () {
+                      setState(() {
+                        imageList[imageList.indexOf(e)] = "";
+                      });
+                    });
+                  },
+                ))
+          ]),
+          Container(width: 8.w)
+        ],
+      ));
 
   @override
   Widget build(BuildContext context) {
@@ -74,7 +184,132 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
         designSize: Size(360, 690),
         orientation: Orientation.portrait);
 
-    Widget formWidget = Form(
+    Widget secondFormMobileWidget = Form(
+      key: secondFormKey,
+      autovalidateMode: AutovalidateMode.always,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 20.w),
+              child: Center(
+                child: Text("Projet Mobile",
+                    style: TextStyle(
+                        fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.only(right: 10.w),
+                  child: Text(
+                    "Logo :",
+                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+                  ),
+                ),
+                InkWell(
+                  onTap: () async {
+                    if (logoImage == "") {
+                      final pickedFile = await ImagePicker()
+                          .pickImage(source: ImageSource.gallery, requestFullMetadata: false);
+                      if (pickedFile != null) {
+                        setState(() {
+                          logoImage = pickedFile.path;
+                        });
+                      }
+                    }
+                  },
+                  child: Container(
+                    width: 70.w,
+                    height: 70.w,
+                    decoration: BoxDecoration(
+                      color: ColorConst.background,
+                      borderRadius: BorderRadius.circular(20.0.r),
+                    ),
+                    child: logoImage == ""
+                        ? Center(
+                          child: SvgPicture.asset(
+                            "assets/icons/camera.svg",
+                            width: 30.w,
+                          ),
+                        )
+                        : ClipRRect(
+                            borderRadius: BorderRadius.all(Radius.circular(12)),
+                            child: Image.file(
+                              File(logoImage),
+                              fit: BoxFit.cover,
+                              width: ScreenUtil().setWidth(70),
+                              height: ScreenUtil().setWidth(70),
+                            )),
+                  ),
+                ),
+              ],
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 20.w),
+              child: Text(
+                "carrousel d'images :",
+                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+              ),
+            ),
+
+            Container(
+                padding: EdgeInsets.only(top: 10.h),
+                height: 100,
+                child:
+                    ListView(
+                        scrollDirection: Axis.horizontal,
+                        shrinkWrap: true,
+                        children: imageList.map((e) => oneImageWidget(e)).toList()),
+
+                ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                      text: 'Valider',
+                      isLoading: _loader,
+                      onTap: () async {
+                        await validButton();
+                      }),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+
+    Widget secondFormAPIWidget = Form(
+      key: secondFormKey,
+      autovalidateMode: AutovalidateMode.always,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
+        child: Center(
+          child: Text("API" + " " + "Form"),
+        ),
+      ),
+    );
+
+    Widget secondFormWEBWidget = Form(
+      key: secondFormKey,
+      autovalidateMode: AutovalidateMode.always,
+      child: Container(
+        width: double.infinity,
+        padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
+        child: Center(
+          child: Text("WEB" + " " + "Form"),
+        ),
+      ),
+    );
+
+    Widget firstFormWidget = Form(
       key: formKey,
       autovalidateMode: AutovalidateMode.always,
       child: Container(
@@ -82,14 +317,17 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
           child: Column(
             mainAxisSize: MainAxisSize.max,
             children: [
-              CustomTextField(
-                controller: nameController,
-                labelText: "Nom",
-                hintText: "Entrer le nom du projet",
-                validator: Validators.validateEmpty,
+              Padding(
+                padding: EdgeInsets.only(top: 10.h),
+                child: CustomTextField(
+                  controller: nameController,
+                  labelText: "Nom",
+                  hintText: "Entrer le nom du projet",
+                  validator: Validators.validateEmpty,
+                ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 20.h),
+                padding: EdgeInsets.only(top: 10.h),
                 child: CustomTextField(
                   controller: descriptionController,
                   labelText: "Description",
@@ -99,10 +337,10 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.only(top: 20.h),
+                padding: EdgeInsets.only(top: 10.h),
                 child: CustomDropDown(
                   hintText: "Type de projet",
-                  listValue:  listeType,
+                  listValue: listeType,
                   validator: Validators.validateDropDownEmpty,
                   action: (dynamic value) {
                     setState(() {
@@ -118,12 +356,10 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     CustomButton(
-                        text: 'Ajouter',
+                        text: 'Continuer',
                         isLoading: _loader,
                         onTap: () async {
-                          if (formKey.currentState!.validate()) {
-                            await validButton();
-                          }
+                          await nextPart();
                         }),
                   ],
                 ),
@@ -180,18 +416,31 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                 Padding(
                   padding: EdgeInsets.only(left: 10.w, right: 10.w, top: 10.h),
                   child: Container(
-                      decoration: BoxDecoration(
-                        color: AppTheme.of(context).secondaryBackground,
-                        borderRadius: BorderRadius.circular(20.0),
-                        boxShadow: const [
-                          BoxShadow(
-                            blurRadius: 4.0,
-                            color: Color(0x33000000),
-                            offset: Offset(0.0, 2.0),
-                          )
-                        ],
-                      ),
-                      child: formWidget),
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: AppTheme.of(context).secondaryBackground,
+                      borderRadius: BorderRadius.circular(20.0),
+                      boxShadow: const [
+                        BoxShadow(
+                          blurRadius: 4.0,
+                          color: Color(0x33000000),
+                          offset: Offset(0.0, 2.0),
+                        )
+                      ],
+                    ),
+                    child: AnimatedCrossFade(
+                      duration: Duration(milliseconds: 500),
+                      crossFadeState: _isFirstFormCollapsed
+                          ? CrossFadeState.showSecond
+                          : CrossFadeState.showFirst,
+                      firstChild: firstFormWidget,
+                      secondChild: selectedType == "MOBILE"
+                          ? secondFormMobileWidget
+                          : selectedType == "WEB"
+                              ? secondFormWEBWidget
+                              : secondFormAPIWidget,
+                    ),
+                  ),
                 ),
               ],
             ),

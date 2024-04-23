@@ -12,6 +12,7 @@ class Project {
   final String? companyName;
   final String core_library;
   final String version;
+  final String logoUrl;
   final String createdBy;
   final String createdAt;
   final String updatedAt;
@@ -24,6 +25,7 @@ class Project {
     this.core_company = '',
     this.companyName = '',
     this.core_library = '',
+    this.logoUrl = '',
     this.version = 'V1.0.0',
     this.createdBy = '',
     this.createdAt = '',
@@ -40,6 +42,7 @@ class Project {
       core_company: json['core_company'] != null ? json['core_company']['uuid'] : null ,
       companyName:  json['core_company'] != null ? json['core_company']['name']: null,
       core_library: json['core_library'] ?? '' ,
+      logoUrl: json['logo_url'] ?? '' ,
       createdBy: json['created_by']['name'] + ' ' + json['created_by']['lastName'] ?? '',
       createdAt:
           json['created_at'] != null ? Tools.formatDate(DateTime.parse(json['created_at'])) : '',

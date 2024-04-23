@@ -1,4 +1,6 @@
 import 'dart:developer';
+import 'package:dio/dio.dart';
+import 'package:path/path.dart' as path;
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -7,11 +9,8 @@ import 'package:my_tech_lib/services/models/project_model.dart';
 import 'package:my_tech_lib/services/repositories/utils_repository.dart';
 
 import '../../app/theme/app_const.dart';
-import '../../app/theme/snackBar_const.dart';
-import '../local/pref.dart';
 import '../models/information_model.dart';
 import '../models/responseAPI_model.dart';
-import '../models/user_model.dart';
 import 'information_repository.dart';
 
 class ProjectRepository {
@@ -39,6 +38,25 @@ class ProjectRepository {
         ));
       }
       return responseApi;
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+
+  Future<ResponseApi?> updateLogoProject(BuildContext context, String projectUuid, String uploadedFileUrl) async {
+    try {
+      String extension = path.extension(uploadedFileUrl);
+
+      final url = await MultipartFile.fromFile(
+        uploadedFileUrl,
+        filename: "logo"+extension,
+      );
+
+      Map<String, Object> bodyJson = {"file": url};
+
+      return utilsRepository.requestImagePost(context, AppConst.projectLogoPostEndpoint + projectUuid, bodyJson);
     } catch (e) {
       log(e.toString());
       return null;

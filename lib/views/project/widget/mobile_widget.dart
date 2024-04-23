@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
 import '../../../app/theme/app_theme.dart';
-import 'dart:ui';
 import 'package:flutter/material.dart';
 
 import '../../../app/widgets/button_custom.dart';
@@ -67,8 +66,11 @@ class _MobileWidgetState extends State<MobileWidget> {
                       padding: const EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10.0),
-                        child: Image.network(
-                          'https://source.unsplash.com/random/1280x720?profile&5',
+                        child:   widget.project.logoUrl.isNotEmpty ? Image.network(
+                        widget.project.logoUrl ,
+                          fit: BoxFit.cover,
+                        ) : Image.asset(
+                          'assets/images/tlchargement.png',
                           fit: BoxFit.cover,
                         ),
                       ),
