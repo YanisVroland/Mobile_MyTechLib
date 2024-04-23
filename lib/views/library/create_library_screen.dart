@@ -26,6 +26,13 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(360, 690),
+        orientation: Orientation.portrait);
+
     return Scaffold(
         key: scaffoldKey,
         backgroundColor: AppTheme.of(context).tertiary,

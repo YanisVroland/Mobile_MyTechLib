@@ -67,6 +67,13 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
 
   @override
   Widget build(BuildContext context) {
+    ScreenUtil.init(
+        BoxConstraints(
+            maxWidth: MediaQuery.of(context).size.width,
+            maxHeight: MediaQuery.of(context).size.height),
+        designSize: Size(360, 690),
+        orientation: Orientation.portrait);
+
     Widget formWidget = Form(
       key: formKey,
       autovalidateMode: AutovalidateMode.always,
