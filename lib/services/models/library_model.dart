@@ -6,6 +6,8 @@ class Library {
   final String description;
   String? core_company;
   late String belongsTo;
+  late String logoUrl;
+  late String bannerUrl;
   final String createdBy;
   final String createdAt;
   final String updatedAt;
@@ -15,6 +17,8 @@ class Library {
     this.uuid = '-1',
     this.name = '',
     this.description = '',
+    this.logoUrl = '',
+    this.bannerUrl = '',
     this.core_company = '',
     this.belongsTo = '',
     this.createdBy = '',
@@ -30,6 +34,8 @@ class Library {
       description: json['description'] ?? '',
       core_company: json['core_company'],
       belongsTo: json['belongs_to'] ?? '',
+      logoUrl: json['logo_url'] ?? '',
+      bannerUrl: json['banner_url'] ?? '',
       createdBy: json['created_by']['name'] + ' ' + json['created_by']['lastName'] ?? '',
       createdAt:
           json['created_at'] != null ? Tools.formatDate(DateTime.parse(json['created_at'])) : '',

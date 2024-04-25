@@ -1,5 +1,6 @@
 import 'dart:developer';
-
+import 'package:path/path.dart' as path;
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/models/information_model.dart';
@@ -45,6 +46,15 @@ class LibraryRepository {
           core_library: library,
           type: "NEW",
         ));
+
+        if(library.logoUrl != null){
+          await uploadLogo(context, responseApi.body['uuid'], library.logoUrl);
+        }
+        if(library.bannerUrl != null){
+          await uploadBanner(context, responseApi.body['uuid'], library.bannerUrl);
+        }
+
+
       }
 
       return responseApi;
@@ -57,6 +67,47 @@ class LibraryRepository {
   Future<ResponseApi?> deleteLibrary(BuildContext context, String uuid) async {
     try {
       return utilsRepository.requestDelete(context, AppConst.libraryDeleteEndpoint + uuid);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+
+  Future<ResponseApi?> uploadLogo(
+      BuildContext context, String libraryUuid, String uploadedFileUrl) async {
+    try {
+      String extension = path.extension(uploadedFileUrl);
+
+      final url = await MultipartFile.fromFile(
+        uploadedFileUrl,
+        filename: "logo" + extension,
+      );
+
+      Map<String, Object> bodyJson = {"file": url};
+
+      return utilsRepository.requestImagePost(
+          context, AppConst.libraryLogoPostEndpoint + libraryUuid, bodyJson);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> uploadBanner(
+      BuildContext context, String libraryUuid, String uploadedFileUrl) async {
+    try {
+      String extension = path.extension(uploadedFileUrl);
+
+      final url = await MultipartFile.fromFile(
+        uploadedFileUrl,
+        filename: "banner" + extension,
+      );
+
+      Map<String, Object> bodyJson = {"file": url};
+
+      return utilsRepository.requestImagePost(
+          context, AppConst.libraryBannerPostEndpoint + libraryUuid, bodyJson);
     } catch (e) {
       log(e.toString());
       return null;

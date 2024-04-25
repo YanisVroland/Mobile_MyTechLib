@@ -36,6 +36,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
   List<Project> listWebProject = [];
   List<Project> listMobileProject = [];
   List<Project> searchListMobileProject = [];
+  int nbProject = 0;
   bool _loader = false;
 
   @override
@@ -71,6 +72,8 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
       searchListMobileProject.clear();
       List<dynamic> result = await response.body.map((doc) => Project.fromJson(doc)).toList();
       setState(() {
+        nbProject = response.body.length;
+
         searchListMobileProject.addAll(result.cast<Project>());
         listProject = searchListMobileProject;
         listAPIProject = listProject.where((element) => element.type == "API").toList();
@@ -122,63 +125,152 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
         ),
       ),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(100.0),
+        preferredSize: const Size.fromHeight(150.0),
         child: AppBar(
-          backgroundColor: AppTheme.of(context).primary,
+          backgroundColor: widget.library.bannerUrl.isEmpty ? AppTheme.of(context).primary : null,
           automaticallyImplyLeading: false,
           actions: [],
           flexibleSpace: FlexibleSpaceBar(
-            title: Column(
-              mainAxisSize: MainAxisSize.max,
-              mainAxisAlignment: MainAxisAlignment.end,
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Padding(
-                        padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
-                        child: IconCustom(
-                          borderColor: Colors.transparent,
-                          borderRadius: 30.0,
-                          borderWidth: 1.0,
-                          buttonSize: 50.0,
-                          icon: const Icon(
-                            Icons.arrow_back_rounded,
-                            color: Colors.white,
-                            size: 30.0,
+            title: Row(
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Expanded(
+                      child: Column(
+                          mainAxisAlignment: MainAxisAlignment.end,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 8.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Padding(
+                                padding: const EdgeInsetsDirectional.fromSTEB(12.0, 0.0, 0.0, 0.0),
+                                child: IconCustom(
+                                  borderColor: Colors.transparent,
+                                  borderRadius: 30.0,
+                                  borderWidth: 1.0,
+                                  buttonSize: 50.0,
+                                  icon: const Icon(
+                                    Icons.arrow_back_rounded,
+                                    color: Colors.white,
+                                    size: 30.0,
+                                  ),
+                                  onPressed: () async {
+                                    Navigator.pop(context);
+                                  },
+                                ),
+                              ),
+                            ],
                           ),
-                          onPressed: () async {
-                            Navigator.pop(context);
-                          },
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 24.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    children: [
-                      Expanded(
-                        child: Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 0.0),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 24.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            children: [
+                              Expanded(
+                                child: Padding(
+                                  padding:
+                                      const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 0.0, 0.0),
+                                  child: Text(
+                                    widget.library.name,
+                                    textAlign: TextAlign.start,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 24.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 16.0, 5.0),
                           child: Text(
-                            widget.library.name,
-                            textAlign: TextAlign.start,
+                            nbProject.toString() + " Projects",
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16.0,
+                            ),
                           ),
                         ),
-                      ),
-                    ],
-                  ),
-                ),
-              ],
-            ),
+                      ])),
+                  Padding(
+                    padding: EdgeInsets.only(right: 20.w),
+                    child: Column(
+                      mainAxisSize: MainAxisSize.max,
+                      mainAxisAlignment: MainAxisAlignment.end,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        if (widget.library.logoUrl.isNotEmpty)
+                          Container(
+                            width: 80.w,
+                            height: 80.w,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(12.0),
+                              border: Border.all(
+                                color: AppTheme.of(context).primary,
+                                width: 2.0,
+                              ),
+                            ),
+                            child: Padding(
+                              padding: const EdgeInsetsDirectional.fromSTEB(2.0, 2.0, 2.0, 2.0),
+                              child: ClipRRect(
+                                borderRadius: BorderRadius.circular(10.0),
+                                child: widget.library.logoUrl.isNotEmpty
+                                    ? Image.network(
+                                        widget.library.logoUrl,
+                                        fit: BoxFit.cover,
+                                      )
+                                    : Image.asset(
+                                        'assets/images/tlchargement.png',
+                                        fit: BoxFit.cover,
+                                      ),
+                              ),
+                            ),
+                          ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 8.0),
+                          child: Container(
+                            width: 40.0,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                              color: ColorConst.delete,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: IconCustom(
+                              onPressed: () async {
+                                deleteLibrary();
+                              },
+                              icon: const Icon(
+                                Icons.delete_forever_rounded,
+                                color: Colors.white,
+                                size: 25.0,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                ]),
             centerTitle: true,
             expandedTitleScale: 1.0,
+            background: widget.library.bannerUrl.isNotEmpty
+                ? Container(
+                    decoration: BoxDecoration(
+                      image: DecorationImage(
+                        image: NetworkImage(widget.library.bannerUrl),
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  )
+                : null,
           ),
           elevation: 0.0,
         ),
@@ -187,42 +279,6 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
         child: Column(
           mainAxisSize: MainAxisSize.max,
           children: [
-            Container(
-              width: double.infinity,
-              height: 50.0,
-              decoration: BoxDecoration(
-                color: AppTheme.of(context).primary,
-              ),
-              child: Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 16.0, 5.0),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    const Text(
-                      "12 Projects",
-                    ),
-                    Container(
-                      width: 40.0,
-                      height: 40.0,
-                      decoration: BoxDecoration(
-                        color: ColorConst.delete,
-                        borderRadius: BorderRadius.circular(8.0),
-                      ),
-                      child: IconCustom(
-                        onPressed: () async {
-                          deleteLibrary();
-                        },
-                        icon: const Icon(
-                          Icons.delete_forever_rounded,
-                          color: Colors.white,
-                          size: 25.0,
-                        ),
-                      ),
-                    )
-                  ],
-                ),
-              ),
-            ),
             Padding(
               padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 15.h, top: 15.h),
               child: Container(
@@ -255,9 +311,12 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                     }).toList();
                     setState(() {
                       listProject = filteredLibraries;
-                      listAPIProject = filteredLibraries.where((element) => element.type == "API").toList();
-                      listWebProject = filteredLibraries.where((element) => element.type == "WEB").toList();
-                      listMobileProject = filteredLibraries.where((element) => element.type == "MOBILE").toList();
+                      listAPIProject =
+                          filteredLibraries.where((element) => element.type == "API").toList();
+                      listWebProject =
+                          filteredLibraries.where((element) => element.type == "WEB").toList();
+                      listMobileProject =
+                          filteredLibraries.where((element) => element.type == "MOBILE").toList();
                     });
                   },
                 ),

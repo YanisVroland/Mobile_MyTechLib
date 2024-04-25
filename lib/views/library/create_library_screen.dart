@@ -46,18 +46,19 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
     setState(() {
       _loader = true;
     });
-    LibraryRepository libraryRepository = LibraryRepository();
     Library library = Library(
       name: nameController.text,
       description: descriptionController.text,
       isPersonal: !toCompany,
+      logoUrl: logoImage,
+      bannerUrl: bannerImage,
     );
     if (!toCompany) {
       library.belongsTo = widget.user.uuid;
     } else {
       library.core_company = widget.user.companyUuid;
     }
-    ResponseApi? response = await libraryRepository.createLibrary(context, library);
+    ResponseApi? response = await LibraryRepository().createLibrary(context, library);
 
     if (response != null && response.status == 201) {
       Navigator.pop(context);
@@ -272,7 +273,7 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                 Padding(
                                     padding: EdgeInsets.only(top: 10.h),
                                     child: Row(children: [
-                                      Text("Librairie entrprise", style: TextStyle(color: Colors.black, fontSize: 16.sp)),
+                                      Text("Librairie entreprise", style: TextStyle(color: Colors.black, fontSize: 16.sp)),
                                       Checkbox(
                                         value: toCompany,
                                         onChanged: (bool? value) {
