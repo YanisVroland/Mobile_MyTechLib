@@ -227,7 +227,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                   onTap: () async {
                                                     await Navigator.pushNamed(
                                                         context, AppRouter.LIBRARY,
-                                                        arguments: element);
+                                                        arguments: [widget.user,element]);
                                                     await initData();
                                                   },
                                                   child: Container(
@@ -351,7 +351,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                       onTap: () async {
                                                         await Navigator.pushNamed(
                                                             context, AppRouter.LIBRARY,
-                                                            arguments: element);
+                                                            arguments: [widget.user,element]);
                                                         await initData();
                                                       },
                                                       child: Container(
@@ -496,7 +496,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                   onTap: () async {
                                                     await Navigator.pushNamed(
                                                         context, AppRouter.LIBRARY,
-                                                        arguments: element);
+                                                        arguments: [widget.user,element]);
                                                     await initData();
                                                   },
                                                   child: Container(

@@ -35,26 +35,59 @@ class LibraryRepository {
     }
   }
 
+  Future<ResponseApi?> updateLibrary(BuildContext context, Library library) async {
+    try {
+      ResponseApi? responseApi = await utilsRepository.requestPatch(
+          context, AppConst.libraryUpdatePatchEndpoint + library.uuid, library.toJson());
+
+      if (responseApi != null && responseApi.status == 200) {
+        if (library.core_company != null) {
+          informationRepository.createInformation(
+              context,
+              Information(
+                core_company: library.core_company,
+                core_library: library,
+                type: "UPDATE",
+              ));
+        }
+
+        if (library.logoUrl != null && !library.logoUrl.contains("http")) {
+          await uploadLogo(context, library.uuid, library.logoUrl);
+        }
+        if (library.bannerUrl != null && !library.bannerUrl.contains("http")) {
+
+          await uploadBanner(context, library.uuid, library.bannerUrl);
+        }
+      }
+      return responseApi;
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   Future<ResponseApi?> createLibrary(BuildContext context, Library library) async {
     try {
       ResponseApi? responseApi = await utilsRepository.requestPost(
           context, AppConst.libraryCreateEndpoint, library.toJson());
 
-      if (library.core_company != null && responseApi != null && responseApi.status == 201) {
-        informationRepository.createInformation(context, Information(
-          core_company: library.core_company,
-          core_library: library,
-          type: "NEW",
-        ));
+      if (responseApi != null && responseApi.status == 201) {
+        if (library.core_company != null) {
+          informationRepository.createInformation(
+              context,
+              Information(
+                core_company: library.core_company,
+                core_library: library,
+                type: "NEW",
+              ));
+        }
 
-        if(library.logoUrl != null){
+        if (library.logoUrl != null) {
           await uploadLogo(context, responseApi.body['uuid'], library.logoUrl);
         }
-        if(library.bannerUrl != null){
+        if (library.bannerUrl != null) {
           await uploadBanner(context, responseApi.body['uuid'], library.bannerUrl);
         }
-
-
       }
 
       return responseApi;
@@ -72,7 +105,6 @@ class LibraryRepository {
       return null;
     }
   }
-
 
   Future<ResponseApi?> uploadLogo(
       BuildContext context, String libraryUuid, String uploadedFileUrl) async {

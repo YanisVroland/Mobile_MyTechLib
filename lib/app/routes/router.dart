@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/views/library/create_library_screen.dart';
 import 'package:my_tech_lib/views/library/library_screen.dart';
+import 'package:my_tech_lib/views/library/modify_library_screen.dart';
 import 'package:my_tech_lib/views/project/create_project_screen.dart';
 import 'package:my_tech_lib/views/project/project_screen.dart';
 
@@ -41,6 +42,7 @@ class AppRouter {
 
   static const String LIBRARY = '/Library';
   static const String CREATE_LIBRARY = '/CreatePublicLibraryWidget';
+  static const String MODIFY_LIBRARY = '/ModifyPublicLibraryWidget';
 
   static const String PROJECT = '/Project';
   static const String CREATE_PROJECT = '/CreateProject';
@@ -58,15 +60,17 @@ class AppRouter {
       case SPLASH:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case HOME:
-        return MaterialPageRoute(builder: (_) => NavBarPage(
-                    (settings.arguments! as List<Object>)[0] as UserModel,
-                    (settings.arguments! as List<Object>)[1] as Company));
+        return MaterialPageRoute(
+            builder: (_) => NavBarPage((settings.arguments! as List<Object>)[0] as UserModel,
+                (settings.arguments! as List<Object>)[1] as Company));
       case CHANGE_PASSWORD:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case EDIT_PROFILE:
-        return MaterialPageRoute(builder: (_) =>  EditProfileWidget(settings.arguments as UserModel));
+        return MaterialPageRoute(
+            builder: (_) => EditProfileWidget(settings.arguments as UserModel));
       case SETTINGS:
-        return MaterialPageRoute(builder: (_) =>  SettingsPageWidget(settings.arguments as UserModel));
+        return MaterialPageRoute(
+            builder: (_) => SettingsPageWidget(settings.arguments as UserModel));
       case PRIVACY_POLICY:
         return MaterialPageRoute(builder: (_) => const PrivacyPolicyWidget());
       case NOTIFICATION_SETTINGS:
@@ -75,20 +79,27 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
 
       case COMPANY_EDIT:
-        return MaterialPageRoute(builder: (_) =>  CompanyEditWidget(settings.arguments as Company));
+        return MaterialPageRoute(builder: (_) => CompanyEditWidget(settings.arguments as Company));
       case COMPANY_LIST_POEPLE:
         return MaterialPageRoute(
             builder: (_) => CompanyListPeopleWidget(settings.arguments as Company));
 
       case LIBRARY:
-        return MaterialPageRoute(builder: (_) =>  LibraryWidget(settings.arguments as Library));
+        return MaterialPageRoute(builder: (_) => LibraryWidget((settings.arguments! as List<Object>)[0] as UserModel,
+            (settings.arguments! as List<Object>)[1] as Library));
       case CREATE_LIBRARY:
-        return MaterialPageRoute(builder: (_) =>  CreateLibraryWidget(settings.arguments as UserModel));
+        return MaterialPageRoute(
+            builder: (_) => CreateLibraryWidget(settings.arguments as UserModel));
+      case MODIFY_LIBRARY:
+        return MaterialPageRoute(
+            builder: (_) => ModifyLibraryWidget((settings.arguments! as List<Object>)[0] as UserModel,
+                (settings.arguments! as List<Object>)[1] as Library));
 
       case PROJECT:
         return MaterialPageRoute(builder: (_) => ProjectWidget(settings.arguments as Project));
       case CREATE_PROJECT:
-        return MaterialPageRoute(builder: (_) =>  CreateProjectWidget(settings.arguments as Library));
+        return MaterialPageRoute(
+            builder: (_) => CreateProjectWidget(settings.arguments as Library));
 
       default:
         return MaterialPageRoute(

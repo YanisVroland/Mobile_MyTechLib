@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_tech_lib/services/models/project_model.dart';
+import 'package:my_tech_lib/services/models/user_model.dart';
 
 import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
@@ -17,11 +18,13 @@ import '../../services/repositories/library_repository.dart';
 import '../../services/repositories/project_repository.dart';
 
 class LibraryWidget extends StatefulWidget {
-  const LibraryWidget(
+  LibraryWidget(
+    this.user,
     this.library, {
     Key? key,
   }) : super(key: key);
-  final Library library;
+  Library library;
+  final UserModel user;
 
   @override
   _LibraryWidgetState createState() => _LibraryWidgetState();
@@ -125,11 +128,10 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
         ),
       ),
       appBar: PreferredSize(
-        preferredSize: const Size.fromHeight(150.0),
+        preferredSize: const Size.fromHeight(120.0),
         child: AppBar(
           backgroundColor: widget.library.bannerUrl.isEmpty ? AppTheme.of(context).primary : null,
           automaticallyImplyLeading: false,
-          actions: [],
           flexibleSpace: FlexibleSpaceBar(
             title: Row(
                 mainAxisSize: MainAxisSize.max,
@@ -225,36 +227,17 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                 child: widget.library.logoUrl.isNotEmpty
                                     ? Image.network(
                                         widget.library.logoUrl,
+                                        key: UniqueKey(),
                                         fit: BoxFit.cover,
                                       )
                                     : Image.asset(
                                         'assets/images/tlchargement.png',
+                                        key: UniqueKey(),
                                         fit: BoxFit.cover,
                                       ),
                               ),
                             ),
                           ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 8.0),
-                          child: Container(
-                            width: 40.0,
-                            height: 40.0,
-                            decoration: BoxDecoration(
-                              color: ColorConst.delete,
-                              borderRadius: BorderRadius.circular(8.0),
-                            ),
-                            child: IconCustom(
-                              onPressed: () async {
-                                deleteLibrary();
-                              },
-                              icon: const Icon(
-                                Icons.delete_forever_rounded,
-                                color: Colors.white,
-                                size: 25.0,
-                              ),
-                            ),
-                          ),
-                        ),
                       ],
                     ),
                   )
@@ -262,13 +245,10 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
             centerTitle: true,
             expandedTitleScale: 1.0,
             background: widget.library.bannerUrl.isNotEmpty
-                ? Container(
-                    decoration: BoxDecoration(
-                      image: DecorationImage(
-                        image: NetworkImage(widget.library.bannerUrl),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
+                ? Image.network(
+                      widget.library.bannerUrl,
+                      key: UniqueKey(),
+                      fit: BoxFit.cover,
                   )
                 : null,
           ),
@@ -280,47 +260,106 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
           mainAxisSize: MainAxisSize.max,
           children: [
             Padding(
-              padding: EdgeInsets.only(left: 10.w, right: 10.w, bottom: 15.h, top: 15.h),
-              child: Container(
-                width: double.infinity,
-                height: 50.0,
-                decoration: BoxDecoration(
-                  color: AppTheme.of(context).secondaryBackground,
-                  boxShadow: const [
-                    BoxShadow(
-                      blurRadius: 4.0,
-                      color: Color(0x3F14181B),
-                      offset: Offset(0.0, 3.0),
-                    )
-                  ],
-                  borderRadius: BorderRadius.circular(8.0),
-                ),
-                child: CustomTextField(
-                  fillColor: AppTheme.of(context).secondaryBackground,
-                  controller: textController,
-                  hintText: "Recherche par nom ...",
-                  prefixIcon: const Icon(
-                    Icons.search_outlined,
-                    color: ColorConst.primary,
-                    size: 24.0,
-                  ),
-                  validator: Validators.validateEmpty,
-                  onChanged: (value) {
-                    List<Project> filteredLibraries = searchListMobileProject.where((project) {
-                      return project.name.toLowerCase().contains(value.toLowerCase());
-                    }).toList();
-                    setState(() {
-                      listProject = filteredLibraries;
-                      listAPIProject =
-                          filteredLibraries.where((element) => element.type == "API").toList();
-                      listWebProject =
-                          filteredLibraries.where((element) => element.type == "WEB").toList();
-                      listMobileProject =
-                          filteredLibraries.where((element) => element.type == "MOBILE").toList();
-                    });
-                  },
-                ),
-              ),
+              padding: EdgeInsets.only(left: 10.w, right: 10.w),
+              child: SizedBox(
+                  width: double.infinity,
+                  height: 80.0,
+                  child: Row(
+                    children: [
+                      Expanded(
+                        child: Container(
+                          width: double.infinity,
+                          height: 50.0,
+                          decoration: BoxDecoration(
+                            color: AppTheme.of(context).secondaryBackground,
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 4.0,
+                                color: Color(0x3F14181B),
+                                offset: Offset(0.0, 3.0),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(8.0),
+                          ),
+                          child: CustomTextField(
+                            fillColor: AppTheme.of(context).secondaryBackground,
+                            controller: textController,
+                            hintText: "Recherche par nom ...",
+                            prefixIcon: const Icon(
+                              Icons.search_outlined,
+                              color: ColorConst.primary,
+                              size: 24.0,
+                            ),
+                            validator: Validators.validateEmpty,
+                            onChanged: (value) {
+                              List<Project> filteredLibraries =
+                                  searchListMobileProject.where((project) {
+                                return project.name.toLowerCase().contains(value.toLowerCase());
+                              }).toList();
+                              setState(() {
+                                listProject = filteredLibraries;
+                                listAPIProject = filteredLibraries
+                                    .where((element) => element.type == "API")
+                                    .toList();
+                                listWebProject = filteredLibraries
+                                    .where((element) => element.type == "WEB")
+                                    .toList();
+                                listMobileProject = filteredLibraries
+                                    .where((element) => element.type == "MOBILE")
+                                    .toList();
+                              });
+                            },
+                          ),
+                        ),
+                      ),
+                      Padding(
+                        padding: EdgeInsets.only(left: 10.w),
+                        child: PopupMenuButton<String>(
+                          itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                            PopupMenuItem<String>(
+                              onTap: () async {
+                                Object? newData = await Navigator.pushNamed(
+                                    context, AppRouter.MODIFY_LIBRARY,
+                                    arguments: [widget.user, widget.library]);
+                                setState(() {
+                                  widget.library = newData as Library;
+                                });
+                              },
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.edit),
+                                  Text('Modifier'),
+                                ],
+                              ),
+                            ),
+                            PopupMenuItem<String>(
+                              textStyle: const TextStyle(color: Colors.red),
+                              onTap: deleteLibrary,
+                              child: const Row(
+                                children: [
+                                  Icon(Icons.delete, color: Colors.red),
+                                  Text('Supprimer', style: TextStyle(color: Colors.red)),
+                                ],
+                              ),
+                            ),
+                          ],
+                          child: Container(
+                            width: 40.0,
+                            height: 40.0,
+                            decoration: BoxDecoration(
+                              color: ColorConst.primary,
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            child: const Icon(
+                              Icons.settings,
+                              color: Colors.white,
+                              size: 25.0,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  )),
             ),
             Expanded(
                 child: Container(

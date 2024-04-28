@@ -19,6 +19,7 @@ class AppConst {
   // -> Library
   static String libraryUserGetEndpoint = '/library/byUser/';
   static String libraryCompanyGetEndpoint = '/library/byCompany/';
+  static String libraryUpdatePatchEndpoint = '/library/';
   static String libraryLogoPostEndpoint = '/library/uploadLogo/';
   static String libraryBannerPostEndpoint = '/library/uploadBanner/';
 
