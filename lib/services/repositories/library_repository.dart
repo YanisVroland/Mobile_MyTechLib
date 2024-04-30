@@ -7,6 +7,7 @@ import 'package:my_tech_lib/services/models/information_model.dart';
 import 'package:my_tech_lib/services/models/library_model.dart';
 import 'package:my_tech_lib/services/repositories/information_repository.dart';
 import 'package:my_tech_lib/services/repositories/utils_repository.dart';
+import 'package:http_parser/http_parser.dart';
 
 import '../../app/theme/app_const.dart';
 import '../local/pref.dart';
@@ -114,6 +115,7 @@ class LibraryRepository {
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
         filename: "logo" + extension,
+        contentType: MediaType('image', extension.substring(1)),
       );
 
       Map<String, Object> bodyJson = {"file": url};
@@ -134,6 +136,7 @@ class LibraryRepository {
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
         filename: "banner" + extension,
+        contentType: MediaType('image', extension.substring(1)),
       );
 
       Map<String, Object> bodyJson = {"file": url};

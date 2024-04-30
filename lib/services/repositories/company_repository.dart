@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
+import 'package:http_parser/http_parser.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -44,7 +45,7 @@ class CompanyRepository {
 
   Future<ResponseApi?> changeCodeCompany(BuildContext context, String companyUuid) async {
     try {
-      String newCode = Uuid().v4();
+      String newCode = const Uuid().v4();
       return utilsRepository.requestPatch(context, AppConst.companyUpdateCodePostEndpoint + companyUuid,{'code': newCode});
     } catch (e) {
       log(e.toString());
@@ -68,6 +69,7 @@ class CompanyRepository {
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
         filename: "logo"+extension,
+        contentType: MediaType('image', extension.substring(1)),
       );
 
       Map<String, Object> bodyJson = {"file": url};

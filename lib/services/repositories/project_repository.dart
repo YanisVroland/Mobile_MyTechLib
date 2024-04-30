@@ -1,6 +1,7 @@
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
+import 'package:http_parser/http_parser.dart';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -55,6 +56,7 @@ class ProjectRepository {
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
         filename: "logo" + extension,
+        contentType: MediaType('image', extension.substring(1)),
       );
 
       Map<String, Object> bodyJson = {"file": url};
@@ -78,6 +80,7 @@ class ProjectRepository {
           final url = await MultipartFile.fromFile(
             illustrations[i],
             filename: "illustration_$i" + extension,
+            contentType: MediaType('image', extension.substring(1)),
           );
 
           files.add(url);

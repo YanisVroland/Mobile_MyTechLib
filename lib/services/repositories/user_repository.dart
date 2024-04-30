@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/repositories/utils_repository.dart';
+import 'package:http_parser/http_parser.dart';
 
 import '../../app/theme/app_const.dart';
 import '../../app/theme/snackBar_const.dart';
@@ -74,6 +75,7 @@ class UserRepository {
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
         filename: "logo"+extension,
+        contentType: MediaType('image', extension.substring(1)),
       );
 
       Map<String, Object> bodyJson = {"file": url};

@@ -1,7 +1,10 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
+import 'package:my_tech_lib/services/models/apiProject_model.dart';
+import 'package:my_tech_lib/services/models/mobileProject_model.dart';
 import 'package:my_tech_lib/services/models/project_model.dart';
 import 'package:my_tech_lib/services/models/user_model.dart';
+import 'package:my_tech_lib/services/models/webProject_model.dart';
 
 import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
@@ -35,10 +38,11 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
   late TextEditingController textController;
   late TabController tabBarController;
   List<Project> listProject = [];
+  List<Project> searchListMobileProject = [];
+
   List<Project> listAPIProject = [];
   List<Project> listWebProject = [];
   List<Project> listMobileProject = [];
-  List<Project> searchListMobileProject = [];
   int nbProject = 0;
   bool _loader = false;
 
@@ -73,15 +77,22 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
         await ProjectRepository().getProjectByLibrary(context, widget.library.uuid);
     if (response != null && response.status == 200) {
       searchListMobileProject.clear();
-      List<dynamic> result = await response.body.map((doc) => Project.fromJson(doc)).toList();
+      List<dynamic> resultApi = await response.body.where((doc) => doc['type'] == 'API').map((doc) => ApiProject.fromJson(doc)).toList();
+      List<dynamic> resultWeb = await response.body.where((doc) => doc['type'] == 'WEB').map((doc) => WebProject.fromJson(doc)).toList();
+      List<dynamic> resultMobile =
+          await response.body.where((doc) => doc['type'] == 'MOBILE').map((doc) => MobileProject.fromJson(doc)).toList();
+
       setState(() {
         nbProject = response.body.length;
 
-        searchListMobileProject.addAll(result.cast<Project>());
+        searchListMobileProject.addAll(resultApi.cast<ApiProject>());
+        searchListMobileProject.addAll(resultWeb.cast<WebProject>());
+        searchListMobileProject.addAll(resultMobile.cast<MobileProject>());
+
         listProject = searchListMobileProject;
-        listAPIProject = listProject.where((element) => element.type == "API").toList();
-        listWebProject = listProject.where((element) => element.type == "WEB").toList();
-        listMobileProject = listProject.where((element) => element.type == "MOBILE").toList();
+        listAPIProject = resultApi.cast<ApiProject>();
+        listWebProject = resultWeb.cast<WebProject>();
+        listMobileProject = resultMobile.cast<MobileProject>();
       });
     }
     setState(() {
@@ -246,9 +257,9 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
             expandedTitleScale: 1.0,
             background: widget.library.bannerUrl.isNotEmpty
                 ? Image.network(
-                      widget.library.bannerUrl,
-                      key: UniqueKey(),
-                      fit: BoxFit.cover,
+                    widget.library.bannerUrl,
+                    key: UniqueKey(),
+                    fit: BoxFit.cover,
                   )
                 : null,
           ),
@@ -321,7 +332,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                 Object? newData = await Navigator.pushNamed(
                                     context, AppRouter.MODIFY_LIBRARY,
                                     arguments: [widget.user, widget.library]);
-                                if(newData != null) {
+                                if (newData != null) {
                                   setState(() {
                                     widget.library = newData as Library;
                                   });
@@ -417,9 +428,13 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    await Navigator.pushNamed(
-                                                        context, AppRouter.PROJECT,
-                                                        arguments: element);
+                                                    if(element.type == "API") {
+                                                      await Navigator.pushNamed(context, AppRouter.PROJECT_API, arguments: element);
+                                                    } else if(element.type == "WEB") {
+                                                      await Navigator.pushNamed(context, AppRouter.PROJECT_WEB, arguments: element);
+                                                    } else if(element.type == "MOBILE") {
+                                                      await Navigator.pushNamed(context, AppRouter.PROJECT_MOBILE, arguments: element);
+                                                    }
                                                     await initProjects();
                                                   },
                                                   child: Container(
@@ -538,7 +553,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 child: InkWell(
                                                   onTap: () async {
                                                     await Navigator.pushNamed(
-                                                        context, AppRouter.PROJECT,
+                                                        context, AppRouter.PROJECT_API,
                                                         arguments: element);
                                                     await initProjects();
                                                   },
@@ -658,7 +673,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 child: InkWell(
                                                   onTap: () async {
                                                     await Navigator.pushNamed(
-                                                        context, AppRouter.PROJECT,
+                                                        context, AppRouter.PROJECT_WEB,
                                                         arguments: element);
                                                     await initProjects();
                                                   },
@@ -778,7 +793,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 child: InkWell(
                                                   onTap: () async {
                                                     await Navigator.pushNamed(
-                                                        context, AppRouter.PROJECT,
+                                                        context, AppRouter.PROJECT_MOBILE,
                                                         arguments: element);
                                                     await initProjects();
                                                   },

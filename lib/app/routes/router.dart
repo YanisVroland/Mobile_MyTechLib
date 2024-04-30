@@ -1,15 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:my_tech_lib/services/models/mobileProject_model.dart';
 import 'package:my_tech_lib/views/library/create_library_screen.dart';
 import 'package:my_tech_lib/views/library/library_screen.dart';
 import 'package:my_tech_lib/views/library/modify_library_screen.dart';
 import 'package:my_tech_lib/views/project/create_project_screen.dart';
-import 'package:my_tech_lib/views/project/project_screen.dart';
 
 import '../../main_screen.dart';
+import '../../services/models/apiProject_model.dart';
 import '../../services/models/company_model.dart';
 import '../../services/models/library_model.dart';
-import '../../services/models/project_model.dart';
 import '../../services/models/user_model.dart';
+import '../../services/models/webProject_model.dart';
 import '../../views/auth/forgot_password_screen.dart';
 import '../../views/auth/login_page_screen.dart';
 import '../../views/auth/onboarding_screen.dart';
@@ -21,6 +22,9 @@ import '../../views/options/edit_profile_widget.dart';
 import '../../views/options/notifications_settings_widget.dart';
 import '../../views/options/privacy_policy_widget.dart';
 import '../../views/options/settings_screen.dart';
+import '../../views/project/api_screen.dart';
+import '../../views/project/mobile_screen.dart';
+import '../../views/project/web_screen.dart';
 import '../../views/splash_screen.dart';
 
 class AppRouter {
@@ -44,7 +48,9 @@ class AppRouter {
   static const String CREATE_LIBRARY = '/CreatePublicLibraryWidget';
   static const String MODIFY_LIBRARY = '/ModifyPublicLibraryWidget';
 
-  static const String PROJECT = '/Project';
+  static const String PROJECT_API = '/ProjectApi';
+  static const String PROJECT_WEB = '/ProjectWeb';
+  static const String PROJECT_MOBILE = '/ProjectMobile';
   static const String CREATE_PROJECT = '/CreateProject';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
@@ -85,18 +91,24 @@ class AppRouter {
             builder: (_) => CompanyListPeopleWidget(settings.arguments as Company));
 
       case LIBRARY:
-        return MaterialPageRoute(builder: (_) => LibraryWidget((settings.arguments! as List<Object>)[0] as UserModel,
-            (settings.arguments! as List<Object>)[1] as Library));
+        return MaterialPageRoute(
+            builder: (_) => LibraryWidget((settings.arguments! as List<Object>)[0] as UserModel,
+                (settings.arguments! as List<Object>)[1] as Library));
       case CREATE_LIBRARY:
         return MaterialPageRoute(
             builder: (_) => CreateLibraryWidget(settings.arguments as UserModel));
       case MODIFY_LIBRARY:
         return MaterialPageRoute(
-            builder: (_) => ModifyLibraryWidget((settings.arguments! as List<Object>)[0] as UserModel,
+            builder: (_) => ModifyLibraryWidget(
+                (settings.arguments! as List<Object>)[0] as UserModel,
                 (settings.arguments! as List<Object>)[1] as Library));
 
-      case PROJECT:
-        return MaterialPageRoute(builder: (_) => ProjectWidget(settings.arguments as Project));
+      case PROJECT_MOBILE:
+        return MaterialPageRoute(builder: (_) => MobileWidget(settings.arguments as MobileProject));
+      case PROJECT_API:
+        return MaterialPageRoute(builder: (_) => ApiWidget(settings.arguments as ApiProject));
+      case PROJECT_WEB:
+        return MaterialPageRoute(builder: (_) => WebWidget(settings.arguments as WebProject));
       case CREATE_PROJECT:
         return MaterialPageRoute(
             builder: (_) => CreateProjectWidget(settings.arguments as Library));

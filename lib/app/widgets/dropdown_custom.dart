@@ -35,11 +35,18 @@ class CustomDropDown extends StatefulWidget {
 class _CustomDropDown extends State<CustomDropDown> {
   @override
   Widget build(BuildContext context) {
-    return DropdownButtonFormField<dynamic>(
+    return Container(
+        decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(10),
+    ),
+    child: DropdownButtonFormField<dynamic>(
         value: widget.value,
         isExpanded: true,
         icon: const Icon(Icons.keyboard_arrow_down),
         validator: widget.validator,
+        style: TextStyle(
+            color: widget.disabled ? Colors.grey.withOpacity(0.9) : Colors.black.withOpacity(0.8),
+            fontSize:  16.0),
         // style: TextStyle(color: widget.disabled ? Colors.grey : Colors.black),
         decoration:InputDecoration(
           filled: true,
@@ -77,6 +84,6 @@ class _CustomDropDown extends State<CustomDropDown> {
             value: value,
             child: Text(value is String ? value : value.name),
           );
-        }).toList());
+        }).toList()));
   }
 }
