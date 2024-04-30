@@ -1,11 +1,14 @@
 import 'dart:io';
 
+import 'package:flutter_multiselect/flutter_multiselect.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:my_tech_lib/app/theme/color_const.dart';
 import 'package:my_tech_lib/services/models/library_model.dart';
+import 'package:my_tech_lib/services/models/mobileProject_model.dart';
 import 'package:my_tech_lib/services/models/project_model.dart';
+import 'package:my_tech_lib/services/models/webProject_model.dart';
 import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -15,6 +18,7 @@ import '../../app/widgets/alert_app.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/dropdown_custom.dart';
 import '../../app/widgets/textField_custom.dart';
+import '../../services/models/apiProject_model.dart';
 import '../../services/models/responseAPI_model.dart';
 import '../../services/repositories/project_repository.dart';
 
@@ -28,69 +32,146 @@ class CreateProjectWidget extends StatefulWidget {
 
 class _CreateProjectWidgetState extends State<CreateProjectWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> secondFormKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   bool _isFirstFormCollapsed = false;
   String selectedType = "";
   List<String> listeType = ["MOBILE", "WEB", "API"];
+
   bool _loader = false;
   List<String> imageList = ["", "", "", "", ""];
   String logoImage = "";
 
+  //MOBILE
+  String platform = "";
+  List<String> listePlatform = ["IOS", "ANDROID", "LES DEUX"];
+  late TextEditingController versionOsController;
+
+  //WEB
+  late TextEditingController urlWebController;
+  late TextEditingController typeWebController;
+  late TextEditingController frameworkController;
+  late TextEditingController bddController;
+  late TextEditingController hostingController;
+  late TextEditingController securityController;
+
+  //API
+  late TextEditingController documentationController;
+  late TextEditingController typeApiController;
+  late TextEditingController dataFormatController;
+  late TextEditingController authUsedController;
+
   @override
   void initState() {
     super.initState();
+    versionOsController = TextEditingController();
     nameController = TextEditingController();
     descriptionController = TextEditingController();
+    urlWebController = TextEditingController();
+    typeWebController = TextEditingController();
+    frameworkController = TextEditingController();
+    bddController = TextEditingController();
+    hostingController = TextEditingController();
+    securityController = TextEditingController();
+    typeApiController = TextEditingController();
+    dataFormatController = TextEditingController();
+    authUsedController = TextEditingController();
+    documentationController = TextEditingController();
   }
 
   @override
   void dispose() {
     super.dispose();
+    versionOsController.dispose();
     nameController.dispose();
     descriptionController.dispose();
-  }
-
-  validMobileButton(String projectUuid) async {
-    if (logoImage != "") {
-      await ProjectRepository().updateLogoProject(context, projectUuid, logoImage);
-    }
-      await ProjectRepository().uploadIllustrations(context, projectUuid, imageList);
-
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-      content: Text("Projet mobile créé avec succès"),
-      backgroundColor: ColorConst.success,
-    ));
-    Navigator.pop(context);
+    urlWebController.dispose();
+    typeWebController.dispose();
+    frameworkController.dispose();
+    bddController.dispose();
+    hostingController.dispose();
+    securityController.dispose();
+    typeApiController.dispose();
+    documentationController.dispose();
+    dataFormatController.dispose();
+    authUsedController.dispose();
   }
 
   validButton() async {
     setState(() {
       _loader = true;
     });
-    Project project = Project(
-        name: nameController.text,
-        description: descriptionController.text,
-        type: selectedType,
-        core_library: widget.library.uuid,
-        core_company: widget.library.core_company);
+
+    Project? project;
+
+    if (selectedType == "MOBILE") {
+      project = MobileProject(
+          name: nameController.text,
+          description: descriptionController.text,
+          type: selectedType,
+          platform: platform,
+          versionOS: versionOsController.text,
+          frameworkUsed: frameworkController.text,
+          core_library: widget.library.uuid,
+          core_company: widget.library.core_company);
+    } else if (selectedType == "WEB") {
+      project = WebProject(
+          name: nameController.text,
+          description: descriptionController.text,
+          type: selectedType,
+          urlWeb: urlWebController.text,
+          typeWeb: typeWebController.text,
+          frameworkUsed: frameworkController.text,
+          bddUsed: bddController.text,
+          hostingUsed: hostingController.text,
+          securityUsed: securityController.text,
+          core_library: widget.library.uuid,
+          core_company: widget.library.core_company);
+    } else if (selectedType == "API") {
+      project = ApiProject(
+          name: nameController.text,
+          description: descriptionController.text,
+          type: selectedType,
+          frameworkUsed: frameworkController.text,
+          dataFormat: dataFormatController.text,
+          authUsed: authUsedController.text,
+          typeApi: typeApiController.text,
+          documentationUrl: documentationController.text,
+          core_library: widget.library.uuid,
+          core_company: widget.library.core_company);
+    } else {
+      project = Project(
+          name: nameController.text,
+          description: descriptionController.text,
+          type: selectedType,
+          core_library: widget.library.uuid,
+          core_company: widget.library.core_company);
+    }
+
+    if (project == null) {
+      setState(() {
+        _loader = false;
+      });
+      return;
+    }
 
     ResponseApi? response =
         await ProjectRepository().createProject(context, project, widget.library);
     if (response != null && response.status == 201) {
-      if (selectedType == "MOBILE") {
-        await validMobileButton(response.body["uuid"]);
-      } else if (selectedType == "WEB") {
-      } else if (selectedType == "API") {
-      } else {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text("Projet mobile créé avec succès"),
-          backgroundColor: ColorConst.success,
-        ));
-        Navigator.pop(context);
+      if (logoImage != "") {
+        await ProjectRepository().updateLogoProject(context, response.body["uuid"], logoImage);
       }
+      if (imageList.isNotEmpty) {
+        await ProjectRepository().uploadIllustrations(context, response.body["uuid"], imageList);
+      }
+
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text("Projet créé avec succès"),
+        backgroundColor: ColorConst.success,
+      ));
+      Navigator.pop(context);
     }
     setState(() {
       _loader = false;
@@ -182,7 +263,6 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
 
     Widget secondFormMobileWidget = Form(
       key: secondFormKey,
-      autovalidateMode: AutovalidateMode.always,
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
@@ -197,67 +277,35 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                         fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
               ),
             ),
-            Row(
-              children: [
-                Padding(
-                  padding: EdgeInsets.only(right: 10.w),
-                  child: Text(
-                    "Logo :",
-                    style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
-                  ),
-                ),
-                InkWell(
-                  onTap: () async {
-                    if (logoImage == "") {
-                      final pickedFile = await ImagePicker()
-                          .pickImage(source: ImageSource.gallery, requestFullMetadata: false);
-                      if (pickedFile != null) {
-                        setState(() {
-                          logoImage = pickedFile.path;
-                        });
-                      }
-                    }
-                  },
-                  child: Container(
-                    width: 70.w,
-                    height: 70.w,
-                    decoration: BoxDecoration(
-                      color: ColorConst.background,
-                      borderRadius: BorderRadius.circular(20.0.r),
-                    ),
-                    child: logoImage == ""
-                        ? Center(
-                            child: SvgPicture.asset(
-                              "assets/icons/camera.svg",
-                              width: 30.w,
-                            ),
-                          )
-                        : ClipRRect(
-                            borderRadius: BorderRadius.all(Radius.circular(12)),
-                            child: Image.file(
-                              File(logoImage),
-                              fit: BoxFit.cover,
-                              width: ScreenUtil().setWidth(70),
-                              height: ScreenUtil().setWidth(70),
-                            )),
-                  ),
-                ),
-              ],
-            ),
             Padding(
-              padding: EdgeInsets.only(top: 20.w),
-              child: Text(
-                "carrousel d'images :",
-                style: TextStyle(fontSize: 16.sp, fontWeight: FontWeight.bold),
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomDropDown(
+                hintText: "Plateforme cible",
+                listValue: listePlatform,
+                validator: Validators.validateDropDownEmpty,
+                action: (dynamic value) {
+                  setState(() {
+                    platform = value ?? "";
+                  });
+                },
+                value: null,
               ),
             ),
-            Container(
+            Padding(
               padding: EdgeInsets.only(top: 10.h),
-              height: 100,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  children: imageList.map((e) => oneImageWidget(e)).toList()),
+              child: CustomTextField(
+                controller: versionOsController,
+                labelText: "Version minimale du mobile",
+                hintText: "Par exemple, iOS 12, Android 8.0, etc",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: frameworkController,
+                labelText: "Framework utilisé",
+                hintText: "React Native, Flutter, Swift, etc.",
+              ),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 30.h),
@@ -284,8 +332,72 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
-        child: Center(
-          child: Text("API" + " " + "Form"),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 20.w),
+              child: Center(
+                child: Text("Projet API",
+                    style: TextStyle(
+                        fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: typeApiController,
+                labelText: "Type d'API",
+                hintText: "RESTful, GraphQL, SOAP, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: documentationController,
+                labelText: "Url de la documentation",
+                hintText: "https://www.documentation.com",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: frameworkController,
+                labelText: "Framework utilisé",
+                hintText: "React Native, Flutter, Swift, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: dataFormatController,
+                labelText: "Formats de données",
+                hintText: "JSON, XML, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: authUsedController,
+                labelText: "Authentification et autorisation ",
+                hintText: "OAuth, JWT, Basic Auth, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                      text: 'Valider',
+                      isLoading: _loader,
+                      onTap: () async {
+                        await validButton();
+                      }),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -296,19 +408,93 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
       child: Container(
         width: double.infinity,
         padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
-        child: Center(
-          child: Text("WEB" + " " + "Form"),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(bottom: 20.w),
+              child: Center(
+                child: Text("Projet WEB",
+                    style: TextStyle(
+                        fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: urlWebController,
+                labelText: "Url du site",
+                hintText: "https://www.example.com",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: typeWebController,
+                labelText: "Type de site",
+                hintText: "Site statique, site dynamique, application web progressive (PWA), etc",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: frameworkController,
+                labelText: "Framework utilisé",
+                hintText: "Angular, React.js, Vue.js, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: bddController,
+                labelText: "Base de données",
+                hintText: "MySQL, PostgreSQL, MongoDB, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: hostingController,
+                labelText: "Hébergement",
+                hintText: "Cloud (AWS, Azure, etc.), serveur dédié, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: securityController,
+                labelText: "Sécurité : ",
+                hintText:
+                    "SSL, authentification, autorisation, protection contre les attaques CSRF, XSS, etc.",
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 30.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                      text: 'Valider',
+                      isLoading: _loader,
+                      onTap: () async {
+                        await validButton();
+                      }),
+                ],
+              ),
+            ),
+          ],
         ),
       ),
     );
 
     Widget firstFormWidget = Form(
-      key: formKey,
+      key: _formKey,
       autovalidateMode: AutovalidateMode.always,
       child: Container(
           padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
           child: Column(
             mainAxisSize: MainAxisSize.max,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Padding(
                 padding: EdgeInsets.only(top: 10.h),
@@ -344,7 +530,74 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                 ),
               ),
               Padding(
-                padding: EdgeInsets.symmetric(vertical: 30.h),
+                padding: EdgeInsets.only(top: 10.h),
+                child: Row(
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.only(
+                        right: 10.w,
+                      ),
+                      child: Text(
+                        "Logo :",
+                        style: TextStyle(fontSize: 14.sp),
+                      ),
+                    ),
+                    InkWell(
+                      onTap: () async {
+                        if (logoImage == "") {
+                          final pickedFile = await ImagePicker()
+                              .pickImage(source: ImageSource.gallery, requestFullMetadata: false);
+                          if (pickedFile != null) {
+                            setState(() {
+                              logoImage = pickedFile.path;
+                            });
+                          }
+                        }
+                      },
+                      child: Container(
+                        width: 70.w,
+                        height: 70.w,
+                        decoration: BoxDecoration(
+                          color: ColorConst.background,
+                          borderRadius: BorderRadius.circular(20.0.r),
+                        ),
+                        child: logoImage == ""
+                            ? Center(
+                                child: SvgPicture.asset(
+                                  "assets/icons/camera.svg",
+                                  width: 30.w,
+                                ),
+                              )
+                            : ClipRRect(
+                                borderRadius: BorderRadius.all(Radius.circular(12)),
+                                child: Image.file(
+                                  File(logoImage),
+                                  fit: BoxFit.cover,
+                                  width: ScreenUtil().setWidth(70),
+                                  height: ScreenUtil().setWidth(70),
+                                )),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Padding(
+                padding: EdgeInsets.only(top: 10.w),
+                child: Text(
+                  "Carrousel d'images :",
+                  style: TextStyle(fontSize: 14.sp),
+                ),
+              ),
+              Container(
+                padding: EdgeInsets.only(top: 10.h),
+                height: 100,
+                child: ListView(
+                    scrollDirection: Axis.horizontal,
+                    shrinkWrap: true,
+                    children: imageList.map((e) => oneImageWidget(e)).toList()),
+              ),
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 20.h),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -352,7 +605,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                         text: 'Continuer',
                         isLoading: _loader,
                         onTap: () async {
-                          if (formKey.currentState!.validate()) {
+                          if (_formKey.currentState!.validate()) {
                             await nextPart();
                           }
                         }),

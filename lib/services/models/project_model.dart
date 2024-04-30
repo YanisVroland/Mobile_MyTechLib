@@ -1,5 +1,3 @@
-import 'dart:math';
-
 import '../../app/theme/tools.dart';
 
 class Project {
@@ -12,7 +10,7 @@ class Project {
   final String core_library;
   final String version;
   final String logoUrl;
-  final List<String> illustrationsUrl;
+  final List<dynamic> illustrationsUrl;
   final String createdBy;
   final String createdAt;
   final String updatedAt;

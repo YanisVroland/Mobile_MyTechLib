@@ -27,7 +27,7 @@ class CreateLibraryWidget extends StatefulWidget {
 class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
   final scaffoldKey = GlobalKey<ScaffoldState>();
   bool toCompany = false;
-  GlobalKey<FormState> formKey = GlobalKey<FormState>();
+  final _formKey = GlobalKey<FormState>();
   late TextEditingController nameController;
   late TextEditingController descriptionController;
   bool _loader = false;
@@ -144,8 +144,8 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                         ],
                       ),
                       child: Form(
-                        key: formKey,
-                        autovalidateMode: AutovalidateMode.always,
+                        key: _formKey,
+
                         child: Container(
                             padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
                             child: Column(
@@ -293,8 +293,8 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                           text: 'Ajouter',
                                           isLoading: _loader,
                                           onTap: () async {
-                                            if (formKey.currentState!.validate()) {
-                                              validButton();
+                                            if (_formKey.currentState!.validate()) {
+                                              await validButton();
                                             }
                                           }),
                                     ],
