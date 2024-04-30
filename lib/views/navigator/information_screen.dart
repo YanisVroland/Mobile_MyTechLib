@@ -462,29 +462,63 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                             crossAxisAlignment:
                                                                 CrossAxisAlignment.start,
                                                             children: [
-                                                              Container(
-                                                                width: 50.w,
-                                                                decoration: BoxDecoration(
-                                                                  color:
-                                                                      AppTheme.of(context).primary,
-                                                                  borderRadius:
-                                                                      BorderRadius.circular(8.0),
-                                                                ),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    element.type,
-                                                                    style: const TextStyle(
-                                                                      fontSize: 12,
-                                                                      color: Colors.white,
-                                                                      fontWeight: FontWeight.bold,
+                                                              Row(
+                                                                children: [
+                                                                  Container(
+                                                                    width: 50.w,
+                                                                    height: 14.h,
+                                                                    decoration: BoxDecoration(
+                                                                      color: AppTheme.of(context)
+                                                                          .primary,
+                                                                      borderRadius:
+                                                                          BorderRadius.circular(
+                                                                              8.0),
+                                                                    ),
+                                                                    child: Center(
+                                                                      child: Text(
+                                                                        element.type,
+                                                                        style: const TextStyle(
+                                                                          fontSize: 10,
+                                                                          color: Colors.white,
+                                                                          fontWeight:
+                                                                              FontWeight.bold,
+                                                                        ),
+                                                                      ),
                                                                     ),
                                                                   ),
-                                                                ),
+                                                                  Padding(
+                                                                    padding:
+                                                                        EdgeInsets.only(left: 5.w),
+                                                                    child: Container(
+                                                                      width: 50.w,
+                                                                      height: 14.h,
+                                                                      decoration: BoxDecoration(
+                                                                        color: AppTheme.of(context)
+                                                                            .secondary,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                8.0),
+                                                                      ),
+                                                                      child: const Center(
+                                                                        child: Text(
+                                                                          "PROJET",
+                                                                          style: TextStyle(
+                                                                            fontSize: 10,
+                                                                            color: Colors.white,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
+                                                                        ),
+                                                                      ),
+                                                                    ),
+                                                                  ),
+                                                                ],
                                                               ),
                                                               Text(
                                                                   "Version : " +
                                                                       element.core_project!.version,
-                                                                  style: TextStyle(fontSize: 12.0)),
+                                                                  style: const TextStyle(
+                                                                      fontSize: 12.0)),
                                                             ],
                                                           ),
                                                         )),
@@ -561,6 +595,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                               children: [
                                                                 Container(
                                                                   width: 50.w,
+                                                                  height: 14.h,
                                                                   decoration: BoxDecoration(
                                                                     color: AppTheme.of(context)
                                                                         .primary,
@@ -571,7 +606,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                                     child: Text(
                                                                       element.type,
                                                                       style: const TextStyle(
-                                                                        fontSize: 12,
+                                                                        fontSize: 10,
                                                                         color: Colors.white,
                                                                         fontWeight: FontWeight.bold,
                                                                       ),

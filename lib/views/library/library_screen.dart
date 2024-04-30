@@ -194,7 +194,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                         Padding(
                           padding: const EdgeInsetsDirectional.fromSTEB(24.0, 0.0, 16.0, 5.0),
                           child: Text(
-                            nbProject.toString() + " Projects",
+                            nbProject.toString() + " Projets",
                             style: const TextStyle(
                               color: Colors.white,
                               fontSize: 16.0,
@@ -321,9 +321,11 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                 Object? newData = await Navigator.pushNamed(
                                     context, AppRouter.MODIFY_LIBRARY,
                                     arguments: [widget.user, widget.library]);
-                                setState(() {
-                                  widget.library = newData as Library;
-                                });
+                                if(newData != null) {
+                                  setState(() {
+                                    widget.library = newData as Library;
+                                  });
+                                }
                               },
                               child: const Row(
                                 children: [
