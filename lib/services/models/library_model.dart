@@ -3,6 +3,7 @@ import '../../app/theme/tools.dart';
 class Library {
   final String uuid;
   final String name;
+  final int projectCount;
   final String description;
   String? core_company;
   late String belongsTo;
@@ -16,6 +17,7 @@ class Library {
   Library({
     this.uuid = '-1',
     this.name = '',
+    this.projectCount = 0,
     this.description = '',
     this.logoUrl = '',
     this.bannerUrl = '',
@@ -31,6 +33,7 @@ class Library {
     return Library(
       uuid: json['uuid'] ?? '-1',
       name: json['name'] ?? '',
+      projectCount: json['project_count'] ?? 0,
       description: json['description'] ?? '',
       core_company: json['core_company'],
       belongsTo: json['belongs_to'] ?? '',
@@ -58,6 +61,7 @@ class Library {
       'name': name,
       'description': description,
       'core_company': core_company,
+      'project_count': 0,
       'is_personal': isPersonal,
     };
     if (isPersonal) {
