@@ -6,6 +6,7 @@ import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../app/theme/tools.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/appBar_custom.dart';
 import '../../app/widgets/textField_custom.dart';
@@ -64,7 +65,23 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     if (inCompany) {
       await getCompanyLibraries();
     }
-    globalListLibrairies.addAll(searchListLibrairies);
+
+
+    searchListLibrairies.sort((a, b) {
+      if (a.updatedAt != null && b.updatedAt != null) {
+            return b.updatedAt!.compareTo(a.updatedAt!);
+      } else {
+        if (a.updatedAt == null && b.updatedAt == null) {
+          return 0;
+        } else if (a.updatedAt == null) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+    });
+
+    globalListLibrairies = searchListLibrairies;
     setState(() {
       _loader = false;
     });
@@ -79,6 +96,19 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         listPersonalLibrairies.addAll(result.cast<Library>());
         searchListLibrairies.addAll(result.cast<Library>());
       });
+      listPersonalLibrairies.sort((a, b) {
+        if (a.updatedAt != null && b.updatedAt != null) {
+              return b.updatedAt!.compareTo(a.updatedAt!);
+        } else {
+          if (a.updatedAt == null && b.updatedAt == null) {
+            return 0;
+          } else if (a.updatedAt == null) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
+      });
     }
   }
 
@@ -91,6 +121,19 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       setState(() {
         listCompanyLibrairies.addAll(result.cast<Library>());
         searchListLibrairies.addAll(result.cast<Library>());
+      });
+      listCompanyLibrairies.sort((a, b) {
+        if (a.updatedAt != null && b.updatedAt != null) {
+              return b.updatedAt!.compareTo(a.updatedAt!);
+        } else {
+          if (a.updatedAt == null && b.updatedAt == null) {
+            return 0;
+          } else if (a.updatedAt == null) {
+            return -1;
+          } else {
+            return 1;
+          }
+        }
       });
     }
   }
@@ -304,8 +347,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment.end,
                                                               children: [
-                                                                Text(
-                                                                  element.createdAt,
+                                                                if(element.updatedAt != null) Text(
+                                                                  Tools.formatDate(element.updatedAt!),
                                                                   textAlign: TextAlign.end,
                                                                 ),
                                                               ],
@@ -432,8 +475,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                   crossAxisAlignment:
                                                                       CrossAxisAlignment.end,
                                                                   children: [
-                                                                    Text(
-                                                                      element.createdAt,
+                                                                    if(element.updatedAt != null) Text(
+                                                                      Tools.formatDate(element.updatedAt!),
                                                                       textAlign: TextAlign.end,
                                                                     ),
                                                                   ],
@@ -573,8 +616,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                               crossAxisAlignment:
                                                                   CrossAxisAlignment.end,
                                                               children: [
-                                                                Text(
-                                                                  element.createdAt,
+                                                                if(element.updatedAt != null) Text(
+                                                                  Tools.formatDate(element.updatedAt!),
                                                                   textAlign: TextAlign.end,
                                                                 ),
                                                               ],
