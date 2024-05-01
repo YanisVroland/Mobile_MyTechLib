@@ -360,7 +360,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                             width: 40.0,
                             height: 40.0,
                             decoration: BoxDecoration(
-                              color: ColorConst.primary,
+                              color: ColorConst.secondary,
                               borderRadius: BorderRadius.circular(8.0),
                             ),
                             child: const Icon(
