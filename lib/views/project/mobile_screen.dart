@@ -221,12 +221,15 @@ class _MobileWidgetState extends State<MobileWidget> {
                                             ),
                                         ],
                                       ),
-                                    CustomButton(
-                                      text: "Télécharger",
-                                      textStyle: TextStyle(fontSize: 12, color: Colors.white),
-                                      width: 100,
-                                      height: 25,
-                                      onTap: () {},
+                                    Visibility(
+                                      visible: widget.project.apkUrl.isNotEmpty,
+                                      child: CustomButton(
+                                        text: "Télécharger",
+                                        textStyle: const TextStyle(fontSize: 12, color: Colors.white),
+                                        width: 100,
+                                        height: 25,
+                                        onTap: () {},
+                                      ),
                                     )
                                   ],
                                 )
