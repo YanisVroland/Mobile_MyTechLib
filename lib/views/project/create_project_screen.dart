@@ -206,8 +206,9 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
     FilePickerResult? filePath = await FilePicker.platform.pickFiles();
 
     if (filePath != null) {
-      apkFile = filePath.files.single.path!;
-      print("Chemin du fichier sélectionné : ${filePath.files.single.path}");
+      setState(() {
+        apkFile = filePath.files.single.path!;
+      });
     }
   }
 
@@ -350,80 +351,72 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
       ],
     );
 
-    Widget secondFormAPIWidget = Form(
-      key: secondFormKey,
-      autovalidateMode: AutovalidateMode.always,
-      child: Container(
-        width: double.infinity,
-        padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.only(bottom: 20.w),
-              child: Center(
-                child: Text("Projet API",
-                    style: TextStyle(
-                        fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.h),
-              child: CustomTextField(
-                controller: typeApiController,
-                labelText: "Type d'API",
-                hintText: "RESTful, GraphQL, SOAP, etc.",
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.h),
-              child: CustomTextField(
-                controller: documentationController,
-                labelText: "Url de la documentation",
-                hintText: "https://www.documentation.com",
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.h),
-              child: CustomTextField(
-                controller: frameworkController,
-                labelText: "Framework utilisé",
-                hintText: "React Native, Flutter, Swift, etc.",
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.h),
-              child: CustomTextField(
-                controller: dataFormatController,
-                labelText: "Formats de données",
-                hintText: "JSON, XML, etc.",
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.only(top: 10.h),
-              child: CustomTextField(
-                controller: authUsedController,
-                labelText: "Authentification et autorisation ",
-                hintText: "OAuth, JWT, Basic Auth, etc.",
-              ),
-            ),
-            Padding(
-              padding: EdgeInsets.symmetric(vertical: 30.h),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  CustomButton(
-                      text: 'Valider',
-                      isLoading: _loader,
-                      onTap: () async {
-                        await validButton();
-                      }),
-                ],
-              ),
-            ),
-          ],
+    Widget secondFormAPIWidget = Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Padding(
+          padding: EdgeInsets.only(bottom: 20.w),
+          child: Center(
+            child: Text("Projet API",
+                style: TextStyle(
+                    fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
+          ),
         ),
-      ),
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: typeApiController,
+            labelText: "Type d'API",
+            hintText: "RESTful, GraphQL, SOAP, etc.",
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: documentationController,
+            labelText: "Url de la documentation",
+            hintText: "https://www.documentation.com",
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: frameworkController,
+            labelText: "Framework utilisé",
+            hintText: "React Native, Flutter, Swift, etc.",
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: dataFormatController,
+            labelText: "Formats de données",
+            hintText: "JSON, XML, etc.",
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: authUsedController,
+            labelText: "Authentification et autorisation ",
+            hintText: "OAuth, JWT, Basic Auth, etc.",
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(vertical: 30.h),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              CustomButton(
+                  text: 'Valider',
+                  isLoading: _loader,
+                  onTap: () async {
+                    await validButton();
+                  }),
+            ],
+          ),
+        ),
+      ],
     );
 
     Widget secondFormWEBWidget = Column(
@@ -503,127 +496,134 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
       ],
     );
 
-    Widget firstFormWidget = Column(
-      mainAxisSize: MainAxisSize.max,
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Padding(
-          padding: EdgeInsets.only(top: 10.h),
-          child: CustomTextField(
-            controller: nameController,
-            labelText: "Nom",
-            hintText: "Entrer le nom du projet",
-            validator: Validators.validateEmpty,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 10.h),
-          child: CustomTextField(
-            controller: descriptionController,
-            labelText: "Description",
-            hintText: "Entrer la description du projet",
-            validator: Validators.validateEmpty,
-            maxLines: 5,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 10.h),
-          child: CustomDropDown(
-            hintText: "Type de projet",
-            listValue: listeType,
-            validator: Validators.validateDropDownEmpty,
-            action: (dynamic value) {
-              setState(() {
-                selectedType = value ?? "";
-              });
-            },
-            value: null,
-          ),
-        ),
-        Padding(
-          padding: EdgeInsets.only(top: 10.h),
-          child: Row(
-            children: [
-              Padding(
-                padding: EdgeInsets.only(
-                  right: 10.w,
-                ),
-                child: Text(
-                  "Logo :",
-                  style: TextStyle(fontSize: 14.sp),
-                ),
+    Widget firstFormWidget = Form(
+      key: _formKey,
+      autovalidateMode: AutovalidateMode.always,
+      child: Container(
+        padding: EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: nameController,
+                labelText: "Nom",
+                hintText: "Entrer le nom du projet",
+                validator: Validators.validateEmpty,
               ),
-              InkWell(
-                onTap: () async {
-                  if (logoImage == "") {
-                    final pickedFile = await ImagePicker()
-                        .pickImage(source: ImageSource.gallery, requestFullMetadata: false);
-                    if (pickedFile != null) {
-                      setState(() {
-                        logoImage = pickedFile.path;
-                      });
-                    }
-                  }
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomTextField(
+                controller: descriptionController,
+                labelText: "Description",
+                hintText: "Entrer la description du projet",
+                validator: Validators.validateEmpty,
+                maxLines: 5,
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: CustomDropDown(
+                hintText: "Type de projet",
+                listValue: listeType,
+                validator: Validators.validateDropDownEmpty,
+                action: (dynamic value) {
+                  setState(() {
+                    selectedType = value ?? "";
+                  });
                 },
-                child: Container(
-                  width: 70.w,
-                  height: 70.w,
-                  decoration: BoxDecoration(
-                    color: ColorConst.background,
-                    borderRadius: BorderRadius.circular(20.0.r),
-                  ),
-                  child: logoImage == ""
-                      ? Center(
-                          child: SvgPicture.asset(
-                            "assets/icons/camera.svg",
-                            width: 30.w,
-                          ),
-                        )
-                      : ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(12)),
-                          child: Image.file(
-                            File(logoImage),
-                            fit: BoxFit.cover,
-                            width: ScreenUtil().setWidth(70),
-                            height: ScreenUtil().setWidth(70),
-                          )),
-                ),
+                value: null,
               ),
-            ],
-          ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.h),
+              child: Row(
+                children: [
+                  Padding(
+                    padding: EdgeInsets.only(
+                      right: 10.w,
+                    ),
+                    child: Text(
+                      "Logo :",
+                      style: TextStyle(fontSize: 14.sp),
+                    ),
+                  ),
+                  InkWell(
+                    onTap: () async {
+                      if (logoImage == "") {
+                        final pickedFile = await ImagePicker()
+                            .pickImage(source: ImageSource.gallery, requestFullMetadata: false);
+                        if (pickedFile != null) {
+                          setState(() {
+                            logoImage = pickedFile.path;
+                          });
+                        }
+                      }
+                    },
+                    child: Container(
+                      width: 70.w,
+                      height: 70.w,
+                      decoration: BoxDecoration(
+                        color: ColorConst.background,
+                        borderRadius: BorderRadius.circular(20.0.r),
+                      ),
+                      child: logoImage == ""
+                          ? Center(
+                              child: SvgPicture.asset(
+                                "assets/icons/camera.svg",
+                                width: 30.w,
+                              ),
+                            )
+                          : ClipRRect(
+                              borderRadius: BorderRadius.all(Radius.circular(12)),
+                              child: Image.file(
+                                File(logoImage),
+                                fit: BoxFit.cover,
+                                width: ScreenUtil().setWidth(70),
+                                height: ScreenUtil().setWidth(70),
+                              )),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: EdgeInsets.only(top: 10.w),
+              child: Text(
+                "Carrousel d'images :",
+                style: TextStyle(fontSize: 14.sp),
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.only(top: 10.h),
+              height: 100,
+              child: ListView(
+                  scrollDirection: Axis.horizontal,
+                  shrinkWrap: true,
+                  children: imageList.map((e) => oneImageWidget(e)).toList()),
+            ),
+            Padding(
+              padding: EdgeInsets.symmetric(vertical: 20.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  CustomButton(
+                      text: 'Continuer',
+                      isLoading: _loader,
+                      onTap: () async {
+                        if (_formKey.currentState!.validate()) {
+                          await nextPart();
+                        }
+                      }),
+                ],
+              ),
+            ),
+          ],
         ),
-        Padding(
-          padding: EdgeInsets.only(top: 10.w),
-          child: Text(
-            "Carrousel d'images :",
-            style: TextStyle(fontSize: 14.sp),
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.only(top: 10.h),
-          height: 100,
-          child: ListView(
-              scrollDirection: Axis.horizontal,
-              shrinkWrap: true,
-              children: imageList.map((e) => oneImageWidget(e)).toList()),
-        ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 20.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomButton(
-                  text: 'Continuer',
-                  isLoading: _loader,
-                  onTap: () async {
-                    if (_formKey.currentState!.validate()) {
-                      await nextPart();
-                    }
-                  }),
-            ],
-          ),
-        ),
-      ],
+      ),
     );
 
     return Scaffold(
