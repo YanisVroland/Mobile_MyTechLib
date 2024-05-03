@@ -96,4 +96,25 @@ class ProjectRepository {
       return null;
     }
   }
+
+  Future<ResponseApi?> updateApkProject(
+      BuildContext context, String projectUuid, String uploadedFileUrl) async {
+    try {
+      String extension = path.extension(uploadedFileUrl);
+
+      final url = await MultipartFile.fromFile(
+        uploadedFileUrl,
+        filename: "apk" + extension,
+        contentType: MediaType('application', 'vnd.android.package-archive'),
+      );
+
+      Map<String, Object> bodyJson = {"file": url};
+
+      return utilsRepository.requestImagePost(
+          context, AppConst.projectApkPostEndpoint + projectUuid, bodyJson);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
 }

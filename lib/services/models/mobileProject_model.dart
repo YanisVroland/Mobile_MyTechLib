@@ -6,6 +6,7 @@ class MobileProject extends Project {
   final String platform;
   final String versionOS;
   final String frameworkUsed;
+  final String apkUrl;
 
   MobileProject({
     String uuid = '-1',
@@ -23,6 +24,7 @@ class MobileProject extends Project {
     List<String> illustrationsUrl = const [],
     this.platform = '',
     this.versionOS = '',
+    this.apkUrl = '',
     this.frameworkUsed = '',
   }) : super(
           uuid: uuid,
@@ -60,6 +62,7 @@ class MobileProject extends Project {
           json['updated_at'] != null ? Tools.formatDate(DateTime.parse(json['updated_at'])) : '',
       platform: json['platform'] ?? '',
       versionOS: json['version_os'] ?? '',
+      apkUrl: json['apk_url'] ?? '',
       frameworkUsed: json['framework_used'] ?? '',
     );
   }
@@ -68,6 +71,7 @@ class MobileProject extends Project {
     var json = super.toJson();
     json['platform'] = platform;
     json['version_os'] = versionOS;
+    json['apk_url'] = apkUrl;
     json['framework_used'] = frameworkUsed;
     return json;
   }

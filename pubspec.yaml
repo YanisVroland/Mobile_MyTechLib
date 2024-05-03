@@ -49,6 +49,8 @@ dependencies:
   mockito: ^5.4.4
   rflutter_alert: ^2.0.7
   url_launcher: ^6.2.4
+  file_picker: ^8.0.0+1
+  flutter_downloader: ^1.11.7
 
 dev_dependencies:
   flutter_test:
