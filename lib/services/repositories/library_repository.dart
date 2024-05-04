@@ -128,6 +128,17 @@ class LibraryRepository {
     }
   }
 
+  Future<ResponseApi?> updateLibraryCountProject(
+      BuildContext context, String libraryUuid) async {
+    try {
+      return utilsRepository.requestPatch(
+          context, AppConst.libraryCountProjectUpdatePatchEndpoint + libraryUuid, {});
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   Future<ResponseApi?> uploadBanner(
       BuildContext context, String libraryUuid, String uploadedFileUrl) async {
     try {

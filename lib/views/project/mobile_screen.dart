@@ -1,10 +1,16 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_tech_lib/services/models/library_model.dart';
+import 'package:my_tech_lib/services/repositories/library_repository.dart';
+import 'package:my_tech_lib/services/repositories/project_repository.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/color_const.dart';
+import '../../app/theme/snackBar_const.dart';
+import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 import '../../services/models/mobileProject_model.dart';
@@ -24,6 +30,38 @@ class _MobileWidgetState extends State<MobileWidget> {
   void initState() {
     super.initState();
   }
+
+  void _launchURL(Uri url) async {
+    if (await canLaunchUrl(url)) {
+      await launchUrl(url);
+    } else {
+      SnackConst.SnackCustom('Impossible d\'ouvrir l\'URL $url', context,
+          duration: 3, color: Colors.red);
+    }
+  }
+
+  Future<void> deleteLibrary() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DeleteDialog(
+          title: "Supprimer le projet ?",
+          content: "Etes-vous sûr de vouloir supprimer ?",
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+          onDelete: () async {
+            await ProjectRepository().deleteProject(context,widget.project);
+            await LibraryRepository().updateLibraryCountProject(context, widget.project.core_library);
+
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -161,7 +199,7 @@ class _MobileWidgetState extends State<MobileWidget> {
                                       ),
                                       PopupMenuItem<String>(
                                         textStyle: const TextStyle(color: Colors.red),
-                                        onTap: () async {},
+                                        onTap: deleteLibrary,
                                         child: const Row(
                                           children: [
                                             Icon(Icons.delete, color: Colors.red),
@@ -225,10 +263,13 @@ class _MobileWidgetState extends State<MobileWidget> {
                                       visible: widget.project.apkUrl.isNotEmpty,
                                       child: CustomButton(
                                         text: "Télécharger",
-                                        textStyle: const TextStyle(fontSize: 12, color: Colors.white),
+                                        textStyle:
+                                            const TextStyle(fontSize: 12, color: Colors.white),
                                         width: 100,
                                         height: 25,
-                                        onTap: () {},
+                                        onTap: () async {
+                                           _launchURL(Uri.parse(widget.project.apkUrl!));
+                                        },
                                       ),
                                     )
                                   ],

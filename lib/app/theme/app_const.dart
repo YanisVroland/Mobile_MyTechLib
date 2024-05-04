@@ -19,16 +19,17 @@ class AppConst {
   // -> Library
   static String libraryUserGetEndpoint = '/library/byUser/';
   static String libraryCompanyGetEndpoint = '/library/byCompany/';
-  static String libraryUpdatePatchEndpoint = '/library/';
   static String libraryLogoPostEndpoint = '/library/uploadLogo/';
   static String libraryBannerPostEndpoint = '/library/uploadBanner/';
-
+  static String libraryCountProjectUpdatePatchEndpoint = '/library/countProject/';
+  static String libraryUpdatePatchEndpoint = '/library/';
   static String libraryCreateEndpoint = '/library/';
   static String libraryDeleteEndpoint = '/library/';
 
   // -> Project
   static String projectGetEndpoint = '/project/byLibrary/';
   static String projectCreateEndpoint = '/project/';
+  static String projectDeleteEndpoint = '/project/';
   static String projectLogoPostEndpoint = '/project/uploadLogo/';
   static String projectIllustrationsPostEndpoint = '/project/uploadIllustrations/';
   static String projectApkPostEndpoint = '/project/uploadApk/';

@@ -402,20 +402,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
             hintText: "OAuth, JWT, Basic Auth, etc.",
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 30.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomButton(
-                  text: 'Valider',
-                  isLoading: _loader,
-                  onTap: () async {
-                    await validButton();
-                  }),
-            ],
-          ),
-        ),
+
       ],
     );
 
@@ -479,20 +466,7 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                 "SSL, authentification, autorisation, protection contre les attaques CSRF, XSS, etc.",
           ),
         ),
-        Padding(
-          padding: EdgeInsets.symmetric(vertical: 30.h),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              CustomButton(
-                  text: 'Valider',
-                  isLoading: _loader,
-                  onTap: () async {
-                    await validButton();
-                  }),
-            ],
-          ),
-        ),
+
       ],
     );
 

@@ -7,8 +7,11 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/color_const.dart';
 import '../../app/theme/snackBar_const.dart';
+import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 import '../../services/models/apiProject_model.dart';
+import '../../services/repositories/library_repository.dart';
+import '../../services/repositories/project_repository.dart';
 
 class ApiWidget extends StatefulWidget {
   const ApiWidget(this.project, {Key? key}) : super(key: key);
@@ -33,6 +36,28 @@ class _ApiWidgetState extends State<ApiWidget> {
       SnackConst.SnackCustom('Impossible d\'ouvrir l\'URL $url', context,
           duration: 3, color: Colors.red);
     }
+  }
+
+  Future<void> deleteLibrary() async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DeleteDialog(
+          title: "Supprimer le projet ?",
+          content: "Etes-vous sûr de vouloir supprimer ?",
+          onCancel: () {
+            Navigator.of(context).pop();
+          },
+          onDelete: () async {
+            await ProjectRepository().deleteProject(context,widget.project);
+            await LibraryRepository().updateLibraryCountProject(context, widget.project.core_library);
+
+            Navigator.of(context).pop();
+            Navigator.of(context).pop();
+          },
+        );
+      },
+    );
   }
   @override
   Widget build(BuildContext context) {
@@ -155,7 +180,7 @@ class _ApiWidgetState extends State<ApiWidget> {
                                 ),
                                 PopupMenuItem<String>(
                                   textStyle: const TextStyle(color: Colors.red),
-                                  onTap: () async {},
+                                  onTap: deleteLibrary,
                                   child: const Row(
                                     children: [
                                       Icon(Icons.delete, color: Colors.red),

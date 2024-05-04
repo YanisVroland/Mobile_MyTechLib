@@ -117,4 +117,13 @@ class ProjectRepository {
       return null;
     }
   }
+
+  Future<ResponseApi?> deleteProject(BuildContext context, Project project) async {
+    try {
+      return utilsRepository.requestDelete(context, AppConst.projectDeleteEndpoint + project.uuid);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
 }
