@@ -49,7 +49,8 @@ class AppConst {
   static String informationByCompanyGetEndpoint = '/information/byCompany/';
   static String informationCreateEndpoint = '/information/';
 
-
+  // -> Copy
+  static String copyLibraryCreateEndpoint = '/copy/createCopyLibrary/';
 
   // Messages
   static String errorApiMessage = 'Erreur de fonctionnement, veuillez contacter le support.';

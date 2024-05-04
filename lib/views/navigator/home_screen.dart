@@ -1,6 +1,8 @@
+import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_tech_lib/app/theme/color_const.dart';
+import 'package:my_tech_lib/services/repositories/copy_repository.dart';
 
 import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
@@ -8,6 +10,7 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/tools.dart';
 import '../../app/theme/validators.dart';
+import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/appBar_custom.dart';
 import '../../app/widgets/textField_custom.dart';
 import '../../services/models/library_model.dart';
@@ -135,6 +138,59 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         }
       });
     }
+  }
+
+  Future<void> copyLibrary(Library library) async {
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text("Partager la librairie ${library.name}"),
+          content: const Text("Etes-vous sûr de vouloir partager ?"),
+          actions: <Widget>[
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Annuler"),
+            ),
+            TextButton(
+              onPressed: () async {
+                ResponseApi? response =
+                    await CopyRepository().createCopyLibrary(context, library.uuid);
+                if (response != null && response.status == 201) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      backgroundColor: Colors.green,
+                      duration: const Duration(seconds: 5),
+                      content: Row(
+                        children: [
+                          const Text(
+                            "Code de partage :",
+                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16 ),
+                          ),
+                          Text(
+                            " ${response.body["code"]}",
+                            style: const TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                Clipboard.setData(ClipboardData(text: response.body["code"]));
+                              },
+                              icon: const Icon(Icons.copy, color: Colors.white)),
+                        ],
+                      ),
+                    ),
+                  );
+                }
+              },
+              child: const Text("Continuer"),
+            ),
+          ],
+        );
+      },
+    );
   }
 
   @override
@@ -338,8 +394,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                   ),
                                                                   Expanded(
                                                                       child: Padding(
-                                                                    padding:
-                                                                        EdgeInsets.only(right: 10.w),
+                                                                    padding: EdgeInsets.only(
+                                                                        right: 10.w),
                                                                     child: Column(
                                                                       mainAxisAlignment:
                                                                           MainAxisAlignment
@@ -412,19 +468,26 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                 ],
                                                               )),
                                                         ),
-                                                        Container(
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            await copyLibrary(element);
+                                                          },
+                                                          child: Container(
                                                             width: 50.w,
                                                             height: 70.h,
                                                             decoration: BoxDecoration(
                                                               color: AppTheme.of(context).tertiary,
-                                                              borderRadius: BorderRadius.only(
+                                                              borderRadius: const BorderRadius.only(
                                                                   topRight: Radius.circular(8.0),
-                                                                  bottomRight: Radius.circular(8.0)),
+                                                                  bottomRight:
+                                                                      Radius.circular(8.0)),
                                                             ),
                                                             child: const Icon(
                                                               Icons.send,
                                                               color: ColorConst.background,
-                                                            )),
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
@@ -470,8 +533,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                       child: Container(
                                                         height: 70.0,
                                                         decoration: BoxDecoration(
-                                                          color:
-                                                          AppTheme.of(context).secondaryBackground,
+                                                          color: AppTheme.of(context)
+                                                              .secondaryBackground,
                                                           boxShadow: const [
                                                             BoxShadow(
                                                               blurRadius: 4.0,
@@ -490,37 +553,38 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                   child: Row(
                                                                     mainAxisSize: MainAxisSize.min,
                                                                     mainAxisAlignment:
-                                                                    MainAxisAlignment.spaceBetween,
+                                                                        MainAxisAlignment
+                                                                            .spaceBetween,
                                                                     crossAxisAlignment:
-                                                                    CrossAxisAlignment.start,
+                                                                        CrossAxisAlignment.start,
                                                                     children: [
                                                                       Expanded(
                                                                         child: Padding(
                                                                           padding:
-                                                                          const EdgeInsetsDirectional
-                                                                              .fromSTEB(
-                                                                              12.0, 0.0, 0.0, 0.0),
+                                                                              const EdgeInsetsDirectional
+                                                                                  .fromSTEB(12.0,
+                                                                                  0.0, 0.0, 0.0),
                                                                           child: Column(
                                                                             mainAxisSize:
-                                                                            MainAxisSize.max,
+                                                                                MainAxisSize.max,
                                                                             mainAxisAlignment:
-                                                                            MainAxisAlignment
-                                                                                .spaceBetween,
+                                                                                MainAxisAlignment
+                                                                                    .spaceBetween,
                                                                             crossAxisAlignment:
-                                                                            CrossAxisAlignment
-                                                                                .start,
+                                                                                CrossAxisAlignment
+                                                                                    .start,
                                                                             children: [
                                                                               Text(
                                                                                 element.name,
                                                                                 style: const TextStyle(
                                                                                     fontSize: 17.0,
                                                                                     fontWeight:
-                                                                                    FontWeight
-                                                                                        .bold),
+                                                                                        FontWeight
+                                                                                            .bold),
                                                                               ),
                                                                               Text(
                                                                                 element.projectCount
-                                                                                    .toString() +
+                                                                                        .toString() +
                                                                                     " projets",
                                                                                 style: const TextStyle(
                                                                                     fontSize: 12.0,
@@ -533,93 +597,108 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                       ),
                                                                       Expanded(
                                                                           child: Padding(
-                                                                            padding:
-                                                                            EdgeInsets.only(right: 10.w),
-                                                                            child: Column(
-                                                                              mainAxisAlignment:
+                                                                        padding: EdgeInsets.only(
+                                                                            right: 10.w),
+                                                                        child: Column(
+                                                                          mainAxisAlignment:
                                                                               MainAxisAlignment
                                                                                   .spaceBetween,
-                                                                              crossAxisAlignment:
-                                                                              CrossAxisAlignment.end,
-                                                                              children: [
-                                                                                element.isPersonal
-                                                                                    ? Container()
-                                                                                    : Container(
-                                                                                  width: 65.w,
-                                                                                  height: 14.h,
-                                                                                  decoration:
-                                                                                  BoxDecoration(
-                                                                                    color: AppTheme.of(
-                                                                                        context)
-                                                                                        .secondary,
-                                                                                    borderRadius:
-                                                                                    BorderRadius
-                                                                                        .circular(
-                                                                                        8.0),
-                                                                                  ),
-                                                                                  child: const Center(
-                                                                                    child: Text(
-                                                                                      "ENTREPRISE",
-                                                                                      style:
-                                                                                      TextStyle(
-                                                                                        fontSize: 9,
-                                                                                        color: Colors
-                                                                                            .white,
-                                                                                        fontWeight:
-                                                                                        FontWeight
-                                                                                            .bold,
+                                                                          crossAxisAlignment:
+                                                                              CrossAxisAlignment
+                                                                                  .end,
+                                                                          children: [
+                                                                            element.isPersonal
+                                                                                ? Container()
+                                                                                : Container(
+                                                                                    width: 65.w,
+                                                                                    height: 14.h,
+                                                                                    decoration:
+                                                                                        BoxDecoration(
+                                                                                      color: AppTheme.of(
+                                                                                              context)
+                                                                                          .secondary,
+                                                                                      borderRadius:
+                                                                                          BorderRadius
+                                                                                              .circular(
+                                                                                                  8.0),
+                                                                                    ),
+                                                                                    child:
+                                                                                        const Center(
+                                                                                      child: Text(
+                                                                                        "ENTREPRISE",
+                                                                                        style:
+                                                                                            TextStyle(
+                                                                                          fontSize:
+                                                                                              9,
+                                                                                          color: Colors
+                                                                                              .white,
+                                                                                          fontWeight:
+                                                                                              FontWeight
+                                                                                                  .bold,
+                                                                                        ),
                                                                                       ),
                                                                                     ),
                                                                                   ),
-                                                                                ),
-                                                                                Column(
-                                                                                  mainAxisSize:
+                                                                            Column(
+                                                                              mainAxisSize:
                                                                                   MainAxisSize.min,
-                                                                                  mainAxisAlignment:
-                                                                                  MainAxisAlignment.end,
-                                                                                  crossAxisAlignment:
+                                                                              mainAxisAlignment:
+                                                                                  MainAxisAlignment
+                                                                                      .end,
+                                                                              crossAxisAlignment:
                                                                                   CrossAxisAlignment
                                                                                       .end,
-                                                                                  children: [
-                                                                                    const Text(
-                                                                                      "Mise à jour :",
-                                                                                      style: TextStyle(
-                                                                                        fontSize: 10.0,
-                                                                                        color: Color(
-                                                                                            0xFF8E8E93),
-                                                                                      ),
-                                                                                    ),
-                                                                                    Text(
-                                                                                      Tools.formatDate(
-                                                                                          element
-                                                                                              .updatedAt!),
-                                                                                      style: TextStyle(
-                                                                                          fontSize: 12.0,
-                                                                                          color: AppTheme.of(
+                                                                              children: [
+                                                                                const Text(
+                                                                                  "Mise à jour :",
+                                                                                  style: TextStyle(
+                                                                                    fontSize: 10.0,
+                                                                                    color: Color(
+                                                                                        0xFF8E8E93),
+                                                                                  ),
+                                                                                ),
+                                                                                Text(
+                                                                                  Tools.formatDate(
+                                                                                      element
+                                                                                          .updatedAt!),
+                                                                                  style: TextStyle(
+                                                                                      fontSize:
+                                                                                          12.0,
+                                                                                      color: AppTheme.of(
                                                                                               context)
-                                                                                              .primary),
-                                                                                    ),
-                                                                                  ],
-                                                                                )
+                                                                                          .primary),
+                                                                                ),
                                                                               ],
-                                                                            ),
-                                                                          )),
+                                                                            )
+                                                                          ],
+                                                                        ),
+                                                                      )),
                                                                     ],
                                                                   )),
                                                             ),
-                                                            Container(
+                                                            InkWell(
+                                                              onTap: () async {
+                                                                await copyLibrary(element);
+                                                              },
+                                                              child: Container(
                                                                 width: 50.w,
                                                                 height: 70.h,
                                                                 decoration: BoxDecoration(
-                                                                  color: AppTheme.of(context).tertiary,
-                                                                  borderRadius: BorderRadius.only(
-                                                                      topRight: Radius.circular(8.0),
-                                                                      bottomRight: Radius.circular(8.0)),
+                                                                  color:
+                                                                      AppTheme.of(context).tertiary,
+                                                                  borderRadius:
+                                                                      const BorderRadius.only(
+                                                                          topRight:
+                                                                              Radius.circular(8.0),
+                                                                          bottomRight:
+                                                                              Radius.circular(8.0)),
                                                                 ),
                                                                 child: const Icon(
                                                                   Icons.send,
                                                                   color: ColorConst.background,
-                                                                )),
+                                                                ),
+                                                              ),
+                                                            ),
                                                           ],
                                                         ),
                                                       ),
@@ -683,7 +762,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                     height: 70.0,
                                                     decoration: BoxDecoration(
                                                       color:
-                                                      AppTheme.of(context).secondaryBackground,
+                                                          AppTheme.of(context).secondaryBackground,
                                                       boxShadow: const [
                                                         BoxShadow(
                                                           blurRadius: 4.0,
@@ -702,37 +781,37 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                               child: Row(
                                                                 mainAxisSize: MainAxisSize.min,
                                                                 mainAxisAlignment:
-                                                                MainAxisAlignment.spaceBetween,
+                                                                    MainAxisAlignment.spaceBetween,
                                                                 crossAxisAlignment:
-                                                                CrossAxisAlignment.start,
+                                                                    CrossAxisAlignment.start,
                                                                 children: [
                                                                   Expanded(
                                                                     child: Padding(
                                                                       padding:
-                                                                      const EdgeInsetsDirectional
-                                                                          .fromSTEB(
-                                                                          12.0, 0.0, 0.0, 0.0),
+                                                                          const EdgeInsetsDirectional
+                                                                              .fromSTEB(
+                                                                              12.0, 0.0, 0.0, 0.0),
                                                                       child: Column(
                                                                         mainAxisSize:
-                                                                        MainAxisSize.max,
+                                                                            MainAxisSize.max,
                                                                         mainAxisAlignment:
-                                                                        MainAxisAlignment
-                                                                            .spaceBetween,
+                                                                            MainAxisAlignment
+                                                                                .spaceBetween,
                                                                         crossAxisAlignment:
-                                                                        CrossAxisAlignment
-                                                                            .start,
+                                                                            CrossAxisAlignment
+                                                                                .start,
                                                                         children: [
                                                                           Text(
                                                                             element.name,
                                                                             style: const TextStyle(
                                                                                 fontSize: 17.0,
                                                                                 fontWeight:
-                                                                                FontWeight
-                                                                                    .bold),
+                                                                                    FontWeight
+                                                                                        .bold),
                                                                           ),
                                                                           Text(
                                                                             element.projectCount
-                                                                                .toString() +
+                                                                                    .toString() +
                                                                                 " projets",
                                                                             style: const TextStyle(
                                                                                 fontSize: 12.0,
@@ -745,93 +824,100 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                   ),
                                                                   Expanded(
                                                                       child: Padding(
-                                                                        padding:
-                                                                        EdgeInsets.only(right: 10.w),
-                                                                        child: Column(
-                                                                          mainAxisAlignment:
+                                                                    padding: EdgeInsets.only(
+                                                                        right: 10.w),
+                                                                    child: Column(
+                                                                      mainAxisAlignment:
                                                                           MainAxisAlignment
                                                                               .spaceBetween,
-                                                                          crossAxisAlignment:
+                                                                      crossAxisAlignment:
                                                                           CrossAxisAlignment.end,
-                                                                          children: [
-                                                                            element.isPersonal
-                                                                                ? Container()
-                                                                                : Container(
-                                                                              width: 65.w,
-                                                                              height: 14.h,
-                                                                              decoration:
-                                                                              BoxDecoration(
-                                                                                color: AppTheme.of(
-                                                                                    context)
-                                                                                    .secondary,
-                                                                                borderRadius:
-                                                                                BorderRadius
-                                                                                    .circular(
-                                                                                    8.0),
-                                                                              ),
-                                                                              child: const Center(
-                                                                                child: Text(
-                                                                                  "ENTREPRISE",
-                                                                                  style:
-                                                                                  TextStyle(
-                                                                                    fontSize: 9,
-                                                                                    color: Colors
-                                                                                        .white,
-                                                                                    fontWeight:
-                                                                                    FontWeight
-                                                                                        .bold,
+                                                                      children: [
+                                                                        element.isPersonal
+                                                                            ? Container()
+                                                                            : Container(
+                                                                                width: 65.w,
+                                                                                height: 14.h,
+                                                                                decoration:
+                                                                                    BoxDecoration(
+                                                                                  color: AppTheme.of(
+                                                                                          context)
+                                                                                      .secondary,
+                                                                                  borderRadius:
+                                                                                      BorderRadius
+                                                                                          .circular(
+                                                                                              8.0),
+                                                                                ),
+                                                                                child: const Center(
+                                                                                  child: Text(
+                                                                                    "ENTREPRISE",
+                                                                                    style:
+                                                                                        TextStyle(
+                                                                                      fontSize: 9,
+                                                                                      color: Colors
+                                                                                          .white,
+                                                                                      fontWeight:
+                                                                                          FontWeight
+                                                                                              .bold,
+                                                                                    ),
                                                                                   ),
                                                                                 ),
                                                                               ),
-                                                                            ),
-                                                                            Column(
-                                                                              mainAxisSize:
+                                                                        Column(
+                                                                          mainAxisSize:
                                                                               MainAxisSize.min,
-                                                                              mainAxisAlignment:
+                                                                          mainAxisAlignment:
                                                                               MainAxisAlignment.end,
-                                                                              crossAxisAlignment:
+                                                                          crossAxisAlignment:
                                                                               CrossAxisAlignment
                                                                                   .end,
-                                                                              children: [
-                                                                                const Text(
-                                                                                  "Mise à jour :",
-                                                                                  style: TextStyle(
-                                                                                    fontSize: 10.0,
-                                                                                    color: Color(
-                                                                                        0xFF8E8E93),
-                                                                                  ),
-                                                                                ),
-                                                                                Text(
-                                                                                  Tools.formatDate(
-                                                                                      element
-                                                                                          .updatedAt!),
-                                                                                  style: TextStyle(
-                                                                                      fontSize: 12.0,
-                                                                                      color: AppTheme.of(
+                                                                          children: [
+                                                                            const Text(
+                                                                              "Mise à jour :",
+                                                                              style: TextStyle(
+                                                                                fontSize: 10.0,
+                                                                                color: Color(
+                                                                                    0xFF8E8E93),
+                                                                              ),
+                                                                            ),
+                                                                            Text(
+                                                                              Tools.formatDate(
+                                                                                  element
+                                                                                      .updatedAt!),
+                                                                              style: TextStyle(
+                                                                                  fontSize: 12.0,
+                                                                                  color: AppTheme.of(
                                                                                           context)
-                                                                                          .primary),
-                                                                                ),
-                                                                              ],
-                                                                            )
+                                                                                      .primary),
+                                                                            ),
                                                                           ],
-                                                                        ),
-                                                                      )),
+                                                                        )
+                                                                      ],
+                                                                    ),
+                                                                  )),
                                                                 ],
                                                               )),
                                                         ),
-                                                        Container(
+                                                        InkWell(
+                                                          onTap: () async {
+                                                            await copyLibrary(element);
+                                                          },
+                                                          child: Container(
                                                             width: 50.w,
                                                             height: 70.h,
                                                             decoration: BoxDecoration(
                                                               color: AppTheme.of(context).tertiary,
-                                                              borderRadius: BorderRadius.only(
+                                                              borderRadius: const BorderRadius.only(
                                                                   topRight: Radius.circular(8.0),
-                                                                  bottomRight: Radius.circular(8.0)),
+                                                                  bottomRight:
+                                                                      Radius.circular(8.0)),
                                                             ),
                                                             child: const Icon(
                                                               Icons.send,
                                                               color: ColorConst.background,
-                                                            )),
+                                                            ),
+                                                          ),
+                                                        ),
                                                       ],
                                                     ),
                                                   ),
