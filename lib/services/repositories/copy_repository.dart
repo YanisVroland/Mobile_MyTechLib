@@ -19,4 +19,13 @@ class CopyRepository {
       return null;
     }
   }
+
+  Future<ResponseApi?> useCopyLibrary(BuildContext context, String codeCopy) async {
+    try {
+      return utilsRepository.requestPost(context, AppConst.useCopyLibraryPostEndpoint + codeCopy, {});
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
 }

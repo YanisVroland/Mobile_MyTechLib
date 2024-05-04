@@ -51,6 +51,7 @@ class AppConst {
 
   // -> Copy
   static String copyLibraryCreateEndpoint = '/copy/createCopyLibrary/';
+  static String   useCopyLibraryPostEndpoint = '/copy/useCopyLibrary/';
 
   // Messages
   static String errorApiMessage = 'Erreur de fonctionnement, veuillez contacter le support.';
