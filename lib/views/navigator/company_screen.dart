@@ -47,7 +47,7 @@ class _CompanyWidgetState extends State<CompanyWidget> with TickerProviderStateM
                             ),
                           ),
                         )
-                      : ViewCompany(widget.globalData.company!)
+                      : ViewCompany(widget.globalData)
                   : JoinCompany(widget.globalData),
             ],
           )),

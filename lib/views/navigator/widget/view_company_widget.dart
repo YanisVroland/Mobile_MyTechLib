@@ -1,6 +1,7 @@
 import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:my_tech_lib/app/theme/color_const.dart';
 
 import '../../../../app/routes/router.dart';
@@ -8,22 +9,19 @@ import '../../../../app/theme/app_theme.dart';
 import '../../../app/widgets/DeleteDialog_custom.dart';
 import '../../../services/local/pref.dart';
 import '../../../services/models/company_model.dart';
+import '../../../services/models/globalData_model.dart';
 import '../../../services/models/responseAPI_model.dart';
 import '../../../services/repositories/company_repository.dart';
 
 class ViewCompany extends StatefulWidget {
-  const ViewCompany(this.company, {Key? key}) : super(key: key);
-  final Company company;
+  const ViewCompany(this.globalData, {Key? key}) : super(key: key);
+  final GlobalData globalData;
 
   @override
   _ViewCompanyState createState() => _ViewCompanyState();
 }
 
 class _ViewCompanyState extends State<ViewCompany> {
-  int? projectCpt;
-  int? libraryCpt;
-  bool _loaderStat = false;
-
   @override
   void initState() {
     super.initState();
@@ -31,18 +29,12 @@ class _ViewCompanyState extends State<ViewCompany> {
   }
 
   getStatistiques() async {
-    setState(() {
-      _loaderStat = true;
-    });
     final ResponseApi? response =
-        await CompanyRepository().getStatistiqueCompany(context, widget.company.uuid);
+        await CompanyRepository().getStatistiqueCompany(context, widget.globalData.company!.uuid);
     if (response != null && response.status == 200) {
-      projectCpt = response.body["projectCpt"];
-      libraryCpt = response.body["libraryCpt"];
+      widget.globalData.company!.projectCpt = response.body["projectCpt"];
+      widget.globalData.company!.libraryCpt = response.body["libraryCpt"];
     }
-    setState(() {
-      _loaderStat = false;
-    });
   }
 
   @override
@@ -86,20 +78,27 @@ class _ViewCompanyState extends State<ViewCompany> {
                                 children: [
                                   InkWell(
                                       onTap: () async {
-                                        await Navigator.pushNamed(context, AppRouter.COMPANY_EDIT,
-                                            arguments: widget.company);
+                                        if (widget.globalData.user.companyAdmin) {
+                                          await Navigator.pushNamed(context, AppRouter.COMPANY_EDIT,
+                                              arguments: widget.globalData.company!);
 
-                                        setState(() {});
+                                          setState(() {
+                                            getStatistiques();
+                                          });
+                                        }
                                       },
                                       child: Container(
                                         width: 35.0,
                                         height: 35.0,
                                         decoration: BoxDecoration(
-                                          color: AppTheme.of(context).primary,
+                                          color: widget.globalData.user.companyAdmin
+                                              ? AppTheme.of(context).primary
+                                              : AppTheme.of(context).primary.withOpacity(0.5),
                                           borderRadius: BorderRadius.circular(8.0),
                                         ),
                                         child: const Icon(
                                           Icons.edit,
+                                          color: ColorConst.background,
                                           size: 20.0,
                                         ),
                                       )),
@@ -118,7 +117,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                               Column(
                                 children: [
                                   Text(
-                                    widget.company!.name.toUpperCase(),
+                                    widget.globalData.company!.name.toUpperCase(),
                                     style: const TextStyle(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -126,14 +125,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                   Row(
                                     children: [
                                       Text(
-                                        "Création :",
-                                        style: TextStyle(
-                                          color: AppTheme.of(context).secondary,
-                                          fontSize: 12.0,
-                                        ),
-                                      ),
-                                      Text(
-                                        widget.company!.createdAt,
+                                        widget.globalData.company!.createdAt,
                                         style: const TextStyle(
                                           fontSize: 10.0,
                                         ),
@@ -147,7 +139,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                   InkWell(
                                       onTap: () {
                                         Navigator.pushNamed(context, AppRouter.COMPANY_LIST_POEPLE,
-                                            arguments: widget.company);
+                                            arguments: widget.globalData.company!);
                                       },
                                       child: Container(
                                         width: 35.0,
@@ -158,6 +150,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                         ),
                                         child: const Icon(
                                           Icons.people,
+                                          color: ColorConst.background,
                                           size: 20.0,
                                         ),
                                       )),
@@ -213,7 +206,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                 Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                   child: Text(
-                                    _loaderStat ? "~~~" : libraryCpt.toString(),
+                                    widget.globalData.company!.libraryCpt.toString(),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
@@ -253,7 +246,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                 Padding(
                                   padding: const EdgeInsetsDirectional.fromSTEB(0.0, 5.0, 0.0, 0.0),
                                   child: Text(
-                                    _loaderStat ? "~~~" : projectCpt.toString(),
+                                    widget.globalData.company!.projectCpt.toString(),
                                     textAlign: TextAlign.start,
                                   ),
                                 ),
@@ -264,104 +257,167 @@ class _ViewCompanyState extends State<ViewCompany> {
                       ],
                     ),
                   ),
-                  Container(
-                    padding: const EdgeInsetsDirectional.fromSTEB(10.0, 10.0, 10.0, 10.0),
-                    decoration: BoxDecoration(
-                      color: AppTheme.of(context).secondaryBackground,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x3F14181B),
-                          offset: Offset(0.0, 3.0),
-                        )
-                      ],
-                      borderRadius: BorderRadius.circular(8.0),
-                    ),
-                    child: Column(
-                      children: [
-                        Row(
-                          mainAxisSize: MainAxisSize.max,
-                          children: [
-                            Expanded(
-                                child: InkWell(
-                              onTap: () async {
-                                Clipboard.setData(ClipboardData(text: widget.company!.code));
-                                ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text("Code copié"),
-                                    backgroundColor: Colors.green,
-                                    duration: Duration(seconds: 1),
+                  Expanded(
+                      child: Padding(
+                          padding: EdgeInsets.only(bottom: 20.h),
+                          child: Container(
+                            padding: EdgeInsets.only(
+                              left: 15.w,
+                              right: 15.w,
+                              top: 10.h,
+                            ),
+                            decoration: BoxDecoration(
+                              color: AppTheme.of(context).secondaryBackground,
+                              borderRadius: const BorderRadius.only(
+                                bottomLeft: Radius.circular(70.0),
+                                bottomRight: Radius.circular(70.0),
+                                topLeft: Radius.circular(20.0),
+                                topRight: Radius.circular(20.0),
+                              ),
+                              boxShadow: const [
+                                BoxShadow(
+                                  blurRadius: 4.0,
+                                  color: Color(0x3F14181B),
+                                  offset: Offset(0.0, 3.0),
+                                )
+                              ],
+                            ),
+                            child: Column(
+                              mainAxisSize: MainAxisSize.max,
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Visibility(
+                                  visible: widget.globalData.user.companyAdmin,
+                                  child: Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Expanded(
+                                          child: InkWell(
+                                        onTap: () async {
+                                          Clipboard.setData(
+                                              ClipboardData(text: widget.globalData.company!.code));
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            const SnackBar(
+                                              content: Text("Code copié"),
+                                              backgroundColor: Colors.green,
+                                              duration: Duration(seconds: 1),
+                                            ),
+                                          );
+                                        },
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          children: [
+                                            const Text(
+                                              "Code : ",
+                                              style: TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.bold,
+                                              ),
+                                            ),
+                                            Expanded(
+                                              child: Text(
+                                                widget.globalData.company!.code,
+                                                overflow: TextOverflow.ellipsis,
+                                              ),
+                                            )
+                                          ],
+                                        ),
+                                      )),
+                                      Row(
+                                        children: [
+                                          Padding(
+                                              padding: EdgeInsets.only(right: 10.w),
+                                              child: InkWell(
+                                                  onTap: () async {
+                                                    Clipboard.setData(ClipboardData(
+                                                        text: widget.globalData.company!.code));
+                                                    ScaffoldMessenger.of(context).showSnackBar(
+                                                      const SnackBar(
+                                                        content: Text("Code copié"),
+                                                        backgroundColor: Colors.green,
+                                                        duration: Duration(seconds: 1),
+                                                      ),
+                                                    );
+                                                  },
+                                                  child: Container(
+                                                    width: 35.0,
+                                                    height: 35.0,
+                                                    decoration: BoxDecoration(
+                                                      color: Colors.blue.shade300,
+                                                      borderRadius: BorderRadius.circular(8.0),
+                                                    ),
+                                                    child: const Icon(
+                                                      Icons.copy,
+                                                      color: ColorConst.background,
+                                                      size: 20.0,
+                                                    ),
+                                                  ))),
+                                          InkWell(
+                                              onTap: () async {
+                                                if (widget.globalData.user.companyAdmin) {
+                                                  ResponseApi? response = await CompanyRepository()
+                                                      .changeCodeCompany(
+                                                          context, widget.globalData.company!.uuid);
+                                                  if (response != null && response.status == 200) {
+                                                    setState(() {
+                                                      widget.globalData.company!.code =
+                                                          response.body['code'];
+                                                    });
+                                                  }
+                                                }
+                                              },
+                                              child: Container(
+                                                width: 35.0,
+                                                height: 35.0,
+                                                decoration: BoxDecoration(
+                                                  color: widget.globalData.user.companyAdmin
+                                                      ? Colors.green.shade300
+                                                      : Colors.green.shade300.withOpacity(0.5),
+                                                  borderRadius: BorderRadius.circular(8.0),
+                                                ),
+                                                child: const Icon(
+                                                  Icons.loop,
+                                                  color: ColorConst.background,
+                                                  size: 20.0,
+                                                ),
+                                              )),
+                                        ],
+                                      )
+                                    ],
                                   ),
-                                );
-                              },
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                children: [
-                                  const Text(
-                                    "Code : ",
+                                ),
+                                Padding(
+                                  padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
+                                  child: const Text(
+                                    "Description : ",
                                     style: TextStyle(
                                       fontSize: 14.0,
                                       fontWeight: FontWeight.bold,
                                     ),
                                   ),
-                                  Expanded(
-                                    child: Text(
-                                      widget.company!.code,
-                                      overflow: TextOverflow.ellipsis,
-                                    ),
-                                  )
-                                ],
-                              ),
-                            )),
-                            InkWell(
-                                onTap: () async {
-                                  ResponseApi? response = await CompanyRepository()
-                                      .changeCodeCompany(context, widget.company.uuid);
-                                  if (response != null && response.status == 200) {
-                                    setState(() {
-                                      widget.company.code = response.body['code'];
-                                    });
-                                  }
-                                },
-                                child: Container(
-                                  width: 35.0,
-                                  height: 35.0,
-                                  decoration: BoxDecoration(
-                                    color: Colors.green.shade300,
-                                    borderRadius: BorderRadius.circular(8.0),
-                                  ),
-                                  child: const Icon(
-                                    Icons.loop,
-                                    size: 20.0,
-                                  ),
-                                )),
-                          ],
-                        ),
-                        Padding(
-                          padding: const EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 10.0),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.max,
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              const Text(
-                                "Description : ",
-                                style: TextStyle(
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
                                 ),
-                              ),
-                              Flexible(
-                                child: AutoSizeText(
-                                  widget.company!.description,
-                                  maxLines: 5,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                                widget.globalData.company!.description.isNotEmpty
+                                    ? AutoSizeText(
+                                        widget.globalData.company!.description,
+                                        maxLines: 10,
+                                        textAlign: TextAlign.justify,
+                                      )
+                                    : const Row(
+                                        mainAxisAlignment: MainAxisAlignment.center,
+                                        children: [
+                                          Text(
+                                            "Pas de description disponible",
+                                            style: TextStyle(
+                                              fontSize: 14.0,
+                                              color: Colors.grey,
+                                            ),
+                                          ),
+                                        ],
+                                      )
+                              ],
+                            ),
+                          )))
                 ],
               ),
             ),
@@ -390,10 +446,15 @@ class _ViewCompanyState extends State<ViewCompany> {
                     decoration: const BoxDecoration(
                       shape: BoxShape.circle,
                     ),
-                    child: Image.network(
-                      widget.company.logoUrl,
-                      fit: BoxFit.cover,
-                    ),
+                    child: widget.globalData.company!.logoUrl.isNotEmpty
+                        ? Image.network(
+                            widget.globalData.company!.logoUrl,
+                            fit: BoxFit.cover,
+                          )
+                        : Image.asset(
+                            'assets/images/tlchargement.png',
+                            fit: BoxFit.cover,
+                          ),
                   ),
                 ),
               ),
@@ -404,33 +465,60 @@ class _ViewCompanyState extends State<ViewCompany> {
                 mainAxisSize: MainAxisSize.max,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Container(
-                    width: 70.0,
-                    height: 30.0,
-                    decoration: BoxDecoration(
-                      color: AppTheme.of(context).secondary,
-                      boxShadow: const [
-                        BoxShadow(
-                          blurRadius: 4.0,
-                          color: Color(0x33000000),
-                          offset: Offset(0.0, 2.0),
+                  widget.globalData.user.companyAdmin
+                      ? Container(
+                          width: 70.0,
+                          height: 30.0,
+                          decoration: BoxDecoration(
+                            color: AppTheme.of(context).secondary,
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 4.0,
+                                color: Color(0x33000000),
+                                offset: Offset(0.0, 2.0),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(30.0),
+                            shape: BoxShape.rectangle,
+                          ),
+                          child: const Align(
+                            alignment: AlignmentDirectional(0.00, 0.00),
+                            child: Text(
+                              "ADMIN",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ),
                         )
-                      ],
-                      borderRadius: BorderRadius.circular(30.0),
-                      shape: BoxShape.rectangle,
-                    ),
-                    child: const Align(
-                      alignment: AlignmentDirectional(0.00, 0.00),
-                      child: Text(
-                        "Admin",
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 12.0,
+                      : Container(
+                          height: 30.0,
+                          decoration: BoxDecoration(
+                            color: AppTheme.of(context).primary,
+                            boxShadow: const [
+                              BoxShadow(
+                                blurRadius: 4.0,
+                                color: Color(0x33000000),
+                                offset: Offset(0.0, 2.0),
+                              )
+                            ],
+                            borderRadius: BorderRadius.circular(30.0),
+                            shape: BoxShape.rectangle,
+                          ),
+                          child: const Align(
+                            alignment: AlignmentDirectional(0.00, 0.00),
+                            child: Text(
+                              "  COLLABORATEUR  ",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 12.0,
+                              ),
+                            ),
+                          ),
                         ),
-                      ),
-                    ),
-                  ),
                   InkWell(
                       onTap: () async {
                         await showDialog(
@@ -463,6 +551,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                         ),
                         child: const Icon(
                           Icons.login,
+                          color: ColorConst.background,
                           size: 20.0,
                         ),
                       )),

@@ -55,6 +55,8 @@ class _CompanyEditWidgetState extends State<CompanyEditWidget> with TickerProvid
         ResponseApi? response =
             await CompanyRepository().updateLogoCompany(context, widget.company, uploadedFileUrl!);
         if (response == null || response.status != 201) {
+          String url = response!.body["logo_url"];
+          widget.company.logoUrl = url;
           SnackConst.SnackCustom("Erreur lors du changement d'image", context,
               duration: 3, color: Colors.red);
         }

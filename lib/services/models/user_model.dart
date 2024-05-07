@@ -6,6 +6,7 @@ class UserModel {
   late String password;
   late String companyUuid;
   late String profileUrl;
+  late bool companyAdmin;
 
   UserModel({
     this.uuid = '',
@@ -15,6 +16,7 @@ class UserModel {
     this.password = '',
     this.profileUrl = '',
     this.companyUuid = '',
+    this.companyAdmin = false,
   });
 
   UserModel.fromJson(map)
@@ -22,6 +24,7 @@ class UserModel {
         email = map["email"] ?? "",
         name = map["name"] ?? "",
         lastname = map["lastName"] ?? "",
+        companyAdmin = map["company_admin"] ?? "",
         companyUuid = map["core_company"] ?? "",
         profileUrl = map["profile_url"] ?? "";
 
