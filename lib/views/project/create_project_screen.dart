@@ -212,60 +212,65 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
     }
   }
 
-  Widget oneImageWidget(String e) => InkWell(
-      onTap: () async {
-        if (e == "") {
-          addPicture();
-        }
-      },
-      child: Row(
-        children: [
-          Stack(children: [
-            Container(
-              width: 90.w,
-              height: 60.w,
-              decoration: BoxDecoration(
-                color: ColorConst.background,
-                borderRadius: BorderRadius.circular(20.0.r),
-              ),
-              child: e == ""
-                  ? Center(
-                      child: SvgPicture.asset(
-                      "assets/icons/camera.svg",
-                      width: 30.w,
-                    ))
-                  : ClipRRect(
-                      borderRadius: BorderRadius.all(Radius.circular(12)),
-                      child: Image.file(
-                        File(e),
-                        fit: BoxFit.cover,
-                        width: ScreenUtil().setWidth(70),
-                        height: ScreenUtil().setWidth(70),
-                      )),
-            ),
-            Visibility(
-                visible: e.isNotEmpty,
-                child: InkWell(
-                  child: Container(
-                      decoration:
-                          BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.r))),
-                      child: SvgPicture.asset(
-                        "assets/icons/close.svg",
-                        width: 15.w,
-                      )),
-                  onTap: () {
-                    Alerts.alert_image(context, () {
-                      setState(() {
-                        imageList[imageList.indexOf(e)] = "";
-                      });
-                    });
-                  },
-                ))
-          ]),
-          Container(width: 8.w)
-        ],
-      ));
+  Widget oneImageWidget(String e, int index) => Padding(
+    padding: EdgeInsets.only(left: 5.w),
+    child: Stack(children: [
+      Container(
+        width: 90.w,
+        height: 60.w,
+        decoration: BoxDecoration(
+          color: ColorConst.background,
+          borderRadius: BorderRadius.circular(20.0.r),
+        ),
+        child: ClipRRect(
+            borderRadius: BorderRadius.all(Radius.circular(12)),
+            child: e.isEmpty
+                ? Center(
+                child: Text((index + 1).toString(),
+                    style: TextStyle(color: ColorConst.primary)))
+                : e.contains("http")
+                ? Image.network(
+              e,
+              width: 50.w,
+              height: 50.w,
+              fit: BoxFit.cover,
+            )
+                : Image.file(
+              File(e),
+              fit: BoxFit.cover,
+              width: ScreenUtil().setWidth(70),
+              height: ScreenUtil().setWidth(70),
+            )),
+      ),
+      Visibility(
+          visible: e.isNotEmpty,
+          child: InkWell(
+            child: Container(
+                decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(2.r))),
+                child: SvgPicture.asset(
+                  "assets/icons/close.svg",
+                  width: 15.w,
+                )),
+            onTap: () {
+              Alerts.alert_image(context, () {
+                setState(() {
+                  imageList[index] = "";
+                });
+              });
+            },
+          ))
+    ]),
+  );
 
+  Widget illustrationsWidget() {
+    return SizedBox(
+        height: 70.w,
+        child: ListView(
+            scrollDirection: Axis.horizontal,
+            shrinkWrap: true,
+            children:
+            imageList.asMap().entries.map((e) => oneImageWidget(e.value, e.key)).toList()));
+  }
   @override
   Widget build(BuildContext context) {
     ScreenUtil.init(
@@ -527,7 +532,6 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                   ),
                   InkWell(
                     onTap: () async {
-                      if (logoImage == "") {
                         final pickedFile = await ImagePicker()
                             .pickImage(source: ImageSource.gallery, requestFullMetadata: false);
                         if (pickedFile != null) {
@@ -535,7 +539,6 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
                             logoImage = pickedFile.path;
                           });
                         }
-                      }
                     },
                     child: Container(
                       width: 70.w,
@@ -565,19 +568,67 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
               ),
             ),
             Padding(
-              padding: EdgeInsets.only(top: 10.w),
-              child: Text(
-                "Carrousel d'images :",
-                style: TextStyle(fontSize: 14.sp),
-              ),
-            ),
-            Container(
+                padding: EdgeInsets.only(top: 10.w),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Row(
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(right: 5.w),
+                          child: Text(
+                            "Carrousel d'images :",
+                            style: TextStyle(fontSize: 14.sp),
+                          ),
+                        ),
+                        Text(
+                          "${imageList.where((file) => file.isNotEmpty).length}",
+                          style: TextStyle(
+                              fontSize: 16.sp, color: Colors.green, fontWeight: FontWeight.bold),
+                        ),
+                        Text(
+                          "/5",
+                          style: TextStyle(
+                              fontSize: 16.sp, color: Colors.green, fontWeight: FontWeight.bold),
+                        ),
+                      ],
+                    ),
+                    Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.0.r),
+                        // color: Colors.green.withOpacity(0.2),
+                        color: ColorConst.tertiary.withOpacity(0.2),
+                      ),
+                      child: IconButton(
+                        icon: const Icon(
+                          Icons.add,
+                          color: Colors.green,
+                        ),
+                        onPressed: () async {
+                          List<XFile> pickedFile = await ImagePicker()
+                              .pickMultiImage(requestFullMetadata: false, imageQuality: 50);
+
+                          if (pickedFile != null) {
+                            for (var i = 0; i < 5; i++) {
+                              for (int j = 0; j < imageList.length; j++) {
+                                if (imageList[j] == "") {
+                                  setState(() {
+                                    imageList[j] = pickedFile[i].path;
+                                  });
+                                  break;
+                                }
+                              }
+                            }
+                          }
+                        },
+                      ),
+                    )
+                  ],
+                )),
+            Padding(
               padding: EdgeInsets.only(top: 10.h),
-              height: 100,
-              child: ListView(
-                  scrollDirection: Axis.horizontal,
-                  shrinkWrap: true,
-                  children: imageList.map((e) => oneImageWidget(e)).toList()),
+              child: illustrationsWidget(),
             ),
             Padding(
               padding: EdgeInsets.symmetric(vertical: 20.h),

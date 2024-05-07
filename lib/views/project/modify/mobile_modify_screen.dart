@@ -329,7 +329,6 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
                   ),
                   InkWell(
                     onTap: () async {
-                      if (logoImage == "") {
                         final pickedFile = await ImagePicker()
                             .pickImage(source: ImageSource.gallery, requestFullMetadata: false);
                         if (pickedFile != null) {
@@ -337,7 +336,6 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
                             logoImage = pickedFile.path;
                           });
                         }
-                      }
                     },
                     child: Container(
                       width: 70.w,
