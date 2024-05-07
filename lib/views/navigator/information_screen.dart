@@ -34,7 +34,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
   @override
   void initState() {
     super.initState();
-    hadCompany = widget.globalData.company != null;
+    hadCompany = widget.globalData.user.companyUuid.isNotEmpty;
     if (hadCompany) {
       initData();
     }
@@ -592,7 +592,8 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                       Padding(
                         padding: EdgeInsets.all(10.w),
                         child: Text(
-                          "Vous n'avez pas encore d'entreprise",
+                          "Cette partie est réservée aux communautés d'entreprise",
+                          textAlign: TextAlign.center,
                           style: TextStyle(
                             color: AppTheme.of(context).primary,
                             fontSize: 16.0,

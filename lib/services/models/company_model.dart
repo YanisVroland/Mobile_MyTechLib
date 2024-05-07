@@ -45,4 +45,11 @@ class Company {
       logoUrl: json['logo_url'] ?? '',
     );
   }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'name': name,
+      'description': description,
+    };
+  }
 }

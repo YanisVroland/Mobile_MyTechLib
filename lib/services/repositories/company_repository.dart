@@ -15,6 +15,24 @@ import '../models/responseAPI_model.dart';
 class CompanyRepository {
   UtilsRepository utilsRepository = UtilsRepository();
 
+  Future<ResponseApi?> createCompany(BuildContext context, Company company) async {
+    try {
+      return utilsRepository.requestPost(context, AppConst.creatCompanyPostEndpoint, company.toJson());
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> joinCompany(BuildContext context, String code) async {
+    try {
+      return utilsRepository.requestPut(context, AppConst.joinCompanyPutEndpoint + code, {});
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   Future<ResponseApi?> getCompany(BuildContext context, String companyUuid) async {
     try {
       return utilsRepository.requestGet(context, AppConst.companyGetEndpoint + companyUuid);

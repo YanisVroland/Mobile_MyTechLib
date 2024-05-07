@@ -721,7 +721,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                         Padding(
                                           padding: EdgeInsets.all(10.w),
                                           child: Text(
-                                            "Vous n'avez pas encore d'entreprise",
+                                            "Cette partie est réservée aux communautés d'entreprise",
+                                            textAlign: TextAlign.center,
                                             style: TextStyle(
                                               color: AppTheme.of(context).primary,
                                               fontSize: 16.0,

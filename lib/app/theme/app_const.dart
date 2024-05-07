@@ -41,6 +41,8 @@ class AppConst {
 
   // -> Company
   static String companyGetEndpoint = '/company/';
+  static String creatCompanyPostEndpoint = '/company/';
+  static String joinCompanyPutEndpoint = '/company/joinCompany/';
   static String companyUsersGetEndpoint = '/company/user/';
   static String companyStatistiqueGetEndpoint = '/company/statistique/';
   static String companyUpdateCodePostEndpoint = '/company/updateCode/';
