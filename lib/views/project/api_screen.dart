@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -14,8 +15,8 @@ import '../../services/repositories/library_repository.dart';
 import '../../services/repositories/project_repository.dart';
 
 class ApiWidget extends StatefulWidget {
-  const ApiWidget(this.project, {Key? key}) : super(key: key);
-  final ApiProject project;
+   ApiWidget(this.project, {Key? key}) : super(key: key);
+   ApiProject project;
 
   @override
   _ApiWidgetState createState() => _ApiWidgetState();
@@ -162,14 +163,14 @@ class _ApiWidgetState extends State<ApiWidget> {
                               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                                 PopupMenuItem<String>(
                                   onTap: () async {
-                                    // Object? newData = await Navigator.pushNamed(
-                                    //     context, AppRouter.MODIFY_LIBRARY,
-                                    //     arguments: [widget.user, widget.library]);
-                                    // if (newData != null) {
-                                    //   setState(() {
-                                    //     widget.library = newData as Library;
-                                    //   });
-                                    // }
+                                    Object? newData = await Navigator.pushNamed(
+                                        context, AppRouter.API_MODIFY_PROJECT,
+                                        arguments: widget.project);
+                                    if (newData != null) {
+                                      setState(() {
+                                        widget.project = newData as ApiProject;
+                                      });
+                                    }
                                   },
                                   child: const Row(
                                     children: [

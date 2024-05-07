@@ -26,6 +26,8 @@ import '../../views/options/privacy_policy_widget.dart';
 import '../../views/options/settings_screen.dart';
 import '../../views/project/api_screen.dart';
 import '../../views/project/mobile_screen.dart';
+import '../../views/project/modify/api_modify_screen.dart';
+import '../../views/project/modify/web_modify_screen.dart';
 import '../../views/project/web_screen.dart';
 import '../../views/splash_screen.dart';
 
@@ -120,6 +122,12 @@ class AppRouter {
       case MOBILE_MODIFY_PROJECT:
         return MaterialPageRoute(
             builder: (_) => MobileModifyProjectWidget(settings.arguments as MobileProject));
+      case API_MODIFY_PROJECT:
+        return MaterialPageRoute(
+            builder: (_) => ApiModifyProjectWidget(settings.arguments as ApiProject));
+      case WEB_MODIFY_PROJECT:
+        return MaterialPageRoute(
+            builder: (_) => WebModifyProjectWidget(settings.arguments as WebProject));
 
       default:
         return MaterialPageRoute(

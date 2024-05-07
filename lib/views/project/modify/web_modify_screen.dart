@@ -15,18 +15,20 @@ import '../../../app/widgets/button_custom.dart';
 import '../../../app/widgets/dropdown_custom.dart';
 import '../../../app/widgets/icon_custom.dart';
 import '../../../app/widgets/textField_custom.dart';
+import '../../../services/models/apiProject_model.dart';
 import '../../../services/models/responseAPI_model.dart';
+import '../../../services/models/webProject_model.dart';
 import '../../../services/repositories/project_repository.dart';
 
-class MobileModifyProjectWidget extends StatefulWidget {
-  MobileModifyProjectWidget(this.project, {Key? key}) : super(key: key);
-  MobileProject project;
+class WebModifyProjectWidget extends StatefulWidget {
+  WebModifyProjectWidget(this.project, {Key? key}) : super(key: key);
+  WebProject project;
 
   @override
   _ModifyProjectWidgetState createState() => _ModifyProjectWidgetState();
 }
 
-class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
+class _ModifyProjectWidgetState extends State<WebModifyProjectWidget> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> secondFormKey = GlobalKey<FormState>();
@@ -38,19 +40,24 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
   List<String> imageList = ["", "", "", "", ""];
   String logoImage = "";
 
-  String? platform;
-  List<String> listePlatform = ["IOS", "ANDROID", "LES DEUX"];
-  late TextEditingController versionOsController;
-  String apkFile = "";
+  late TextEditingController urlWebController;
+  late TextEditingController typeWebController;
   late TextEditingController frameworkController;
+  late TextEditingController bddController;
+  late TextEditingController hostingController;
+  late TextEditingController securityController;
 
   @override
   void initState() {
     super.initState();
-    versionOsController = TextEditingController();
     nameController = TextEditingController();
     descriptionController = TextEditingController();
     frameworkController = TextEditingController();
+    urlWebController = TextEditingController();
+    typeWebController = TextEditingController();
+    bddController = TextEditingController();
+    hostingController = TextEditingController();
+    securityController = TextEditingController();
 
     initData();
   }
@@ -58,11 +65,14 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
   initData() {
     nameController.text = widget.project.name;
     descriptionController.text = widget.project.description;
-    versionOsController.text = widget.project.versionOS;
     frameworkController.text = widget.project.frameworkUsed;
-    platform = widget.project.platform.isNotEmpty ? widget.project.platform : null;
     logoImage = widget.project.logoUrl;
-    apkFile = widget.project.apkUrl;
+    typeWebController.text = widget.project.typeWeb;
+    bddController.text = widget.project.bddUsed;
+    hostingController.text = widget.project.hostingUsed;
+    securityController.text = widget.project.securityUsed;
+    urlWebController.text = widget.project.urlWeb;
+
     for (int i = 0; i < widget.project.illustrationsUrl.length; i++) {
       imageList[i] = widget.project.illustrationsUrl[i];
     }
@@ -71,10 +81,15 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
   @override
   void dispose() {
     super.dispose();
-    versionOsController.dispose();
     nameController.dispose();
     descriptionController.dispose();
     frameworkController.dispose();
+    typeWebController.dispose();
+    bddController.dispose();
+    hostingController.dispose();
+    securityController.dispose();
+    urlWebController.dispose();
+
   }
 
   validButton() async {
@@ -83,9 +98,12 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
 
       widget.project.name = nameController.text;
       widget.project.description = descriptionController.text;
-      widget.project.platform = platform == null ? "" : platform!;
-      widget.project.versionOS = versionOsController.text;
+      widget.project.urlWeb = urlWebController.text;
+      widget.project.bddUsed = bddController.text;
+      widget.project.hostingUsed = hostingController.text;
+      widget.project.securityUsed = securityController.text;
       widget.project.frameworkUsed = frameworkController.text;
+      widget.project.typeWeb = typeWebController.text;
     });
 
     if (imageList.isNotEmpty) {
@@ -109,9 +127,6 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
       if (logoImage.isNotEmpty && logoImage.contains("http") == false) {
         await ProjectRepository().updateLogoProject(context, widget.project.uuid, logoImage);
       }
-      if (apkFile.isNotEmpty && apkFile.contains("http") == false) {
-        await ProjectRepository().updateApkProject(context, widget.project.uuid, apkFile);
-      }
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Projet mis à jour avec succès"),
@@ -128,16 +143,6 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
     setState(() {
       _isFirstFormCollapsed = true;
     });
-  }
-
-  openFileExplorer(BuildContext context) async {
-    FilePickerResult? filePath = await FilePicker.platform.pickFiles();
-
-    if (filePath != null) {
-      setState(() {
-        apkFile = filePath.files.single.path!;
-      });
-    }
   }
 
   Widget oneImageWidget(String e, int index) => Padding(
@@ -209,37 +214,31 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
         designSize: Size(360, 690),
         orientation: Orientation.portrait);
 
-    Widget secondFormMobileWidget = Column(
+    Widget secondFormWEBWidget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(bottom: 20.w),
           child: Center(
-            child: Text("Projet Mobile",
+            child: Text("Projet WEB",
                 style: TextStyle(
                     fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
-          child: CustomDropDown(
-            hintText: "Plateforme cible",
-            listValue: listePlatform,
-            value: platform,
-            validator: Validators.validateDropDownEmpty,
-            action: (dynamic value) {
-              setState(() {
-                platform = value ?? "";
-              });
-            },
+          child: CustomTextField(
+            controller: urlWebController,
+            labelText: "Url du site",
+            hintText: "https://www.example.com",
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
           child: CustomTextField(
-            controller: versionOsController,
-            labelText: "Version minimale du mobile",
-            hintText: "Par exemple, iOS 12, Android 8.0, etc",
+            controller: typeWebController,
+            labelText: "Type de site",
+            hintText: "Site statique, site dynamique, application web progressive (PWA), etc",
           ),
         ),
         Padding(
@@ -247,41 +246,35 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
           child: CustomTextField(
             controller: frameworkController,
             labelText: "Framework utilisé",
-            hintText: "React Native, Flutter, Swift, etc.",
+            hintText: "Angular, React.js, Vue.js, etc.",
           ),
         ),
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: Colors.grey.shade300,
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: bddController,
+            labelText: "Base de données",
+            hintText: "MySQL, PostgreSQL, MongoDB, etc.",
+          ),
         ),
         Padding(
-            padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("APK du projet :"),
-                ElevatedButton(
-                  onPressed: () => openFileExplorer(context),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Sélectionner un fichier',
-                          style: TextStyle(
-                              fontSize: 10.sp, color: apkFile.isEmpty ? null : Colors.green)),
-                      apkFile.isEmpty
-                          ? Icon(Icons.upload_file, size: 18.w)
-                          : Icon(Icons.check, color: Colors.green, size: 18.w),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: Colors.grey.shade300,
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: hostingController,
+            labelText: "Hébergement",
+            hintText: "Cloud (AWS, Azure, etc.), serveur dédié, etc.",
+          ),
         ),
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: securityController,
+            labelText: "Sécurité : ",
+            hintText:
+            "SSL, authentification, autorisation, protection contre les attaques CSRF, XSS, etc.",
+          ),
+        ),
+
       ],
     );
 
@@ -528,7 +521,7 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
                                 EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w, bottom: 20.h),
                             child: Column(
                               children: [
-                                secondFormMobileWidget,
+                                secondFormWEBWidget,
                                 Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10.h),
                                   child: Row(

@@ -3,11 +3,11 @@ import 'package:my_tech_lib/services/models/project_model.dart';
 import '../../app/theme/tools.dart';
 
 class ApiProject extends Project {
-  final String typeApi;
-  final String dataFormat;
-  final String frameworkUsed;
-  final String authUsed;
-  final String documentationUrl;
+   String typeApi;
+   String dataFormat;
+   String frameworkUsed;
+   String authUsed;
+   String documentationUrl;
 
   ApiProject({
     String uuid = '-1',

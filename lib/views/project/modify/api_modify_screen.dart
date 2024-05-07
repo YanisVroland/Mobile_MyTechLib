@@ -15,18 +15,19 @@ import '../../../app/widgets/button_custom.dart';
 import '../../../app/widgets/dropdown_custom.dart';
 import '../../../app/widgets/icon_custom.dart';
 import '../../../app/widgets/textField_custom.dart';
+import '../../../services/models/apiProject_model.dart';
 import '../../../services/models/responseAPI_model.dart';
 import '../../../services/repositories/project_repository.dart';
 
-class MobileModifyProjectWidget extends StatefulWidget {
-  MobileModifyProjectWidget(this.project, {Key? key}) : super(key: key);
-  MobileProject project;
+class ApiModifyProjectWidget extends StatefulWidget {
+  ApiModifyProjectWidget(this.project, {Key? key}) : super(key: key);
+  ApiProject project;
 
   @override
   _ModifyProjectWidgetState createState() => _ModifyProjectWidgetState();
 }
 
-class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
+class _ModifyProjectWidgetState extends State<ApiModifyProjectWidget> {
   final _scaffoldKey = GlobalKey<ScaffoldState>();
   final _formKey = GlobalKey<FormState>();
   GlobalKey<FormState> secondFormKey = GlobalKey<FormState>();
@@ -38,19 +39,22 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
   List<String> imageList = ["", "", "", "", ""];
   String logoImage = "";
 
-  String? platform;
-  List<String> listePlatform = ["IOS", "ANDROID", "LES DEUX"];
-  late TextEditingController versionOsController;
-  String apkFile = "";
   late TextEditingController frameworkController;
+  late TextEditingController documentationController;
+  late TextEditingController typeApiController;
+  late TextEditingController dataFormatController;
+  late TextEditingController authUsedController;
 
   @override
   void initState() {
     super.initState();
-    versionOsController = TextEditingController();
     nameController = TextEditingController();
     descriptionController = TextEditingController();
     frameworkController = TextEditingController();
+    documentationController = TextEditingController();
+    typeApiController = TextEditingController();
+    dataFormatController = TextEditingController();
+    authUsedController = TextEditingController();
 
     initData();
   }
@@ -58,11 +62,12 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
   initData() {
     nameController.text = widget.project.name;
     descriptionController.text = widget.project.description;
-    versionOsController.text = widget.project.versionOS;
     frameworkController.text = widget.project.frameworkUsed;
-    platform = widget.project.platform.isNotEmpty ? widget.project.platform : null;
     logoImage = widget.project.logoUrl;
-    apkFile = widget.project.apkUrl;
+    documentationController.text = widget.project.documentationUrl;
+    typeApiController.text = widget.project.typeApi;
+    dataFormatController.text = widget.project.dataFormat;
+    authUsedController.text = widget.project.authUsed;
     for (int i = 0; i < widget.project.illustrationsUrl.length; i++) {
       imageList[i] = widget.project.illustrationsUrl[i];
     }
@@ -71,10 +76,13 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
   @override
   void dispose() {
     super.dispose();
-    versionOsController.dispose();
     nameController.dispose();
     descriptionController.dispose();
     frameworkController.dispose();
+    documentationController.dispose();
+    typeApiController.dispose();
+    dataFormatController.dispose();
+    authUsedController.dispose();
   }
 
   validButton() async {
@@ -83,9 +91,11 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
 
       widget.project.name = nameController.text;
       widget.project.description = descriptionController.text;
-      widget.project.platform = platform == null ? "" : platform!;
-      widget.project.versionOS = versionOsController.text;
       widget.project.frameworkUsed = frameworkController.text;
+      widget.project.documentationUrl = documentationController.text;
+      widget.project.typeApi = typeApiController.text;
+      widget.project.dataFormat = dataFormatController.text;
+      widget.project.authUsed = authUsedController.text;
     });
 
     if (imageList.isNotEmpty) {
@@ -109,9 +119,6 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
       if (logoImage.isNotEmpty && logoImage.contains("http") == false) {
         await ProjectRepository().updateLogoProject(context, widget.project.uuid, logoImage);
       }
-      if (apkFile.isNotEmpty && apkFile.contains("http") == false) {
-        await ProjectRepository().updateApkProject(context, widget.project.uuid, apkFile);
-      }
 
       ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
         content: Text("Projet mis à jour avec succès"),
@@ -128,16 +135,6 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
     setState(() {
       _isFirstFormCollapsed = true;
     });
-  }
-
-  openFileExplorer(BuildContext context) async {
-    FilePickerResult? filePath = await FilePicker.platform.pickFiles();
-
-    if (filePath != null) {
-      setState(() {
-        apkFile = filePath.files.single.path!;
-      });
-    }
   }
 
   Widget oneImageWidget(String e, int index) => Padding(
@@ -209,37 +206,31 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
         designSize: Size(360, 690),
         orientation: Orientation.portrait);
 
-    Widget secondFormMobileWidget = Column(
+    Widget secondFormAPIWidget = Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Padding(
           padding: EdgeInsets.only(bottom: 20.w),
           child: Center(
-            child: Text("Projet Mobile",
+            child: Text("Projet API",
                 style: TextStyle(
                     fontSize: 20.sp, color: ColorConst.primary, fontWeight: FontWeight.bold)),
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
-          child: CustomDropDown(
-            hintText: "Plateforme cible",
-            listValue: listePlatform,
-            value: platform,
-            validator: Validators.validateDropDownEmpty,
-            action: (dynamic value) {
-              setState(() {
-                platform = value ?? "";
-              });
-            },
+          child: CustomTextField(
+            controller: typeApiController,
+            labelText: "Type d'API",
+            hintText: "RESTful, GraphQL, SOAP, etc.",
           ),
         ),
         Padding(
           padding: EdgeInsets.only(top: 10.h),
           child: CustomTextField(
-            controller: versionOsController,
-            labelText: "Version minimale du mobile",
-            hintText: "Par exemple, iOS 12, Android 8.0, etc",
+            controller: documentationController,
+            labelText: "Url de la documentation",
+            hintText: "https://www.documentation.com",
           ),
         ),
         Padding(
@@ -250,38 +241,23 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
             hintText: "React Native, Flutter, Swift, etc.",
           ),
         ),
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: Colors.grey.shade300,
+        Padding(
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: dataFormatController,
+            labelText: "Formats de données",
+            hintText: "JSON, XML, etc.",
+          ),
         ),
         Padding(
-            padding: EdgeInsets.only(top: 10.h, bottom: 10.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                const Text("APK du projet :"),
-                ElevatedButton(
-                  onPressed: () => openFileExplorer(context),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Text('Sélectionner un fichier',
-                          style: TextStyle(
-                              fontSize: 10.sp, color: apkFile.isEmpty ? null : Colors.green)),
-                      apkFile.isEmpty
-                          ? Icon(Icons.upload_file, size: 18.w)
-                          : Icon(Icons.check, color: Colors.green, size: 18.w),
-                    ],
-                  ),
-                ),
-              ],
-            )),
-        Divider(
-          height: 1,
-          thickness: 1,
-          color: Colors.grey.shade300,
+          padding: EdgeInsets.only(top: 10.h),
+          child: CustomTextField(
+            controller: authUsedController,
+            labelText: "Authentification et autorisation ",
+            hintText: "OAuth, JWT, Basic Auth, etc.",
+          ),
         ),
+
       ],
     );
 
@@ -528,7 +504,7 @@ class _ModifyProjectWidgetState extends State<MobileModifyProjectWidget> {
                                 EdgeInsets.only(top: 10.h, left: 20.w, right: 20.w, bottom: 20.h),
                             child: Column(
                               children: [
-                                secondFormMobileWidget,
+                                secondFormAPIWidget,
                                 Padding(
                                   padding: EdgeInsets.symmetric(vertical: 10.h),
                                   child: Row(

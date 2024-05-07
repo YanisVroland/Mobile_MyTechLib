@@ -2,21 +2,21 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
 import '../../app/theme/color_const.dart';
 import '../../app/theme/snackBar_const.dart';
 import '../../app/widgets/DeleteDialog_custom.dart';
-import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 import '../../services/models/webProject_model.dart';
 import '../../services/repositories/library_repository.dart';
 import '../../services/repositories/project_repository.dart';
 
 class WebWidget extends StatefulWidget {
-  const WebWidget(this.project, {Key? key}) : super(key: key);
-  final WebProject project;
+  WebWidget(this.project, {Key? key}) : super(key: key);
+  WebProject project;
 
   @override
   _WebWidgetState createState() => _WebWidgetState();
@@ -50,8 +50,9 @@ class _WebWidgetState extends State<WebWidget> {
             Navigator.of(context).pop();
           },
           onDelete: () async {
-            await ProjectRepository().deleteProject(context,widget.project);
-            await LibraryRepository().updateLibraryCountProject(context, widget.project.core_library);
+            await ProjectRepository().deleteProject(context, widget.project);
+            await LibraryRepository()
+                .updateLibraryCountProject(context, widget.project.core_library);
 
             Navigator.of(context).pop();
             Navigator.of(context).pop();
@@ -164,14 +165,14 @@ class _WebWidgetState extends State<WebWidget> {
                               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                                 PopupMenuItem<String>(
                                   onTap: () async {
-                                    // Object? newData = await Navigator.pushNamed(
-                                    //     context, AppRouter.MODIFY_LIBRARY,
-                                    //     arguments: [widget.user, widget.library]);
-                                    // if (newData != null) {
-                                    //   setState(() {
-                                    //     widget.library = newData as Library;
-                                    //   });
-                                    // }
+                                    Object? newData = await Navigator.pushNamed(
+                                        context, AppRouter.WEB_MODIFY_PROJECT,
+                                        arguments: widget.project);
+                                    if (newData != null) {
+                                      setState(() {
+                                        widget.project = newData as WebProject;
+                                      });
+                                    }
                                   },
                                   child: const Row(
                                     children: [
@@ -258,7 +259,9 @@ class _WebWidgetState extends State<WebWidget> {
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enlargeCenterPage: true,
                         ),
-                        items: widget.project.illustrationsUrl.where((element) => element !="" ).map((imageUrl) {
+                        items: widget.project.illustrationsUrl
+                            .where((element) => element != "")
+                            .map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
                               return ClipRRect(
