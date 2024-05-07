@@ -301,7 +301,6 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
-                                                    if (logoImage == "") {
                                                       final pickedFile = await ImagePicker()
                                                           .pickImage(
                                                               source: ImageSource.gallery,
@@ -310,7 +309,6 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                                         setState(() {
                                                           logoImage = pickedFile.path;
                                                         });
-                                                      }
                                                     }
                                                   },
                                                   child: Container(
@@ -351,7 +349,6 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
-                                                    if (bannerImage == "") {
                                                       final pickedFile = await ImagePicker()
                                                           .pickImage(
                                                               source: ImageSource.gallery,
@@ -360,7 +357,6 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                                         setState(() {
                                                           bannerImage = pickedFile.path;
                                                         });
-                                                      }
                                                     }
                                                   },
                                                   child: Container(

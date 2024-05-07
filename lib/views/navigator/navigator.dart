@@ -2,15 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/models/company_model.dart';
 
 import '../../app/theme/app_theme.dart';
-import '../../services/models/user_model.dart';
+import '../../services/models/globalData_model.dart';
 import 'company_screen.dart';
 import 'home_screen.dart';
 import 'information_screen.dart';
 
 class NavBarPage extends StatefulWidget {
-  const NavBarPage(this.user,this.company, {Key? key, this.initialPage, this.page}) : super(key: key);
-  final UserModel user;
-  final Company? company;
+  const NavBarPage(this.globalData, {Key? key, this.initialPage, this.page}) : super(key: key);
+  final GlobalData globalData;
   final String? initialPage;
   final Widget? page;
 
@@ -32,9 +31,9 @@ class _NavBarPageState extends State<NavBarPage> {
   @override
   Widget build(BuildContext context) {
     final tabs = {
-      'information': InformationWidget(widget.company,widget.user),
-      'home':  HomeWidget(widget.user),
-      'company': CompanyWidget(widget.user,widget.company),
+      'information': InformationWidget(widget.globalData),
+      'home':  HomeWidget(widget.globalData),
+      'company': CompanyWidget(widget.globalData),
     };
     final currentIndex = tabs.keys.toList().indexOf(_currentPageName);
 

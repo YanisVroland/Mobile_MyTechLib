@@ -2,6 +2,7 @@ import 'dart:async';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/models/company_model.dart';
+import 'package:my_tech_lib/services/models/globalData_model.dart';
 import 'package:my_tech_lib/services/models/responseAPI_model.dart';
 import 'package:my_tech_lib/services/repositories/company_repository.dart';
 import 'package:my_tech_lib/services/repositories/user_repository.dart';
@@ -22,7 +23,8 @@ class _MainScreenState extends State<MainScreen> {
   late bool load;
   int state = -1;
   UserModel? user;
-  Company? company;
+  GlobalData? globalData ;
+
 
   @override
   void initState() {
@@ -35,14 +37,6 @@ class _MainScreenState extends State<MainScreen> {
     if (response != null && response.status == 200) {
       UserModel result = UserModel.fromJson(response.body);
       user = result;
-    }
-  }
-
-  initCompany() async {
-    ResponseApi? response = await CompanyRepository().getCompany(context, user!.companyUuid);
-    if (response != null && response.status == 200) {
-      Company result = Company.fromJson(response.body);
-      company = result;
     }
   }
 
@@ -61,9 +55,14 @@ class _MainScreenState extends State<MainScreen> {
     } else {
       await initUser();
       if (user != null) {
+        globalData = GlobalData(user!);
+        await globalData!.getApiPersonalLibraries(context);
         if(user!.companyUuid != null && user!.companyUuid != ""){
-          await initCompany();
+          await globalData!.getApiCompany(context);
+          await globalData!.getApiCompanyLibraries(context);
+          await globalData!.getApiInformation(context);
         }
+
         setState(() {
           state = 2;
         });
@@ -78,7 +77,7 @@ class _MainScreenState extends State<MainScreen> {
           case (1):
             return const LoginPageWidget();
           case (2):
-            return NavBarPage(user!,company);
+            return NavBarPage(globalData!);
           default:
             return const SplashScreen();
         }

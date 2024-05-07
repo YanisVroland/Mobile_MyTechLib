@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:my_tech_lib/services/models/globalData_model.dart';
 import 'package:my_tech_lib/services/models/mobileProject_model.dart';
 import 'package:my_tech_lib/views/library/create_library_screen.dart';
 import 'package:my_tech_lib/views/library/library_screen.dart';
@@ -74,8 +75,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case HOME:
         return MaterialPageRoute(
-            builder: (_) => NavBarPage((settings.arguments! as List<Object>)[0] as UserModel,
-                (settings.arguments! as List<Object>)[1] as Company));
+            builder: (_) => NavBarPage(settings.arguments as GlobalData));
       case CHANGE_PASSWORD:
         return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
       case EDIT_PROFILE:

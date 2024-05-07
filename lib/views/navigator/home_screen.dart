@@ -10,17 +10,16 @@ import 'package:flutter/material.dart';
 
 import '../../app/theme/tools.dart';
 import '../../app/theme/validators.dart';
-import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/appBar_custom.dart';
 import '../../app/widgets/textField_custom.dart';
+import '../../services/models/globalData_model.dart';
 import '../../services/models/library_model.dart';
 import '../../services/models/responseAPI_model.dart';
-import '../../services/models/user_model.dart';
 import '../../services/repositories/library_repository.dart';
 
 class HomeWidget extends StatefulWidget {
-  const HomeWidget(this.user, {Key? key}) : super(key: key);
-  final UserModel user;
+  const HomeWidget(this.globalData, {Key? key}) : super(key: key);
+  final GlobalData globalData;
 
   @override
   _HomeWidgetState createState() => _HomeWidgetState();
@@ -35,7 +34,6 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
   List<Library> globalListLibrairies = [];
   List<Library> searchListLibrairies = [];
   late bool inCompany;
-  bool _loader = true;
 
   int get tabBarCurrentIndex => tabBarController.index;
 
@@ -43,11 +41,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
   void initState() {
     super.initState();
 
-    // TODO ajouter vraie variable
-    inCompany = widget.user.companyUuid.isNotEmpty;
     initData();
-
-    textController = TextEditingController();
 
     tabBarController = TabController(
       vsync: this,
@@ -56,14 +50,10 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     )..addListener(() => setState(() {}));
   }
 
-  Future<void> initData() async {
-    setState(() {
-      _loader = true;
-      listPersonalLibrairies.clear();
-      globalListLibrairies.clear();
-      listCompanyLibrairies.clear();
-      searchListLibrairies.clear();
-    });
+  Future<void> refreshData() async {
+    searchListLibrairies.clear();
+    listPersonalLibrairies.clear();
+    listCompanyLibrairies.clear();
     await getPersonalLibraries();
     if (inCompany) {
       await getCompanyLibraries();
@@ -82,11 +72,40 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         }
       }
     });
+  }
+
+  Future<void> initData() async {
+    setState(() {
+      searchListLibrairies.clear();
+      listPersonalLibrairies.clear();
+      listCompanyLibrairies.clear();
+
+      inCompany = widget.globalData.user.companyUuid.isNotEmpty;
+
+      listPersonalLibrairies = widget.globalData.listPersonalLibrairies;
+      listCompanyLibrairies = widget.globalData.listCompanyLibrairies;
+
+      searchListLibrairies.addAll(listPersonalLibrairies);
+      searchListLibrairies.addAll(listCompanyLibrairies);
+
+      textController = TextEditingController();
+    });
+
+    searchListLibrairies.sort((a, b) {
+      if (a.updatedAt != null && b.updatedAt != null) {
+        return b.updatedAt!.compareTo(a.updatedAt!);
+      } else {
+        if (a.updatedAt == null && b.updatedAt == null) {
+          return 0;
+        } else if (a.updatedAt == null) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+    });
 
     globalListLibrairies = searchListLibrairies;
-    setState(() {
-      _loader = false;
-    });
   }
 
   Future<void> getPersonalLibraries() async {
@@ -95,47 +114,23 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       List<dynamic> result = await response.body.map((doc) => Library.fromJson(doc)).toList();
 
       setState(() {
-        listPersonalLibrairies.addAll(result.cast<Library>());
-        searchListLibrairies.addAll(result.cast<Library>());
-      });
-      listPersonalLibrairies.sort((a, b) {
-        if (a.updatedAt != null && b.updatedAt != null) {
-          return b.updatedAt!.compareTo(a.updatedAt!);
-        } else {
-          if (a.updatedAt == null && b.updatedAt == null) {
-            return 0;
-          } else if (a.updatedAt == null) {
-            return -1;
-          } else {
-            return 1;
-          }
-        }
+        listPersonalLibrairies = result.cast<Library>();
+        widget.globalData.listPersonalLibrairies = listPersonalLibrairies;
+        searchListLibrairies = result.cast<Library>();
       });
     }
   }
 
   Future<void> getCompanyLibraries() async {
     ResponseApi? response =
-        await LibraryRepository().getCompanyLibrary(context, widget.user.companyUuid);
+        await LibraryRepository().getCompanyLibrary(context, widget.globalData.user.companyUuid);
     if (response != null && response.status == 200) {
       List<dynamic> result = await response.body.map((doc) => Library.fromJson(doc)).toList();
 
       setState(() {
-        listCompanyLibrairies.addAll(result.cast<Library>());
+        listCompanyLibrairies = result.cast<Library>();
+        widget.globalData.listCompanyLibrairies = listCompanyLibrairies;
         searchListLibrairies.addAll(result.cast<Library>());
-      });
-      listCompanyLibrairies.sort((a, b) {
-        if (a.updatedAt != null && b.updatedAt != null) {
-          return b.updatedAt!.compareTo(a.updatedAt!);
-        } else {
-          if (a.updatedAt == null && b.updatedAt == null) {
-            return 0;
-          } else if (a.updatedAt == null) {
-            return -1;
-          } else {
-            return 1;
-          }
-        }
       });
     }
   }
@@ -168,7 +163,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                         children: [
                           const Text(
                             "Code de partage :",
-                            style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16 ),
+                            style: TextStyle(
+                                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 16),
                           ),
                           Text(
                             " ${response.body["code"]}",
@@ -207,8 +203,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       backgroundColor: AppTheme.of(context).background,
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          await Navigator.pushNamed(context, AppRouter.CREATE_LIBRARY, arguments: widget.user);
-          await initData();
+          await Navigator.pushNamed(context, AppRouter.CREATE_LIBRARY,
+              arguments: widget.globalData.user);
+          await refreshData();
         },
         backgroundColor: AppTheme.of(context).primary,
         child: const Icon(
@@ -217,7 +214,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
           size: 32.0,
         ),
       ),
-      appBar: CustomAppBar(widget.user),
+      appBar: CustomAppBar(widget.globalData.user),
       body: SafeArea(
         child: Column(
           mainAxisSize: MainAxisSize.max,
@@ -298,20 +295,20 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                           child: TabBarView(
                             controller: tabBarController,
                             children: [
-                              _loader
+                              globalListLibrairies.isEmpty
                                   ? Center(
                                       child: Lottie.asset(
-                                        'assets/lottie/list_loader.json',
+                                        'assets/lottie/list_empty.json',
                                       ),
                                     )
-                                  : globalListLibrairies.isEmpty
-                                      ? Center(
-                                          child: Lottie.asset(
-                                            'assets/lottie/list_empty.json',
-                                          ),
-                                        )
-                                      : Padding(
-                                          padding: EdgeInsets.all(10.w),
+                                  : Padding(
+                                      padding: EdgeInsets.all(10.w),
+                                      child: RefreshIndicator(
+                                        color: AppTheme.of(context).primary,
+                                        backgroundColor: AppTheme.of(context).secondaryBackground,
+                                        onRefresh: refreshData,
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context).size.height,
                                           child: ListView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
@@ -324,9 +321,11 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                 child: InkWell(
                                                   onTap: () async {
                                                     await Navigator.pushNamed(
-                                                        context, AppRouter.LIBRARY,
-                                                        arguments: [widget.user, element]);
-                                                    await initData();
+                                                        context, AppRouter.LIBRARY, arguments: [
+                                                      widget.globalData.user,
+                                                      element
+                                                    ]);
+                                                    await refreshData();
                                                   },
                                                   child: Container(
                                                     height: 70.0,
@@ -496,23 +495,24 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                             },
                                           ),
                                         ),
-                              _loader
-                                  ? Expanded(
-                                      child: Center(
-                                        child: Lottie.asset(
-                                          'assets/lottie/list_loader.json',
-                                        ),
                                       ),
-                                    )
-                                  : inCompany
-                                      ? listCompanyLibrairies.isEmpty
-                                          ? Center(
-                                              child: Lottie.asset(
-                                                'assets/lottie/list_empty.json',
-                                              ),
-                                            )
-                                          : Padding(
-                                              padding: EdgeInsets.all(10.w),
+                                    ),
+                              inCompany
+                                  ? listCompanyLibrairies.isEmpty
+                                      ? Center(
+                                          child: Lottie.asset(
+                                            'assets/lottie/list_empty.json',
+                                          ),
+                                        )
+                                      : Padding(
+                                          padding: EdgeInsets.all(10.w),
+                                          child: RefreshIndicator(
+                                            color: AppTheme.of(context).primary,
+                                            backgroundColor:
+                                                AppTheme.of(context).secondaryBackground,
+                                            onRefresh: refreshData,
+                                            child: SizedBox(
+                                              height: MediaQuery.of(context).size.height,
                                               child: ListView.builder(
                                                 padding: EdgeInsets.zero,
                                                 shrinkWrap: true,
@@ -526,9 +526,11 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                     child: InkWell(
                                                       onTap: () async {
                                                         await Navigator.pushNamed(
-                                                            context, AppRouter.LIBRARY,
-                                                            arguments: [widget.user, element]);
-                                                        await initData();
+                                                            context, AppRouter.LIBRARY, arguments: [
+                                                          widget.globalData.user,
+                                                          element
+                                                        ]);
+                                                        await refreshData();
                                                       },
                                                       child: Container(
                                                         height: 70.0,
@@ -705,43 +707,44 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                     ),
                                                   );
                                                 },
-                                              ))
-                                      : Column(
-                                          children: [
-                                            Lottie.asset(
-                                              'assets/lottie/without_company.json',
-                                              height: 200.h,
-                                              width: 300.w,
-                                            ),
-                                            Padding(
-                                              padding: EdgeInsets.all(10.w),
-                                              child: Text(
-                                                "Vous n'avez pas encore d'entreprise",
-                                                style: TextStyle(
-                                                  color: AppTheme.of(context).primary,
-                                                  fontSize: 16.0,
-                                                  fontWeight: FontWeight.w500,
-                                                ),
                                               ),
                                             ),
-                                          ],
-                                        ),
-                              _loader
-                                  ? Expanded(
-                                      child: Center(
-                                        child: Lottie.asset(
-                                          'assets/lottie/list_loader.json',
-                                        ),
-                                      ),
-                                    )
-                                  : listPersonalLibrairies.isEmpty
-                                      ? Center(
-                                          child: Lottie.asset(
-                                            'assets/lottie/list_empty.json',
                                           ),
                                         )
-                                      : Padding(
+                                  : Column(
+                                      children: [
+                                        Lottie.asset(
+                                          'assets/lottie/without_company.json',
+                                          height: 200.h,
+                                          width: 300.w,
+                                        ),
+                                        Padding(
                                           padding: EdgeInsets.all(10.w),
+                                          child: Text(
+                                            "Vous n'avez pas encore d'entreprise",
+                                            style: TextStyle(
+                                              color: AppTheme.of(context).primary,
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.w500,
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                              listPersonalLibrairies.isEmpty
+                                  ? Center(
+                                      child: Lottie.asset(
+                                        'assets/lottie/list_empty.json',
+                                      ),
+                                    )
+                                  : Padding(
+                                      padding: EdgeInsets.all(10.w),
+                                      child: RefreshIndicator(
+                                        color: AppTheme.of(context).primary,
+                                        backgroundColor: AppTheme.of(context).secondaryBackground,
+                                        onRefresh: refreshData,
+                                        child: SizedBox(
+                                          height: MediaQuery.of(context).size.height,
                                           child: ListView.builder(
                                             padding: EdgeInsets.zero,
                                             shrinkWrap: true,
@@ -754,9 +757,11 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                 child: InkWell(
                                                   onTap: () async {
                                                     await Navigator.pushNamed(
-                                                        context, AppRouter.LIBRARY,
-                                                        arguments: [widget.user, element]);
-                                                    await initData();
+                                                        context, AppRouter.LIBRARY, arguments: [
+                                                      widget.globalData.user,
+                                                      element
+                                                    ]);
+                                                    await refreshData();
                                                   },
                                                   child: Container(
                                                     height: 70.0,
@@ -926,6 +931,8 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                             },
                                           ),
                                         ),
+                                      ),
+                                    ),
                             ],
                           ),
                         ),

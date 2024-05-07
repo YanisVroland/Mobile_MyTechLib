@@ -1,6 +1,7 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
 import 'package:my_tech_lib/services/models/company_model.dart';
+import 'package:my_tech_lib/services/models/globalData_model.dart';
 
 import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
@@ -9,13 +10,11 @@ import '../../app/theme/tools.dart';
 import '../../app/widgets/appBar_custom.dart';
 import '../../services/models/information_model.dart';
 import '../../services/models/responseAPI_model.dart';
-import '../../services/models/user_model.dart';
 import '../../services/repositories/information_repository.dart';
 
 class InformationWidget extends StatefulWidget {
-  const InformationWidget(this.company, this.user, {Key? key}) : super(key: key);
-  final Company? company;
-  final UserModel user;
+  const InformationWidget(this.globalData, {Key? key}) : super(key: key);
+  final GlobalData globalData;
 
   @override
   _InformationWidgetState createState() => _InformationWidgetState();
@@ -27,7 +26,6 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Information> listInformation = [];
   List<Information> listInformationTmp = [];
-  bool _loader = true;
   bool hadCompany = false;
   int nbNewInformation = 0;
   int nbDeleteInformation = 0;
@@ -36,19 +34,15 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
   @override
   void initState() {
     super.initState();
-    hadCompany = widget.company != null;
+    hadCompany = widget.globalData.company != null;
     if (hadCompany) {
-      initInformation();
+      initData();
     }
   }
 
-  Future<void> initInformation() async {
-    setState(() {
-      _loader = true;
-    });
-
-    ResponseApi? response =
-        await InformationRepository().getInformationByCompany(context, widget.company!.uuid);
+  Future<void> refreshData() async {
+    ResponseApi? response = await InformationRepository()
+        .getInformationByCompany(context, widget.globalData.company!.uuid);
     if (response != null && response.status == 200) {
       List<dynamic> result = await response.body.map((doc) => Information.fromJson(doc)).toList();
 
@@ -58,9 +52,15 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
         updateGlobalList();
       });
     }
+  }
 
+  Future<void> initData() async {
+    listInformationTmp.clear();
+    listInformation.clear();
+    listInformation = widget.globalData.listInformation;
+    listInformationTmp = widget.globalData.listInformation;
     setState(() {
-      _loader = false;
+      updateGlobalList();
     });
   }
 
@@ -115,7 +115,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: AppTheme.of(context).background,
-      appBar: CustomAppBar(widget.user),
+      appBar: CustomAppBar(widget.globalData.user),
       body: SafeArea(
         top: true,
         child: Column(
@@ -404,61 +404,61 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                 )),
             hadCompany
                 ? Expanded(
-                    child: _loader
-                        ? Center(
-                            child: Lottie.asset(
-                              'assets/lottie/list_loader.json',
-                            ),
-                          )
-                        : Padding(
-                            padding: EdgeInsets.only(left: 10.w, right: 10.w),
-                            child: listInformation.isEmpty
-                                ? Center(
-                                    child: Lottie.asset(
-                                      'assets/lottie/list_empty.json',
-                                    ),
-                                  )
-                                : ListView.builder(
-                                    padding: EdgeInsets.zero,
-                                    shrinkWrap: true,
-                                    scrollDirection: Axis.vertical,
-                                    itemCount: listInformation.length,
-                                    itemBuilder: (context, listViewIndex) {
-                                      final element = listInformation[listViewIndex];
-                                      return Padding(
-                                        padding: EdgeInsets.only(bottom: 10.h),
-                                        child: Container(
-                                          height: 70.0,
-                                          decoration: BoxDecoration(
-                                            color: AppTheme.of(context).secondaryBackground,
-                                            boxShadow: const [
-                                              BoxShadow(
-                                                blurRadius: 4.0,
-                                                color: Color(0x3F14181B),
-                                                offset: Offset(0.0, 3.0),
-                                              )
-                                            ],
-                                            borderRadius: BorderRadius.circular(8.0),
-                                          ),
-                                          child: Padding(
-                                              padding: EdgeInsets.only(top: 5.w, bottom: 5.w),
-                                              child: Row(
-                                                mainAxisSize: MainAxisSize.min,
-                                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                crossAxisAlignment: CrossAxisAlignment.start,
-                                                children: [
-                                                  Expanded(
-                                                    child: Padding(
-                                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                                          12.0, 0.0, 0.0, 0.0),
-                                                      child: Column(
-                                                        mainAxisSize: MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment.spaceBetween,
-                                                        crossAxisAlignment:
-                                                            CrossAxisAlignment.start,
-                                                        children: [
-                                                          Row(children: [
+                    child: Padding(
+                      padding: EdgeInsets.only(left: 10.w, right: 10.w),
+                      child: listInformation.isEmpty
+                          ? Center(
+                              child: Lottie.asset(
+                                'assets/lottie/list_empty.json',
+                              ),
+                            )
+                          : RefreshIndicator(
+                              color: AppTheme.of(context).primary,
+                              backgroundColor: AppTheme.of(context).secondaryBackground,
+                              onRefresh: refreshData,
+                              child: SizedBox(
+                                height: MediaQuery.of(context).size.height,
+                                child: ListView.builder(
+                                  padding: EdgeInsets.zero,
+                                  shrinkWrap: true,
+                                  scrollDirection: Axis.vertical,
+                                  itemCount: listInformation.length,
+                                  itemBuilder: (context, listViewIndex) {
+                                    final element = listInformation[listViewIndex];
+                                    return Padding(
+                                      padding: EdgeInsets.only(bottom: 10.h),
+                                      child: Container(
+                                        height: 70.0,
+                                        decoration: BoxDecoration(
+                                          color: AppTheme.of(context).secondaryBackground,
+                                          boxShadow: const [
+                                            BoxShadow(
+                                              blurRadius: 4.0,
+                                              color: Color(0x3F14181B),
+                                              offset: Offset(0.0, 3.0),
+                                            )
+                                          ],
+                                          borderRadius: BorderRadius.circular(8.0),
+                                        ),
+                                        child: Padding(
+                                            padding: EdgeInsets.only(top: 5.w, bottom: 5.w),
+                                            child: Row(
+                                              mainAxisSize: MainAxisSize.min,
+                                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                              crossAxisAlignment: CrossAxisAlignment.start,
+                                              children: [
+                                                Expanded(
+                                                  child: Padding(
+                                                    padding: const EdgeInsetsDirectional.fromSTEB(
+                                                        12.0, 0.0, 0.0, 0.0),
+                                                    child: Column(
+                                                      mainAxisSize: MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                      MainAxisAlignment.spaceBetween,
+                                                      crossAxisAlignment: CrossAxisAlignment.start,
+                                                      children: [
+                                                        Row(
+                                                          children: [
                                                             Text(
                                                               element.core_library!.name,
                                                               style: const TextStyle(
@@ -468,9 +468,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                             if (element.isProject)
                                                               Padding(
                                                                 padding: EdgeInsets.only(left: 5.w),
-                                                                child: const Text(
-                                                                  " -> "
-                                                                ),
+                                                                child: const Text(" -> "),
                                                               ),
                                                             if (element.isProject)
                                                               Padding(
@@ -482,107 +480,107 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                                       fontWeight: FontWeight.bold),
                                                                 ),
                                                               ),
-                                                          ],),
-                                                          Text(
-                                                            "Par : " + element.createdBy,
-                                                            style: const TextStyle(
-                                                              fontSize: 12.0,
-                                                            ),
+                                                          ],
+                                                        ),
+                                                        Text(
+                                                          "Par : " + element.createdBy,
+                                                          style: const TextStyle(
+                                                            fontSize: 12.0,
                                                           ),
-                                                        ],
-                                                      ),
+                                                        ),
+                                                      ],
                                                     ),
                                                   ),
-                                                  Expanded(
-                                                      child: Padding(
-                                                    padding: const EdgeInsetsDirectional.fromSTEB(
-                                                        12.0, 0.0, 12.0, 0.0),
-                                                    child: Column(
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.end,
-                                                      children: [
-                                                        Row(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          mainAxisAlignment: MainAxisAlignment.end,
-                                                          children: [
-                                                            if (element.isProject)
-                                                              Padding(
-                                                                padding:
-                                                                    EdgeInsets.only(right: 5.w),
-                                                                child: Container(
-                                                                  width: 50.w,
-                                                                  height: 14.h,
-                                                                  decoration: BoxDecoration(
-                                                                    color: AppTheme.of(context)
-                                                                        .secondary,
-                                                                    borderRadius:
-                                                                        BorderRadius.circular(8.0),
-                                                                  ),
-                                                                  child: const Center(
-                                                                    child: Text(
-                                                                      "PROJET",
-                                                                      style: TextStyle(
-                                                                        fontSize: 10,
-                                                                        color: Colors.white,
-                                                                        fontWeight: FontWeight.bold,
+                                                ),
+                                                Expanded(
+                                                    child: Padding(
+                                                      padding: const EdgeInsetsDirectional.fromSTEB(
+                                                          12.0, 0.0, 12.0, 0.0),
+                                                      child: Column(
+                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                                        crossAxisAlignment: CrossAxisAlignment.end,
+                                                        children: [
+                                                          Row(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            children: [
+                                                              if (element.isProject)
+                                                                Padding(
+                                                                  padding: EdgeInsets.only(right: 5.w),
+                                                                  child: Container(
+                                                                    width: 50.w,
+                                                                    height: 14.h,
+                                                                    decoration: BoxDecoration(
+                                                                      color:
+                                                                      AppTheme.of(context).secondary,
+                                                                      borderRadius:
+                                                                      BorderRadius.circular(8.0),
+                                                                    ),
+                                                                    child: const Center(
+                                                                      child: Text(
+                                                                        "PROJET",
+                                                                        style: TextStyle(
+                                                                          fontSize: 10,
+                                                                          color: Colors.white,
+                                                                          fontWeight: FontWeight.bold,
+                                                                        ),
                                                                       ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            Container(
-                                                              width: 50.w,
-                                                              height: 14.h,
-                                                              decoration: BoxDecoration(
-                                                                color: AppTheme.of(context).primary,
-                                                                borderRadius:
-                                                                    BorderRadius.circular(8.0),
-                                                              ),
-                                                              child: Center(
-                                                                child: Text(
-                                                                  element.type,
-                                                                  style: const TextStyle(
-                                                                    fontSize: 10,
-                                                                    color: Colors.white,
-                                                                    fontWeight: FontWeight.bold,
+                                                              Container(
+                                                                width: 50.w,
+                                                                height: 14.h,
+                                                                decoration: BoxDecoration(
+                                                                  color: AppTheme.of(context).primary,
+                                                                  borderRadius:
+                                                                  BorderRadius.circular(8.0),
+                                                                ),
+                                                                child: Center(
+                                                                  child: Text(
+                                                                    element.type,
+                                                                    style: const TextStyle(
+                                                                      fontSize: 10,
+                                                                      color: Colors.white,
+                                                                      fontWeight: FontWeight.bold,
+                                                                    ),
                                                                   ),
                                                                 ),
                                                               ),
-                                                            ),
-                                                          ],
-                                                        ),
-                                                        Column(
-                                                          mainAxisSize: MainAxisSize.min,
-                                                          mainAxisAlignment:
-                                                          MainAxisAlignment.end,
-                                                          crossAxisAlignment:
-                                                          CrossAxisAlignment.end,
-                                                          children: [
-                                                            const Text(
-                                                              "Mise à jour :",
-                                                              style: TextStyle(
-                                                                fontSize: 10.0,
-                                                                color: Color(0xFF8E8E93),
+                                                            ],
+                                                          ),
+                                                          Column(
+                                                            mainAxisSize: MainAxisSize.min,
+                                                            mainAxisAlignment: MainAxisAlignment.end,
+                                                            crossAxisAlignment: CrossAxisAlignment.end,
+                                                            children: [
+                                                              const Text(
+                                                                "Mise à jour :",
+                                                                style: TextStyle(
+                                                                  fontSize: 10.0,
+                                                                  color: Color(0xFF8E8E93),
+                                                                ),
                                                               ),
-                                                            ),  Text(
-                                                              Tools.formatDate(element.createdAt!),
-                                                              style: TextStyle(
-                                                                  fontSize: 12.0,
-                                                                  color: AppTheme.of(context).primary),
-                                                            ),
-                                                          ],
-                                                        )
-                                                      ],
-                                                    ),
-                                                  )),
-                                                ],
-                                              )),
-                                        ),
-                                      );
-                                    },
-                                  ),
-                          ),
+                                                              Text(
+                                                                Tools.formatDate(element.createdAt!),
+                                                                style: TextStyle(
+                                                                    fontSize: 12.0,
+                                                                    color: AppTheme.of(context).primary),
+                                                              ),
+                                                            ],
+                                                          )
+                                                        ],
+                                                      ),
+                                                    )),
+                                              ],
+                                            )),
+                                      ),
+                                    );
+                                  },
+                                ),
+                              )
+                            ),
+                    ),
                   )
                 : Column(
                     children: [
