@@ -39,20 +39,16 @@ class UserRepository {
 
   Future<ResponseApi?> signUp(BuildContext context, UserModel user) async {
     try {
-      var requestBody = {
-        'email': user.email.trim(),
-        'name': user.name.trim(),
-        'lastname': user.lastname.trim(),
-        'password': user.password.trim(),
-      };
+
       ResponseApi? response =
-          await utilsRepository.requestPost(context, AppConst.signUpPostEndpoint, requestBody);
+          await utilsRepository.requestPost(context, AppConst.signUpPostEndpoint, user.toJson());
 
       if (response != null && response.status == 201) {
         SnackConst.SnackCustom(AppConst.userCreatedMessage, context,
             duration: 3, color: Colors.green);
         return await signIn(context, user.email, user.password);
       }
+
       return response;
     } catch (e) {
       log(e.toString());

@@ -126,20 +126,14 @@ class UtilsRepository {
     print("$endpoint => Status : ${response.statusCode} Body : ${response.body}");
 
     if (response.statusCode >= 200 && response.statusCode <= 204) {
-      // if (response.statusCode == 204) {
-      //   SnackConst.SnackCustom(AppConst.missingDataMessage, context,
-      //       duration: 3, color: Colors.blue);
-      // }
       return ResponseApi.fromRequest(response);
     } else {
       if (response.body.contains("message")) {
-        //TODO A CLEANCODE
         if(jsonDecode(response.body)["message"] == "JWT expired" || jsonDecode(response.body)["message"] == "JWT is invalid") {
-          SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
-              duration: 3, color: Colors.red);
+          SnackConst.SnackCustom("Session  expirée, veuillez vous reconnecter", context, duration: 3, color: Colors.red);
           LocalPref().saveString("access_token", "");
           LocalPref().saveString("refresh_token", "");
-          LocalPref().saveString("user", "");
+          LocalPref().saveString("uuid_user", "");
           Navigator.pushNamedAndRemoveUntil(context, "/Login", (route) => false);
         }
         // SnackConst.SnackCustom(jsonDecode(response.body)["message"], context,
@@ -148,5 +142,7 @@ class UtilsRepository {
         SnackConst.SnackCustom(AppConst.errorApiMessage, context, duration: 3);
       }
     }
+    return ResponseApi.fromRequest(response);
+
   }
 }

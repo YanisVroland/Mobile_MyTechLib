@@ -111,6 +111,7 @@ class _ForgotPasswordWidgetState extends State<ForgotPasswordWidget> {
                       )),
                   CustomTextField(
                     controller: emailAddressController,
+                    keyboardType: TextInputType.emailAddress,
                     obscureText: false,
                     labelText: "Adresse e-mail",
                     hintText: "Entrer votre adresse e-mail...",

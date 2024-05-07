@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
+import '../../app/theme/snackBar_const.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
 import '../../app/widgets/textField_custom.dart';
@@ -53,19 +54,42 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
     passwordConfirmController.dispose();
   }
 
-  validButton() async {
-    UserModel user = UserModel(
+  Future<void> validButton() async {
+    final UserModel user = UserModel(
       email: emailAddressController.text,
       name: firstNameController.text,
       lastname: lastNameController.text,
       password: passwordCreateController.text,
     );
-    UserRepository userRepository = UserRepository();
-    ResponseApi? response = await userRepository.signUp(context, user);
-    if (response != null && response.status == 200) {
-      String uuid = response.body['uuid_user'];
-      Navigator.pushNamedAndRemoveUntil(context, AppRouter.MAIN, (Route<dynamic> route) => false,
-          arguments: uuid);    }
+
+    final ResponseApi? response = await UserRepository().signUp(context, user);
+    if (response != null) {
+      if (response.status == 200) {
+        final String uuid = response.body['uuid_user'];
+        _navigateToMainScreen(uuid);
+      } else {
+        _handleError(response.body['message']);
+      }
+    } else {
+      _handleError('Une erreur est survenue lors de la création de votre compte.');
+    }
+  }
+
+  void _navigateToMainScreen(String uuid) {
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      AppRouter.MAIN,
+      (Route<dynamic> route) => false,
+      arguments: uuid,
+    );
+  }
+
+  void _handleError(String errorMessage) {
+    final errorMessageToShow =
+        errorMessage == "A user with this email address has already been registered"
+            ? "Un utilisateur avec cette adresse email est déjà enregistré."
+            : "Une erreur est survenue lors de la création de votre compte.";
+    SnackConst.SnackCustom(errorMessageToShow, context, duration: 3, color: Colors.red);
   }
 
   @override
@@ -132,6 +156,7 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                   key: const Key('emailTextField'),
                   controller: emailAddressController,
                   obscureText: false,
+                  keyboardType: TextInputType.emailAddress,
                   labelText: "Adresse e-mail",
                   hintText: "Entrer votre adresse e-mail...",
                   validator: Validators.validateEmail,
@@ -233,6 +258,9 @@ class _RegisterAccountWidgetState extends State<RegisterAccountWidget> {
                         ),
                         const Text(
                           "Vous avez déjà un compte ?",
+                          style: TextStyle(
+                            fontSize: 12.0,
+                          ),
                         ),
                       ],
                     ),

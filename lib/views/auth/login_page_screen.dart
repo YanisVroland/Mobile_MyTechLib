@@ -49,6 +49,12 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
       String uuid = response.body['uuid_user'];
       Navigator.pushNamedAndRemoveUntil(context, AppRouter.MAIN, (Route<dynamic> route) => false,
           arguments: uuid);
+    }else{
+      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Email ou mot de passe incorrect'),
+        backgroundColor: Colors.red,
+        duration: Duration(seconds: 3),
+      ));
     }
   }
 
@@ -84,6 +90,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
           CustomTextField(
             key: const Key('emailTextField'),
             controller: emailAddressLoginController,
+            keyboardType: TextInputType.emailAddress,
             labelText: "Email",
             hintText: "Entrer votre email",
             validator: Validators.validateEmail,

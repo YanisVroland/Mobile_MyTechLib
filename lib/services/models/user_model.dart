@@ -24,4 +24,13 @@ class UserModel {
         lastname = map["lastName"] ?? "",
         companyUuid = map["core_company"] ?? "",
         profileUrl = map["profile_url"] ?? "";
+
+  Map<String, dynamic> toJson() {
+    return {
+      "email": email.trim(),
+      "name": name.trim(),
+      "lastName": lastname.trim(),
+      "password": password.trim(),
+    };
+  }
 }

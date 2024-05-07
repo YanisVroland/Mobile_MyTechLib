@@ -85,6 +85,7 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
               padding: EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 0.0),
               child: TextFormField(
                 controller: emailAddressController,
+                keyboardType: TextInputType.emailAddress,
                 obscureText: false,
                 decoration: InputDecoration(
                   labelText: "Email",
