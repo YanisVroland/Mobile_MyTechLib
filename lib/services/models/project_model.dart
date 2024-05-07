@@ -1,3 +1,5 @@
+import 'package:my_tech_lib/services/models/library_model.dart';
+
 import '../../app/theme/tools.dart';
 
 class Project {
@@ -8,6 +10,7 @@ class Project {
   final String? core_company;
   final String? companyName;
   final String core_library;
+   Library? library;
   final String version;
   final String logoUrl;
    List<dynamic> illustrationsUrl;
@@ -29,6 +32,7 @@ class Project {
     this.createdBy = '',
     this.createdAt = '',
     this.updatedAt = '',
+    this.library,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) {

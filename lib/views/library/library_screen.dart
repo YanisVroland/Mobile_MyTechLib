@@ -15,8 +15,10 @@ import '../../app/theme/validators.dart';
 import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 import '../../app/widgets/textField_custom.dart';
+import '../../services/models/information_model.dart';
 import '../../services/models/library_model.dart';
 import '../../services/models/responseAPI_model.dart';
+import '../../services/repositories/information_repository.dart';
 import '../../services/repositories/library_repository.dart';
 import '../../services/repositories/project_repository.dart';
 
@@ -77,10 +79,18 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
         await ProjectRepository().getProjectByLibrary(context, widget.library.uuid);
     if (response != null && response.status == 200) {
       searchListMobileProject.clear();
-      List<dynamic> resultApi = await response.body.where((doc) => doc['type'] == 'API').map((doc) => ApiProject.fromJson(doc)).toList();
-      List<dynamic> resultWeb = await response.body.where((doc) => doc['type'] == 'WEB').map((doc) => WebProject.fromJson(doc)).toList();
-      List<dynamic> resultMobile =
-          await response.body.where((doc) => doc['type'] == 'MOBILE').map((doc) => MobileProject.fromJson(doc)).toList();
+      List<dynamic> resultApi = await response.body
+          .where((doc) => doc['type'] == 'API')
+          .map((doc) => ApiProject.fromJson(doc))
+          .toList();
+      List<dynamic> resultWeb = await response.body
+          .where((doc) => doc['type'] == 'WEB')
+          .map((doc) => WebProject.fromJson(doc))
+          .toList();
+      List<dynamic> resultMobile = await response.body
+          .where((doc) => doc['type'] == 'MOBILE')
+          .map((doc) => MobileProject.fromJson(doc))
+          .toList();
 
       setState(() {
         nbProject = response.body.length;
@@ -111,10 +121,23 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
             Navigator.of(context).pop();
           },
           onDelete: () async {
-            await LibraryRepository().deleteLibrary(context, widget.library.uuid);
-            await initProjects();
-            Navigator.of(context).pop();
-            Navigator.of(context).pop();
+            ResponseApi? responseApi =
+                await LibraryRepository().deleteLibrary(context, widget.library.uuid);
+
+            if (responseApi != null && responseApi.status == 204) {
+              if (widget.library.core_company != null) {
+                InformationRepository().createInformation(
+                    context,
+                    Information(
+                      core_library: widget.library,
+                      core_company: widget.library.core_company,
+                      type: "DELETE",
+                    ));
+              }
+              await initProjects();
+              Navigator.of(context).pop();
+              Navigator.of(context).pop();
+            }
           },
         );
       },
@@ -428,12 +451,19 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
-                                                    if(element.type == "API") {
-                                                      await Navigator.pushNamed(context, AppRouter.PROJECT_API, arguments: element);
-                                                    } else if(element.type == "WEB") {
-                                                      await Navigator.pushNamed(context, AppRouter.PROJECT_WEB, arguments: element);
-                                                    } else if(element.type == "MOBILE") {
-                                                      await Navigator.pushNamed(context, AppRouter.PROJECT_MOBILE, arguments: element);
+                                                    element.library = widget.library;
+                                                    if (element.type == "API") {
+                                                      await Navigator.pushNamed(
+                                                          context, AppRouter.PROJECT_API,
+                                                          arguments: element);
+                                                    } else if (element.type == "WEB") {
+                                                      await Navigator.pushNamed(
+                                                          context, AppRouter.PROJECT_WEB,
+                                                          arguments: element);
+                                                    } else if (element.type == "MOBILE") {
+                                                      await Navigator.pushNamed(
+                                                          context, AppRouter.PROJECT_MOBILE,
+                                                          arguments: element);
                                                     }
                                                     await initProjects();
                                                   },
@@ -552,6 +582,7 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
+                                                    element.library = widget.library;
                                                     await Navigator.pushNamed(
                                                         context, AppRouter.PROJECT_API,
                                                         arguments: element);
@@ -672,6 +703,8 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
+                                                    element.library = widget.library;
+
                                                     await Navigator.pushNamed(
                                                         context, AppRouter.PROJECT_WEB,
                                                         arguments: element);
@@ -792,6 +825,8 @@ class _LibraryWidgetState extends State<LibraryWidget> with TickerProviderStateM
                                                 padding: EdgeInsets.only(bottom: 10.h),
                                                 child: InkWell(
                                                   onTap: () async {
+                                                    element.library = widget.library;
+
                                                     await Navigator.pushNamed(
                                                         context, AppRouter.PROJECT_MOBILE,
                                                         arguments: element);

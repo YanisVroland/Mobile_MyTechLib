@@ -59,6 +59,7 @@ class ProjectRepository {
               context,
               Information(
                 core_company: project.core_company,
+                core_library: project.library,
                 core_project: project,
                 type: "UPDATE",
               ));
@@ -168,7 +169,20 @@ class ProjectRepository {
 
   Future<ResponseApi?> deleteProject(BuildContext context, Project project) async {
     try {
-      return utilsRepository.requestDelete(context, AppConst.projectDeleteEndpoint + project.uuid);
+      ResponseApi? responseApi = await utilsRepository.requestDelete(context, AppConst.projectDeleteEndpoint + project.uuid);
+      if (responseApi != null && responseApi.status == 204) {
+        if (project.core_company != null) {
+          informationRepository.createInformation(
+              context,
+              Information(
+                core_company: project.core_company,
+                core_library: project.library,
+                core_project: project,
+                type: "DELETE",
+              ));
+        }
+      }
+      return responseApi;
     } catch (e) {
       log(e.toString());
       return null;
