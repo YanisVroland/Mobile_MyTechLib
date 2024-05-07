@@ -139,7 +139,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                   InkWell(
                                       onTap: () {
                                         Navigator.pushNamed(context, AppRouter.COMPANY_LIST_POEPLE,
-                                            arguments: widget.globalData.company!);
+                                            arguments: widget.globalData);
                                       },
                                       child: Container(
                                         width: 35.0,

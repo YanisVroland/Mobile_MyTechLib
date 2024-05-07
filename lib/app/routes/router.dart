@@ -95,7 +95,7 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => CompanyEditWidget(settings.arguments as Company));
       case COMPANY_LIST_POEPLE:
         return MaterialPageRoute(
-            builder: (_) => CompanyListPeopleWidget(settings.arguments as Company));
+            builder: (_) => CompanyListPeopleWidget(settings.arguments as GlobalData));
 
       case LIBRARY:
         return MaterialPageRoute(

@@ -39,7 +39,6 @@ class UserRepository {
 
   Future<ResponseApi?> signUp(BuildContext context, UserModel user) async {
     try {
-
       ResponseApi? response =
           await utilsRepository.requestPost(context, AppConst.signUpPostEndpoint, user.toJson());
 
@@ -77,19 +76,31 @@ class UserRepository {
     }
   }
 
-  Future<ResponseApi?> updateProfileImageUser(BuildContext context, UserModel user, String uploadedFileUrl) async {
+  Future<ResponseApi?> setUserAdmin(
+      BuildContext context, List<String> uuidUser, bool boolean) async {
+    try {
+      return utilsRepository.requestPut(context,
+          AppConst.setCompanyAdminPutEndpoint + boolean.toString(), {"listUuid": uuidUser});
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> updateProfileImageUser(
+      BuildContext context, UserModel user, String uploadedFileUrl) async {
     try {
       String extension = path.extension(uploadedFileUrl);
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
-        filename: "logo"+extension,
+        filename: "logo" + extension,
         contentType: MediaType('image', extension.substring(1)),
       );
 
       Map<String, Object> bodyJson = {"file": url};
 
-
-      return utilsRepository.requestImagePost(context, AppConst.userImageProfilePatchEndpoint + user.uuid, bodyJson);
+      return utilsRepository.requestImagePost(
+          context, AppConst.userImageProfilePatchEndpoint + user.uuid, bodyJson);
     } catch (e) {
       log(e.toString());
       return null;
@@ -102,7 +113,8 @@ class UserRepository {
         'name': user.name.trim(),
         'lastName': user.lastname.trim(),
       };
-      return utilsRepository.requestPut(context, AppConst.userUpdatePutEndpoint + user.uuid, requestBody);
+      return utilsRepository.requestPut(
+          context, AppConst.userUpdatePutEndpoint + user.uuid, requestBody);
     } catch (e) {
       log(e.toString());
       return null;
