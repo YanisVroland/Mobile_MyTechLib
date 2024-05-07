@@ -4,11 +4,13 @@ import 'package:my_tech_lib/views/library/create_library_screen.dart';
 import 'package:my_tech_lib/views/library/library_screen.dart';
 import 'package:my_tech_lib/views/library/modify_library_screen.dart';
 import 'package:my_tech_lib/views/project/create_project_screen.dart';
+import 'package:my_tech_lib/views/project/modify/mobile_modify_screen.dart';
 
 import '../../main_screen.dart';
 import '../../services/models/apiProject_model.dart';
 import '../../services/models/company_model.dart';
 import '../../services/models/library_model.dart';
+import '../../services/models/project_model.dart';
 import '../../services/models/user_model.dart';
 import '../../services/models/webProject_model.dart';
 import '../../views/auth/forgot_password_screen.dart';
@@ -52,6 +54,9 @@ class AppRouter {
   static const String PROJECT_WEB = '/ProjectWeb';
   static const String PROJECT_MOBILE = '/ProjectMobile';
   static const String CREATE_PROJECT = '/CreateProject';
+  static const String MOBILE_MODIFY_PROJECT = '/MobileModifyProject';
+  static const String API_MODIFY_PROJECT = '/ApiModifyProject';
+  static const String WEB_MODIFY_PROJECT = '/WebApiModifyProject';
 
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -112,6 +117,9 @@ class AppRouter {
       case CREATE_PROJECT:
         return MaterialPageRoute(
             builder: (_) => CreateProjectWidget(settings.arguments as Library));
+      case MOBILE_MODIFY_PROJECT:
+        return MaterialPageRoute(
+            builder: (_) => MobileModifyProjectWidget(settings.arguments as MobileProject));
 
       default:
         return MaterialPageRoute(

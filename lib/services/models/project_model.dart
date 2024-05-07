@@ -2,15 +2,15 @@ import '../../app/theme/tools.dart';
 
 class Project {
   final String uuid;
-  final String name;
-  final String description;
+ String name;
+   String description;
   final String type;
   final String? core_company;
   final String? companyName;
   final String core_library;
   final String version;
   final String logoUrl;
-  final List<dynamic> illustrationsUrl;
+   List<dynamic> illustrationsUrl;
   final String createdBy;
   final String createdAt;
   final String updatedAt;
@@ -72,6 +72,14 @@ class Project {
       'core_library': core_library,
       'version': version,
     };
+    String illustrations = '';
+    for(int i = 0, len = illustrationsUrl.length; i < len; i++) {
+      illustrations += illustrationsUrl[i];
+      if (i < len - 1) {
+        illustrations += ',';
+      }
+    }
+    json['illustrations_url'] = illustrations;
     return json;
   }
 }

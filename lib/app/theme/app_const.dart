@@ -28,10 +28,12 @@ class AppConst {
 
   // -> Project
   static String projectGetEndpoint = '/project/byLibrary/';
+  static String projectUpdateEndpoint = '/project/';
   static String projectCreateEndpoint = '/project/';
   static String projectDeleteEndpoint = '/project/';
   static String projectLogoPostEndpoint = '/project/uploadLogo/';
   static String projectIllustrationsPostEndpoint = '/project/uploadIllustrations/';
+  static String projectOneIllustrationPostEndpoint = '/project/uploadIllustration/';
   static String projectApkPostEndpoint = '/project/uploadApk/';
 
 

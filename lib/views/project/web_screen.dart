@@ -258,7 +258,7 @@ class _WebWidgetState extends State<WebWidget> {
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enlargeCenterPage: true,
                         ),
-                        items: widget.project.illustrationsUrl.map((imageUrl) {
+                        items: widget.project.illustrationsUrl.where((element) => element !="" ).map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
                               return ClipRRect(

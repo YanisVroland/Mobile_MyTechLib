@@ -1,10 +1,10 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:my_tech_lib/services/models/library_model.dart';
 import 'package:my_tech_lib/services/repositories/library_repository.dart';
 import 'package:my_tech_lib/services/repositories/project_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
 
+import '../../app/routes/router.dart';
 import '../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
@@ -16,8 +16,8 @@ import '../../app/widgets/icon_custom.dart';
 import '../../services/models/mobileProject_model.dart';
 
 class MobileWidget extends StatefulWidget {
-  const MobileWidget(this.project, {Key? key}) : super(key: key);
-  final MobileProject project;
+  MobileWidget(this.project, {Key? key}) : super(key: key);
+  MobileProject project;
 
   @override
   _MobileWidgetState createState() => _MobileWidgetState();
@@ -83,7 +83,7 @@ class _MobileWidgetState extends State<MobileWidget> {
             Navigator.pop(context);
           },
         ),
-        title: Text("Projet MOBILE"),
+        title: const Text("Projet MOBILE"),
         actions: [],
         centerTitle: false,
         elevation: 0.0,
@@ -181,14 +181,14 @@ class _MobileWidgetState extends State<MobileWidget> {
                                     itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                                       PopupMenuItem<String>(
                                         onTap: () async {
-                                          // Object? newData = await Navigator.pushNamed(
-                                          //     context, AppRouter.MODIFY_LIBRARY,
-                                          //     arguments: [widget.user, widget.library]);
-                                          // if (newData != null) {
-                                          //   setState(() {
-                                          //     widget.library = newData as Library;
-                                          //   });
-                                          // }
+                                          Object? newData = await Navigator.pushNamed(
+                                              context, AppRouter.MOBILE_MODIFY_PROJECT,
+                                              arguments: widget.project);
+                                          if (newData != null) {
+                                            setState(() {
+                                              widget.project = newData as MobileProject;
+                                            });
+                                          }
                                         },
                                         child: const Row(
                                           children: [
@@ -304,7 +304,7 @@ class _MobileWidgetState extends State<MobileWidget> {
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enlargeCenterPage: true,
                         ),
-                        items: widget.project.illustrationsUrl.map((imageUrl) {
+                        items: widget.project.illustrationsUrl.where((element) => element !="" ).map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
                               return ClipRRect(

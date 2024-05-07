@@ -48,6 +48,30 @@ class ProjectRepository {
     }
   }
 
+  Future<ResponseApi?> updateProject(BuildContext context, Project project) async {
+    try {
+      ResponseApi? responseApi = await utilsRepository.requestPatch(
+          context, AppConst.projectUpdateEndpoint + project.uuid, project.toJson());
+
+      if (responseApi != null && responseApi.status == 200) {
+        if (project.core_company != null) {
+          informationRepository.createInformation(
+              context,
+              Information(
+                core_company: project.core_company,
+                core_project: project,
+                type: "UPDATE",
+              ));
+        }
+      }
+
+      return responseApi;
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   Future<ResponseApi?> updateLogoProject(
       BuildContext context, String projectUuid, String uploadedFileUrl) async {
     try {
@@ -75,6 +99,9 @@ class ProjectRepository {
       List<MultipartFile> files = [];
       for (int i = 0, len = illustrations.length; i < len; i++) {
         if (illustrations[i].isNotEmpty) {
+          if (illustrations[i].contains("http")) {
+            continue;
+          }
           String extension = path.extension(illustrations[i]);
 
           final url = await MultipartFile.fromFile(
@@ -91,6 +118,27 @@ class ProjectRepository {
 
       return utilsRepository.requestImagePost(
           context, AppConst.projectIllustrationsPostEndpoint + projectUuid, bodyJson);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
+  Future<ResponseApi?> uploadOneIllustration(
+      BuildContext context, String projectUuid, String illustrations,int index) async {
+    try {
+      String extension = path.extension(illustrations);
+
+      final url = await MultipartFile.fromFile(
+        illustrations,
+        filename: "illustration_$index" + extension,
+        contentType: MediaType('image', extension.substring(1)),
+      );
+
+      Map<String, Object> bodyJson = {"file": url};
+
+      return utilsRepository.requestImagePost(
+          context, AppConst.projectOneIllustrationPostEndpoint + projectUuid, bodyJson);
     } catch (e) {
       log(e.toString());
       return null;

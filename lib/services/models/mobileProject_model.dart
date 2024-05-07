@@ -3,10 +3,10 @@ import 'package:my_tech_lib/services/models/project_model.dart';
 import '../../app/theme/tools.dart';
 
 class MobileProject extends Project {
-  final String platform;
-  final String versionOS;
-  final String frameworkUsed;
-  final String apkUrl;
+  String platform;
+  String versionOS;
+  String frameworkUsed;
+  String apkUrl;
 
   MobileProject({
     String uuid = '-1',
