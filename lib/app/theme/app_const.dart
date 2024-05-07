@@ -12,6 +12,7 @@ class AppConst {
   static String signInPostEndpoint = '/user/auth';
   static String signUpPostEndpoint = '/user/registration';
   static String userGetEndpoint = '/user/';
+  static String forgotPasswordPostEndpoint = '/user/forgot-password/';
   static String userImageProfilePatchEndpoint = '/user/uploadImageProfile/';
   static String userUpdatePutEndpoint = '/user/';
   static String companyLeaveCompanyPostEndpoint = '/user/leaveCompany/';

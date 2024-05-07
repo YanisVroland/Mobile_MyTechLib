@@ -60,6 +60,18 @@ class UserRepository {
     }
   }
 
+  Future<ResponseApi?> forgotPassword(BuildContext context, String email) async {
+    try {
+      var requestBody = {
+        'email': email.trim(),
+      };
+      return utilsRepository.requestPost(context, AppConst.forgotPasswordPostEndpoint, requestBody);
+    } catch (e) {
+      log(e.toString());
+      return null;
+    }
+  }
+
   Future<ResponseApi?> getUser(BuildContext context, String uuidUser) async {
     try {
       return utilsRepository.requestGet(context, AppConst.userGetEndpoint + uuidUser);
