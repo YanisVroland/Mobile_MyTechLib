@@ -301,14 +301,14 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
-                                                      final pickedFile = await ImagePicker()
-                                                          .pickImage(
-                                                              source: ImageSource.gallery,
-                                                              requestFullMetadata: false);
-                                                      if (pickedFile != null) {
-                                                        setState(() {
-                                                          logoImage = pickedFile.path;
-                                                        });
+                                                    final pickedFile = await ImagePicker()
+                                                        .pickImage(
+                                                            source: ImageSource.gallery,
+                                                            requestFullMetadata: false);
+                                                    if (pickedFile != null) {
+                                                      setState(() {
+                                                        logoImage = pickedFile.path;
+                                                      });
                                                     }
                                                   },
                                                   child: Container(
@@ -349,14 +349,14 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                                 ),
                                                 InkWell(
                                                   onTap: () async {
-                                                      final pickedFile = await ImagePicker()
-                                                          .pickImage(
-                                                              source: ImageSource.gallery,
-                                                              requestFullMetadata: false);
-                                                      if (pickedFile != null) {
-                                                        setState(() {
-                                                          bannerImage = pickedFile.path;
-                                                        });
+                                                    final pickedFile = await ImagePicker()
+                                                        .pickImage(
+                                                            source: ImageSource.gallery,
+                                                            requestFullMetadata: false);
+                                                    if (pickedFile != null) {
+                                                      setState(() {
+                                                        bannerImage = pickedFile.path;
+                                                      });
                                                     }
                                                   },
                                                   child: Container(
@@ -392,15 +392,24 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                         padding: EdgeInsets.only(top: 10.h),
                                         child: Row(
                                           children: [
-                                            Text("Librairie entreprise",
+                                            Text("Librairie entreprise ",
                                                 style: TextStyle(
-                                                    color: Colors.black, fontSize: 16.sp)),
+                                                    color: widget.user.companyAdmin
+                                                        ? Colors.black
+                                                        : Colors.grey,
+                                                    fontSize: 16.sp)),
                                             Checkbox(
                                               value: toCompany,
+                                              side: BorderSide(
+                                                  color: widget.user.companyAdmin
+                                                      ? Colors.black
+                                                      : Colors.grey),
                                               onChanged: (bool? value) {
-                                                setState(() {
-                                                  toCompany = value!;
-                                                });
+                                                if (widget.user.companyAdmin) {
+                                                  setState(() {
+                                                    toCompany = value!;
+                                                  });
+                                                }
                                               },
                                             ),
                                           ],
