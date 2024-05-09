@@ -1,5 +1,6 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_tech_lib/services/models/user_model.dart';
 import 'package:my_tech_lib/services/repositories/library_repository.dart';
 import 'package:my_tech_lib/services/repositories/project_repository.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -16,7 +17,8 @@ import '../../app/widgets/icon_custom.dart';
 import '../../services/models/mobileProject_model.dart';
 
 class MobileWidget extends StatefulWidget {
-  MobileWidget(this.project, {Key? key}) : super(key: key);
+  MobileWidget(this.userModel, this.project, {Key? key}) : super(key: key);
+  UserModel userModel;
   MobileProject project;
 
   @override
@@ -51,8 +53,9 @@ class _MobileWidgetState extends State<MobileWidget> {
             Navigator.of(context).pop();
           },
           onDelete: () async {
-            await ProjectRepository().deleteProject(context,widget.project);
-            await LibraryRepository().updateLibraryCountProject(context, widget.project.core_library);
+            await ProjectRepository().deleteProject(context, widget.project);
+            await LibraryRepository()
+                .updateLibraryCountProject(context, widget.project.core_library);
 
             Navigator.of(context).pop();
             Navigator.of(context).pop();
@@ -62,13 +65,12 @@ class _MobileWidgetState extends State<MobileWidget> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.of(context).secondaryBackground,
+      backgroundColor: AppTheme.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppTheme.of(context).secondaryBackground,
+        backgroundColor: AppTheme.of(context).background,
         automaticallyImplyLeading: false,
         leading: IconCustom(
           borderColor: Colors.transparent,
@@ -146,6 +148,8 @@ class _MobileWidgetState extends State<MobileWidget> {
                                   children: [
                                     Text(
                                       widget.project.name,
+                                      softWrap: true,
+                                      overflow: TextOverflow.ellipsis,
                                       style: TextStyle(
                                         fontSize: 24,
                                         color: AppTheme.of(context).primary,
@@ -155,6 +159,8 @@ class _MobileWidgetState extends State<MobileWidget> {
                                     if (widget.project.companyName != null)
                                       Text(
                                         widget.project.companyName!,
+                                        softWrap: true,
+                                        overflow: TextOverflow.ellipsis,
                                         style: TextStyle(
                                           fontSize: 12,
                                           color: Colors.grey.shade500,
@@ -164,6 +170,8 @@ class _MobileWidgetState extends State<MobileWidget> {
                                 ),
                                 Text(
                                   widget.project.version,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
                                   style: TextStyle(
                                     fontSize: 16,
                                     color: Colors.grey.shade500,
@@ -177,51 +185,67 @@ class _MobileWidgetState extends State<MobileWidget> {
                               children: [
                                 Padding(
                                   padding: EdgeInsets.only(left: 10.w),
-                                  child: PopupMenuButton<String>(
-                                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                                      PopupMenuItem<String>(
-                                        onTap: () async {
-                                          Object? newData = await Navigator.pushNamed(
-                                              context, AppRouter.MOBILE_MODIFY_PROJECT,
-                                              arguments: widget.project);
-                                          if (newData != null) {
-                                            setState(() {
-                                              widget.project = newData as MobileProject;
-                                            });
-                                          }
-                                        },
-                                        child: const Row(
-                                          children: [
-                                            Icon(Icons.edit),
-                                            Text('Modifier'),
+                                  child: widget.project.isPersonal || widget.userModel.companyAdmin
+                                      ? PopupMenuButton<String>(
+                                          itemBuilder: (BuildContext context) =>
+                                              <PopupMenuEntry<String>>[
+                                            PopupMenuItem<String>(
+                                              onTap: () async {
+                                                Object? newData = await Navigator.pushNamed(
+                                                    context, AppRouter.MOBILE_MODIFY_PROJECT,
+                                                    arguments: widget.project);
+                                                if (newData != null) {
+                                                  setState(() {
+                                                    widget.project = newData as MobileProject;
+                                                  });
+                                                }
+                                              },
+                                              child: const Row(
+                                                children: [
+                                                  Icon(Icons.edit),
+                                                  Text('Modifier'),
+                                                ],
+                                              ),
+                                            ),
+                                            PopupMenuItem<String>(
+                                              textStyle: const TextStyle(color: Colors.red),
+                                              onTap: deleteLibrary,
+                                              child: const Row(
+                                                children: [
+                                                  Icon(Icons.delete, color: Colors.red),
+                                                  Text('Supprimer',
+                                                      style: TextStyle(color: Colors.red)),
+                                                ],
+                                              ),
+                                            ),
                                           ],
+                                          child: Container(
+                                            width: 40.0,
+                                            height: 40.0,
+                                            decoration: BoxDecoration(
+                                              color: ColorConst.secondary,
+                                              borderRadius: BorderRadius.circular(8.0),
+                                            ),
+                                            child: const Icon(
+                                              Icons.settings,
+                                              color: Colors.white,
+                                              size: 25.0,
+                                            ),
+                                          ),
+                                        )
+                                      : Container(
+                                          width: 40.0,
+                                          height: 40.0,
+                                          decoration: BoxDecoration(
+                                            color: ColorConst.secondary.withOpacity(0.5),
+                                            borderRadius: BorderRadius.circular(8.0),
+                                          ),
+                                          child: const Icon(
+                                            Icons.settings,
+                                            color: Colors.white,
+                                            size: 25.0,
+                                          ),
                                         ),
-                                      ),
-                                      PopupMenuItem<String>(
-                                        textStyle: const TextStyle(color: Colors.red),
-                                        onTap: deleteLibrary,
-                                        child: const Row(
-                                          children: [
-                                            Icon(Icons.delete, color: Colors.red),
-                                            Text('Supprimer', style: TextStyle(color: Colors.red)),
-                                          ],
-                                        ),
-                                      ),
-                                    ],
-                                    child: Container(
-                                      width: 40.0,
-                                      height: 40.0,
-                                      decoration: BoxDecoration(
-                                        color: ColorConst.secondary,
-                                        borderRadius: BorderRadius.circular(8.0),
-                                      ),
-                                      child: const Icon(
-                                        Icons.settings,
-                                        color: Colors.white,
-                                        size: 25.0,
-                                      ),
-                                    ),
-                                  ),
                                 ),
                                 Column(
                                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -268,7 +292,7 @@ class _MobileWidgetState extends State<MobileWidget> {
                                         width: 100,
                                         height: 25,
                                         onTap: () async {
-                                           _launchURL(Uri.parse(widget.project.apkUrl!));
+                                          _launchURL(Uri.parse(widget.project.apkUrl!));
                                         },
                                       ),
                                     )
@@ -304,7 +328,9 @@ class _MobileWidgetState extends State<MobileWidget> {
                           autoPlayCurve: Curves.fastOutSlowIn,
                           enlargeCenterPage: true,
                         ),
-                        items: widget.project.illustrationsUrl.where((element) => element !="" ).map((imageUrl) {
+                        items: widget.project.illustrationsUrl
+                            .where((element) => element != "")
+                            .map((imageUrl) {
                           return Builder(
                             builder: (BuildContext context) {
                               return ClipRRect(
@@ -341,6 +367,7 @@ class _MobileWidgetState extends State<MobileWidget> {
                         Padding(
                             padding: EdgeInsets.only(left: 5.w, top: 5.h),
                             child: Text(widget.project.description,
+                                textAlign: TextAlign.justify,
                                 style: const TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 12,
@@ -391,6 +418,8 @@ class _MobileWidgetState extends State<MobileWidget> {
                               Expanded(
                                 child: Text(
                                   widget.project.versionOS,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontSize: 12,
@@ -421,6 +450,8 @@ class _MobileWidgetState extends State<MobileWidget> {
                               Expanded(
                                 child: Text(
                                   widget.project.frameworkUsed,
+                                  softWrap: true,
+                                  overflow: TextOverflow.ellipsis,
                                   style: const TextStyle(
                                     fontFamily: 'Montserrat',
                                     fontSize: 12,

@@ -174,6 +174,9 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                         mainAxisSize: MainAxisSize.max,
                         children: [
                           Text(widget.user.name + " " + widget.user.lastname,
+
+                              softWrap: true,
+                              overflow: TextOverflow.ellipsis,
                               style: const TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
                         ],
                       ),
@@ -185,6 +188,9 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                           padding: const EdgeInsetsDirectional.fromSTEB(0.0, 8.0, 0.0, 0.0),
                           child: Text(
                             widget.user.email,
+
+                            softWrap: true,
+                            overflow: TextOverflow.ellipsis,
                             style: const TextStyle(fontSize: 16.0, fontWeight: FontWeight.normal),
                           ),
                         ),
@@ -247,7 +253,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
               padding: const EdgeInsetsDirectional.fromSTEB(0.0, 12.0, 0.0, 0.0),
               child: InkWell(
                   onTap: () async {
-                    Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD);
+                    Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD, arguments: widget.user);
                   },
                   child: Container(
                     width: MediaQuery.sizeOf(context).width * 0.9,
@@ -278,7 +284,7 @@ class _ProfilePageWidgetState extends State<SettingsPageWidget> {
                               size: 20.0,
                             ),
                             onPressed: () {
-                              Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD);
+                              Navigator.pushNamed(context, AppRouter.CHANGE_PASSWORD, arguments: widget.user);
                             },
                           ),
                         ],

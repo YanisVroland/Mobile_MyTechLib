@@ -72,7 +72,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
             fontSize: widget.sizeText),
         keyboardType: widget.keyboardType,
         validator: widget.validator,
-        textCapitalization: TextCapitalization.words,
+        textCapitalization: TextCapitalization.sentences,
         decoration: InputDecoration(
           filled: true,
           fillColor: widget.disabled ? Colors.grey.withOpacity(0.2) : widget.fillColor,

@@ -158,13 +158,15 @@ class _CreateProjectWidgetState extends State<CreateProjectWidget> {
       return;
     }
 
+    project.isPersonal = widget.library.core_company == null || widget.library.core_company!.isEmpty;
+
     ResponseApi? response =
         await ProjectRepository().createProject(context, project, widget.library);
     if (response != null && response.status == 201) {
       if (logoImage.isNotEmpty) {
         await ProjectRepository().updateLogoProject(context, response.body["uuid"], logoImage);
       }
-      if (imageList.isNotEmpty) {
+      if (imageList.isNotEmpty && imageList.where((element) => element.isNotEmpty).isNotEmpty) {
         await ProjectRepository().uploadIllustrations(context, response.body["uuid"], imageList);
       }
       if (apkFile.isNotEmpty) {

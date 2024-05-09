@@ -11,11 +11,13 @@ import '../../app/theme/snackBar_const.dart';
 import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/icon_custom.dart';
 import '../../services/models/apiProject_model.dart';
+import '../../services/models/user_model.dart';
 import '../../services/repositories/library_repository.dart';
 import '../../services/repositories/project_repository.dart';
 
 class ApiWidget extends StatefulWidget {
-   ApiWidget(this.project, {Key? key}) : super(key: key);
+   ApiWidget(this.userModel,this.project,  {Key? key}) : super(key: key);
+   UserModel userModel;
    ApiProject project;
 
   @override
@@ -63,9 +65,9 @@ class _ApiWidgetState extends State<ApiWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.of(context).secondaryBackground,
+      backgroundColor: AppTheme.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppTheme.of(context).secondaryBackground,
+        backgroundColor: AppTheme.of(context).background,
         automaticallyImplyLeading: false,
         leading: IconCustom(
           borderColor: Colors.transparent,
@@ -159,7 +161,7 @@ class _ApiWidgetState extends State<ApiWidget> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 10.w),
-                            child: PopupMenuButton<String>(
+                            child: widget.project.isPersonal || widget.userModel.companyAdmin?  PopupMenuButton<String>(
                               itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
                                 PopupMenuItem<String>(
                                   onTap: () async {
@@ -203,7 +205,20 @@ class _ApiWidgetState extends State<ApiWidget> {
                                   size: 25.0,
                                 ),
                               ),
+                            )         : Container(
+                              width: 40.0,
+                              height: 40.0,
+                              decoration: BoxDecoration(
+                                color: ColorConst.secondary.withOpacity(0.5),
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              child: const Icon(
+                                Icons.settings,
+                                color: Colors.white,
+                                size: 25.0,
+                              ),
                             ),
+
                           ),
                         ],
                       ),
@@ -293,6 +308,7 @@ class _ApiWidgetState extends State<ApiWidget> {
                         Padding(
                             padding: EdgeInsets.only(left: 5.w, top: 5.h),
                             child: Text(widget.project.description,
+                                textAlign: TextAlign.justify,
                                 style: const TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 12,

@@ -11,7 +11,6 @@ import '../../main_screen.dart';
 import '../../services/models/apiProject_model.dart';
 import '../../services/models/company_model.dart';
 import '../../services/models/library_model.dart';
-import '../../services/models/project_model.dart';
 import '../../services/models/user_model.dart';
 import '../../services/models/webProject_model.dart';
 import '../../views/auth/forgot_password_screen.dart';
@@ -21,6 +20,7 @@ import '../../views/auth/register_account_screen.dart';
 import '../../views/company/company_edit_screen.dart';
 import '../../views/company/company_list_people_screen.dart';
 import '../../views/navigator/navigator.dart';
+import '../../views/options/change_password_widget.dart';
 import '../../views/options/edit_profile_widget.dart';
 import '../../views/options/notifications_settings_widget.dart';
 import '../../views/options/privacy_policy_widget.dart';
@@ -74,10 +74,10 @@ class AppRouter {
       case SPLASH:
         return MaterialPageRoute(builder: (_) => const SplashScreen());
       case HOME:
-        return MaterialPageRoute(
-            builder: (_) => NavBarPage(settings.arguments as GlobalData));
+        return MaterialPageRoute(builder: (_) => NavBarPage(settings.arguments as GlobalData));
       case CHANGE_PASSWORD:
-        return MaterialPageRoute(builder: (_) => const ForgotPasswordWidget());
+        return MaterialPageRoute(
+            builder: (_) => ChangePasswordWidget(settings.arguments as UserModel));
       case EDIT_PROFILE:
         return MaterialPageRoute(
             builder: (_) => EditProfileWidget(settings.arguments as UserModel));
@@ -111,11 +111,11 @@ class AppRouter {
                 (settings.arguments! as List<Object>)[1] as Library));
 
       case PROJECT_MOBILE:
-        return MaterialPageRoute(builder: (_) => MobileWidget(settings.arguments as MobileProject));
+        return MaterialPageRoute(builder: (_) => MobileWidget((settings.arguments! as List<Object>)[0] as UserModel, (settings.arguments! as List<Object>)[1]  as MobileProject));
       case PROJECT_API:
-        return MaterialPageRoute(builder: (_) => ApiWidget(settings.arguments as ApiProject));
+        return MaterialPageRoute(builder: (_) => ApiWidget((settings.arguments! as List<Object>)[0] as UserModel, (settings.arguments! as List<Object>)[1]   as ApiProject));
       case PROJECT_WEB:
-        return MaterialPageRoute(builder: (_) => WebWidget(settings.arguments as WebProject));
+        return MaterialPageRoute(builder: (_) => WebWidget((settings.arguments! as List<Object>)[0] as UserModel, (settings.arguments! as List<Object>)[1]   as WebProject));
       case CREATE_PROJECT:
         return MaterialPageRoute(
             builder: (_) => CreateProjectWidget(settings.arguments as Library));

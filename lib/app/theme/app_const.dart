@@ -4,7 +4,7 @@ class AppConst {
   static const String appVersion = '1.0.0';
 
   static const String baseUrl = 'http://192.168.1.177:3000';
-  // static const String baseUrl = 'https://api-my-tech-lib.vercel.app';
+  // static const String baseUrl = 'http://13.48.27.36:3000';
   static const String anonToken = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFyeHVwZm9laXl5dm93Y2JreXp3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MDcyMjEwMDYsImV4cCI6MjAyMjc5NzAwNn0.lDcM6CgAk3dAKhtke5q66beviyptGvhLDNemvhhJlTE';
 
   // Endpoints

@@ -22,7 +22,7 @@ class Validators {
   }
 
   static String? validateEmpty(String? value) {
-    if (value!.isEmpty) {
+    if (value!.trim().isEmpty) {
       return 'Ne peut pas être vide';
     }
     return null;

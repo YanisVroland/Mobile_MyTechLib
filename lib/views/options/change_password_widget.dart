@@ -1,60 +1,83 @@
-import '../../app/theme/app_theme.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:my_tech_lib/services/models/responseAPI_model.dart';
+import 'package:my_tech_lib/services/repositories/user_repository.dart';
+
+import '../../../app/theme/app_theme.dart';
 import 'package:flutter/material.dart';
 
+import '../../app/routes/router.dart';
 import '../../app/theme/validators.dart';
 import '../../app/widgets/button_custom.dart';
+import '../../app/widgets/textField_custom.dart';
+import '../../services/models/user_model.dart';
 
 class ChangePasswordWidget extends StatefulWidget {
-  const ChangePasswordWidget({Key? key}) : super(key: key);
+  ChangePasswordWidget(this.user, {Key? key}) : super(key: key);
+  UserModel user;
 
   @override
   _ChangePasswordWidgetState createState() => _ChangePasswordWidgetState();
 }
 
 class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
-  final scaffoldKey = GlobalKey<ScaffoldState>();
-  TextEditingController? emailAddressController;
+  late TextEditingController emailAddressController;
   String? Function(BuildContext, String?)? emailAddressControllerValidator;
+  final _formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-
-    emailAddressController ??= TextEditingController();
+    emailAddressController = TextEditingController();
+    emailAddressController.text = widget.user.email;
   }
 
   @override
   void dispose() {
     super.dispose();
-    emailAddressController?.dispose();
+    emailAddressController.dispose();
+  }
+
+  sendEmail() async {
+    if (emailAddressController!.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Email required!',
+          ),
+        ),
+      );
+      return;
+    }
+    ResponseApi? responseApi = await UserRepository().forgotPassword(
+      context,
+      emailAddressController!.text.trim(),
+    );
+
+    if (responseApi != null && responseApi.status == 200) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.green,
+          content: Text(
+            'Email envoyé',
+          ),
+        ),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.red,
+          content: Text(
+            'Limite de débit de courrier électronique dépassée',
+          ),
+        ),
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      key: scaffoldKey,
-      backgroundColor: AppTheme.of(context).secondaryBackground,
-      appBar: AppBar(
-        backgroundColor: AppTheme.of(context).secondaryBackground,
-        automaticallyImplyLeading: false,
-        leading: InkWell(
-          splashColor: Colors.transparent,
-          focusColor: Colors.transparent,
-          hoverColor: Colors.transparent,
-          highlightColor: Colors.transparent,
-          onTap: () async {
-            Navigator.pop(context);
-          },
-          child: Icon(
-            Icons.chevron_left_rounded,
-            size: 32.0,
-          ),
-        ),
-        title: Text("Changer mot de passe"),
-        actions: [],
-        centerTitle: false,
-        elevation: 0.0,
-      ),
+      backgroundColor: AppTheme.of(context).background,
       body: Container(
         width: MediaQuery.sizeOf(context).width * 1.0,
         height: MediaQuery.sizeOf(context).height * 1.0,
@@ -62,76 +85,55 @@ class _ChangePasswordWidgetState extends State<ChangePasswordWidget> {
           image: DecorationImage(
             fit: BoxFit.fitWidth,
             image: Image.asset(
-              'assets/images/login_bg@2x.png',
+              'assets/images/createAccount_bg@2x.png',
             ).image,
           ),
         ),
-        child: Column(
-          mainAxisSize: MainAxisSize.max,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(20.0, 0.0, 20.0, 0.0),
-              child: Row(
+        child: Padding(
+          padding: EdgeInsets.symmetric(
+            horizontal: 30.w,
+            vertical: 70.h,
+          ),
+          child: SingleChildScrollView(
+            child: Form(
+              key: _formKey,
+              child: Column(
                 mainAxisSize: MainAxisSize.max,
+                crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Expanded(
-                    child: Text("Entrez l'e-mail associé à votre compte"),
+                  Image.asset(
+                    'assets/images/logo_landscape.png',
+                    width: 300.0,
+                    fit: BoxFit.fitWidth,
                   ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 100.h, bottom: 40.h),
+                      child: const Text(
+                        "Entrez l'e-mail associé à votre compte",
+                        textAlign: TextAlign.center,
+                      )),
+                  CustomTextField(
+                    controller: emailAddressController,
+                    keyboardType: TextInputType.emailAddress,
+                    obscureText: false,
+                    labelText: "Adresse e-mail",
+                    hintText: "Entrer votre adresse e-mail...",
+                    validator: Validators.validateEmail,
+                  ),
+                  Padding(
+                      padding: EdgeInsets.only(top: 30.h, bottom: 30.h),
+                      child: CustomButton(
+                        text: "Envoyer",
+                        onTap: () async {
+                          if (_formKey.currentState!.validate()) {
+                            await sendEmail();
+                          }
+                        },
+                      )),
                 ],
               ),
             ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(20.0, 20.0, 20.0, 0.0),
-              child: TextFormField(
-                controller: emailAddressController,
-                keyboardType: TextInputType.emailAddress,
-                obscureText: false,
-                decoration: InputDecoration(
-                  labelText: "Email",
-                  hintText: "Entrer votre Email",
-                  enabledBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0x00000000),
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  errorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0x00000000),
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  focusedErrorBorder: OutlineInputBorder(
-                    borderSide: BorderSide(
-                      color: Color(0x00000000),
-                      width: 2.0,
-                    ),
-                    borderRadius: BorderRadius.circular(8.0),
-                  ),
-                  filled: true,
-                  fillColor: AppTheme.of(context).secondaryBackground,
-                  contentPadding: EdgeInsetsDirectional.fromSTEB(20.0, 24.0, 20.0, 24.0),
-                ),
-                validator: Validators.validateEmpty,
-              ),
-            ),
-            Padding(
-              padding: EdgeInsetsDirectional.fromSTEB(0.0, 24.0, 0.0, 0.0),
-              child: CustomButton(
-                text: "Envoyer demande",
-                onTap: () async {},
-              ),
-            ),
-          ],
+          ),
         ),
       ),
     );

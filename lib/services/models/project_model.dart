@@ -16,7 +16,8 @@ class Project {
    List<dynamic> illustrationsUrl;
   final String createdBy;
   final String createdAt;
-  final String updatedAt;
+  final DateTime? updatedAt;
+   bool isPersonal;
 
   Project({
     this.uuid = '-1',
@@ -31,29 +32,32 @@ class Project {
     this.version = 'V1.0.0',
     this.createdBy = '',
     this.createdAt = '',
-    this.updatedAt = '',
+    this.updatedAt = null,
+    this.isPersonal = false,
     this.library,
   });
 
   factory Project.fromJson(Map<String, dynamic> json) {
+
     return Project(
       uuid: json['uuid'] ?? '-1',
       name: json['name'] ?? '',
       description: json['description'] ?? '',
       type: json['type'] ?? '',
       version: json['version'] ?? 'V?.?.?',
+      isPersonal: json['is_personal'] ?? false,
       core_company: json['core_company'] != null ? json['core_company']['uuid'] : null,
       companyName: json['core_company'] != null ? json['core_company']['name'] : null,
       core_library: json['core_library'] ?? '',
       logoUrl: json['logo_url'] ?? '',
-      illustrationsUrl: json['illustrations_url'] != null
+      illustrationsUrl: json['illustrations_url'] != null && json['illustrations_url'].toString().isNotEmpty
           ? json['illustrations_url'].toString().split(',')
           : [],
       createdBy: json['created_by']['name'] + ' ' + json['created_by']['lastName'] ?? '',
       createdAt:
           json['created_at'] != null ? Tools.formatDate(DateTime.parse(json['created_at'])) : '',
       updatedAt:
-          json['updated_at'] != null ? Tools.formatDate(DateTime.parse(json['updated_at'])) : '',
+      json['updated_at']  != null ?  DateTime.parse(json['updated_at']) : null,
     );
   }
 
@@ -71,6 +75,7 @@ class Project {
     var json = {
       'name': name,
       'type': type,
+      'is_personal': isPersonal,
       'description': description,
       'core_company': core_company,
       'core_library': core_library,

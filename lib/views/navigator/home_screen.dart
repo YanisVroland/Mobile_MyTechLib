@@ -113,11 +113,12 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
     if (response != null && response.status == 200) {
       List<dynamic> result = await response.body.map((doc) => Library.fromJson(doc)).toList();
 
-      setState(() {
-        listPersonalLibrairies = result.cast<Library>();
-        widget.globalData.listPersonalLibrairies = listPersonalLibrairies;
-        searchListLibrairies = result.cast<Library>();
-      });
+      listPersonalLibrairies.addAll(result.cast<Library>());
+      widget.globalData.listPersonalLibrairies = listPersonalLibrairies;
+      searchListLibrairies.addAll(result.cast<Library>());
+    }else{
+        listPersonalLibrairies = [];
+        widget.globalData.listPersonalLibrairies = [];
     }
   }
 
@@ -128,9 +129,14 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       List<dynamic> result = await response.body.map((doc) => Library.fromJson(doc)).toList();
 
       setState(() {
-        listCompanyLibrairies = result.cast<Library>();
+        listCompanyLibrairies.addAll(result.cast<Library>());
         widget.globalData.listCompanyLibrairies = listCompanyLibrairies;
         searchListLibrairies.addAll(result.cast<Library>());
+      });
+    }else{
+      setState(() {
+        listCompanyLibrairies = [];
+        widget.globalData.listCompanyLibrairies = [];
       });
     }
   }
@@ -373,7 +379,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                           Text(
                                                                             element.name,
                                                                             style: const TextStyle(
-                                                                                fontSize: 17.0,
+                                                                                fontSize: 14.0,
                                                                                 fontWeight:
                                                                                     FontWeight
                                                                                         .bold),
@@ -391,8 +397,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  Expanded(
-                                                                      child: Padding(
+                                                                 Padding(
                                                                     padding: EdgeInsets.only(
                                                                         right: 10.w),
                                                                     child: Column(
@@ -463,19 +468,25 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                         )
                                                                       ],
                                                                     ),
-                                                                  )),
+                                                                  ),
                                                                 ],
                                                               )),
                                                         ),
                                                         InkWell(
                                                           onTap: () async {
-                                                            await copyLibrary(element);
+                                                            if (element.isPersonal || widget
+                                                                .globalData.user.companyAdmin) {
+                                                              await copyLibrary(element);
+                                                            }
                                                           },
                                                           child: Container(
                                                             width: 50.w,
                                                             height: 70.h,
                                                             decoration: BoxDecoration(
-                                                              color: AppTheme.of(context).tertiary,
+                                                              color:element.isPersonal ||  widget
+                                                                      .globalData.user.companyAdmin
+                                                                  ? AppTheme.of(context).tertiary
+                                                                  : AppTheme.of(context).secondary.withOpacity(0.5),
                                                               borderRadius: const BorderRadius.only(
                                                                   topRight: Radius.circular(8.0),
                                                                   bottomRight:
@@ -579,7 +590,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                               Text(
                                                                                 element.name,
                                                                                 style: const TextStyle(
-                                                                                    fontSize: 17.0,
+                                                                                    fontSize: 14.0,
                                                                                     fontWeight:
                                                                                         FontWeight
                                                                                             .bold),
@@ -597,8 +608,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                      Expanded(
-                                                                          child: Padding(
+                                                                       Padding(
                                                                         padding: EdgeInsets.only(
                                                                             right: 10.w),
                                                                         child: Column(
@@ -674,20 +684,27 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                             )
                                                                           ],
                                                                         ),
-                                                                      )),
+                                                                      ),
                                                                     ],
                                                                   )),
                                                             ),
                                                             InkWell(
                                                               onTap: () async {
-                                                                await copyLibrary(element);
+                                                                if (element.isPersonal || widget
+                                                                    .globalData.user.companyAdmin) {
+                                                                  await copyLibrary(element);
+                                                                }
                                                               },
                                                               child: Container(
                                                                 width: 50.w,
                                                                 height: 70.h,
                                                                 decoration: BoxDecoration(
-                                                                  color:
-                                                                      AppTheme.of(context).tertiary,
+                                                                  color:element.isPersonal ||  widget.globalData.user
+                                                                          .companyAdmin
+                                                                      ? AppTheme.of(context)
+                                                                          .tertiary
+                                                                      : AppTheme.of(context)
+                                                                          .secondary.withOpacity(0.5),
                                                                   borderRadius:
                                                                       const BorderRadius.only(
                                                                           topRight:
@@ -810,7 +827,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                           Text(
                                                                             element.name,
                                                                             style: const TextStyle(
-                                                                                fontSize: 17.0,
+                                                                                fontSize: 14.0,
                                                                                 fontWeight:
                                                                                     FontWeight
                                                                                         .bold),
@@ -828,8 +845,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                  Expanded(
-                                                                      child: Padding(
+                                                                  Padding(
                                                                     padding: EdgeInsets.only(
                                                                         right: 10.w),
                                                                     child: Column(
@@ -900,19 +916,25 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                         )
                                                                       ],
                                                                     ),
-                                                                  )),
+                                                                  ),
                                                                 ],
                                                               )),
                                                         ),
                                                         InkWell(
                                                           onTap: () async {
-                                                            await copyLibrary(element);
+                                                            if (element.isPersonal || widget
+                                                                .globalData.user.companyAdmin) {
+                                                              await copyLibrary(element);
+                                                            }
                                                           },
                                                           child: Container(
                                                             width: 50.w,
                                                             height: 70.h,
                                                             decoration: BoxDecoration(
-                                                              color: AppTheme.of(context).tertiary,
+                                                              color: element.isPersonal || widget
+                                                                      .globalData.user.companyAdmin
+                                                                  ? AppTheme.of(context).tertiary
+                                                                  : AppTheme.of(context).secondary.withOpacity(0.5),
                                                               borderRadius: const BorderRadius.only(
                                                                   topRight: Radius.circular(8.0),
                                                                   bottomRight:

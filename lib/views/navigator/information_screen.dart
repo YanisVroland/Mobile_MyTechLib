@@ -1,6 +1,5 @@
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:lottie/lottie.dart';
-import 'package:my_tech_lib/services/models/company_model.dart';
 import 'package:my_tech_lib/services/models/globalData_model.dart';
 
 import '../../../app/theme/app_theme.dart';
@@ -21,7 +20,7 @@ class InformationWidget extends StatefulWidget {
 }
 
 class _InformationWidgetState extends State<InformationWidget> with TickerProviderStateMixin {
-  int filterIdx = 1;
+  int filterIdx = 2;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
   List<Information> listInformation = [];
@@ -45,10 +44,11 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
         .getInformationByCompany(context, widget.globalData.company!.uuid);
     if (response != null && response.status == 200) {
       List<dynamic> result = await response.body.map((doc) => Information.fromJson(doc)).toList();
-
-      setState(() {
+      widget.globalData.listInformation.clear();
+      widget.globalData.listInformation.addAll(result.cast<Information>());
         listInformationTmp = result.cast<Information>();
         listInformation = result.cast<Information>();
+      setState(() {
         updateGlobalList();
       });
     }
@@ -59,9 +59,7 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
     listInformation.clear();
     listInformation = widget.globalData.listInformation;
     listInformationTmp = widget.globalData.listInformation;
-    setState(() {
-      updateGlobalList();
-    });
+    refreshData();
   }
 
   updateGlobalList() {
@@ -451,135 +449,175 @@ class _InformationWidgetState extends State<InformationWidget> with TickerProvid
                                                   child: Padding(
                                                     padding: const EdgeInsetsDirectional.fromSTEB(
                                                         12.0, 0.0, 0.0, 0.0),
-                                                    child: Column(
-                                                      mainAxisSize: MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                      MainAxisAlignment.spaceBetween,
-                                                      crossAxisAlignment: CrossAxisAlignment.start,
-                                                      children: [
-                                                        Row(
-                                                          children: [
-                                                            Text(
-                                                              element.core_library!.name,
-                                                              style: const TextStyle(
-                                                                  fontSize: 15.0,
-                                                                  fontWeight: FontWeight.bold),
-                                                            ),
-                                                            if (element.isProject)
-                                                              Padding(
-                                                                padding: EdgeInsets.only(left: 5.w),
-                                                                child: const Text(" -> "),
+                                                    child: element.message.isNotEmpty
+                                                        ? Column(
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.center,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment.start,
+                                                            children: [
+                                                              Text(
+
+                                                                element.message,
+                                                                softWrap: true,
+                                                                overflow: TextOverflow.ellipsis,
+                                                                style: const TextStyle(
+                                                                    fontSize: 12.0,
+                                                                    fontWeight: FontWeight.bold),
+                                                              )
+                                                            ],
+                                                          )
+                                                        : Column(
+                                                            mainAxisSize: MainAxisSize.max,
+                                                            mainAxisAlignment:
+                                                                MainAxisAlignment.spaceBetween,
+                                                            crossAxisAlignment:
+                                                                CrossAxisAlignment.start,
+                                                            children: [
+                                                              Row(
+                                                                children: [
+                                                                  if (element.core_library != null)
+                                                                    Text(
+                                                                      element.core_library!.name,
+                                                                      softWrap: true,
+                                                                      overflow: TextOverflow.ellipsis,
+                                                                      style: const TextStyle(
+                                                                          fontSize: 14.0,
+                                                                          fontWeight:
+                                                                              FontWeight.bold),
+                                                                    ),
+                                                                  if (element.isProject)
+                                                                    Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          left: 5.w),
+                                                                      child: const Text("->"),
+                                                                    ),
+                                                                  if (element.isProject)
+                                                                    Padding(
+                                                                      padding: EdgeInsets.only(
+                                                                          left: 5.w),
+                                                                      child: Text(
+                                                                        softWrap: true,
+                                                                        overflow: TextOverflow.ellipsis,
+                                                                        element.core_project!.name,
+                                                                        style: const TextStyle(
+                                                                            fontSize: 13.0,
+                                                                            fontWeight:
+                                                                                FontWeight.bold),
+                                                                      ),
+                                                                    ),
+                                                                ],
                                                               ),
-                                                            if (element.isProject)
-                                                              Padding(
-                                                                padding: EdgeInsets.only(left: 5.w),
-                                                                child: Text(
-                                                                  element.core_project!.name,
-                                                                  style: const TextStyle(
-                                                                      fontSize: 14.0,
-                                                                      fontWeight: FontWeight.bold),
+                                                              Text(
+                                                                "Par : " + element.createdBy,
+                                                                softWrap: true,
+                                                                overflow: TextOverflow.ellipsis,
+                                                                style: const TextStyle(
+                                                                  fontSize: 12.0,
                                                                 ),
                                                               ),
-                                                          ],
-                                                        ),
-                                                        Text(
-                                                          "Par : " + element.createdBy,
-                                                          style: const TextStyle(
-                                                            fontSize: 12.0,
+                                                            ],
                                                           ),
-                                                        ),
-                                                      ],
-                                                    ),
                                                   ),
                                                 ),
-                                                Expanded(
-                                                    child: Padding(
-                                                      padding: const EdgeInsetsDirectional.fromSTEB(
-                                                          12.0, 0.0, 12.0, 0.0),
-                                                      child: Column(
-                                                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                                                        crossAxisAlignment: CrossAxisAlignment.end,
-                                                        children: [
-                                                          Row(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            mainAxisAlignment: MainAxisAlignment.end,
-                                                            children: [
-                                                              if (element.isProject)
-                                                                Padding(
-                                                                  padding: EdgeInsets.only(right: 5.w),
-                                                                  child: Container(
-                                                                    width: 50.w,
-                                                                    height: 14.h,
-                                                                    decoration: BoxDecoration(
-                                                                      color:
-                                                                      AppTheme.of(context).secondary,
-                                                                      borderRadius:
-                                                                      BorderRadius.circular(8.0),
-                                                                    ),
-                                                                    child: const Center(
-                                                                      child: Text(
-                                                                        "PROJET",
-                                                                        style: TextStyle(
-                                                                          fontSize: 10,
-                                                                          color: Colors.white,
-                                                                          fontWeight: FontWeight.bold,
+                                               Padding(
+                                                        padding:
+                                                            const EdgeInsetsDirectional.fromSTEB(
+                                                                12.0, 0.0, 12.0, 0.0),
+                                                        child: Column(
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment.spaceBetween,
+                                                          crossAxisAlignment:
+                                                              CrossAxisAlignment.end,
+                                                          children: [
+                                                            Row(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment.end,
+                                                              children: [
+                                                                if (element.isProject)
+                                                                  Padding(
+                                                                    padding:
+                                                                        EdgeInsets.only(right: 5.w),
+                                                                    child: Container(
+                                                                      width: 50.w,
+                                                                      height: 14.h,
+                                                                      decoration: BoxDecoration(
+                                                                        color: AppTheme.of(context)
+                                                                            .secondary,
+                                                                        borderRadius:
+                                                                            BorderRadius.circular(
+                                                                                8.0),
+                                                                      ),
+                                                                      child: const Center(
+                                                                        child: Text(
+                                                                          "PROJET",
+                                                                          style: TextStyle(
+                                                                            fontSize: 10,
+                                                                            color: Colors.white,
+                                                                            fontWeight:
+                                                                                FontWeight.bold,
+                                                                          ),
                                                                         ),
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                ),
-                                                              Container(
-                                                                width: 50.w,
-                                                                height: 14.h,
-                                                                decoration: BoxDecoration(
-                                                                  color: AppTheme.of(context).primary,
-                                                                  borderRadius:
-                                                                  BorderRadius.circular(8.0),
-                                                                ),
-                                                                child: Center(
-                                                                  child: Text(
-                                                                    element.type,
-                                                                    style: const TextStyle(
-                                                                      fontSize: 10,
-                                                                      color: Colors.white,
-                                                                      fontWeight: FontWeight.bold,
+                                                                Container(
+                                                                  width: 50.w,
+                                                                  height: 14.h,
+                                                                  decoration: BoxDecoration(
+                                                                    color: AppTheme.of(context)
+                                                                        .primary,
+                                                                    borderRadius:
+                                                                        BorderRadius.circular(8.0),
+                                                                  ),
+                                                                  child: Center(
+                                                                    child: Text(
+                                                                      element.type,
+                                                                      style: const TextStyle(
+                                                                        fontSize: 10,
+                                                                        color: Colors.white,
+                                                                        fontWeight: FontWeight.bold,
+                                                                      ),
                                                                     ),
                                                                   ),
                                                                 ),
-                                                              ),
-                                                            ],
-                                                          ),
-                                                          Column(
-                                                            mainAxisSize: MainAxisSize.min,
-                                                            mainAxisAlignment: MainAxisAlignment.end,
-                                                            crossAxisAlignment: CrossAxisAlignment.end,
-                                                            children: [
-                                                              const Text(
-                                                                "Mise à jour :",
-                                                                style: TextStyle(
-                                                                  fontSize: 10.0,
-                                                                  color: Color(0xFF8E8E93),
+                                                              ],
+                                                            ),
+                                                            Column(
+                                                              mainAxisSize: MainAxisSize.min,
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment.end,
+                                                              crossAxisAlignment:
+                                                                  CrossAxisAlignment.end,
+                                                              children: [
+                                                                const Text(
+                                                                  "Mise à jour :",
+                                                                  style: TextStyle(
+                                                                    fontSize: 10.0,
+                                                                    color: Color(0xFF8E8E93),
+                                                                  ),
                                                                 ),
-                                                              ),
-                                                              Text(
-                                                                Tools.formatDate(element.createdAt!),
-                                                                style: TextStyle(
-                                                                    fontSize: 12.0,
-                                                                    color: AppTheme.of(context).primary),
-                                                              ),
-                                                            ],
-                                                          )
-                                                        ],
-                                                      ),
-                                                    )),
+                                                                Text(
+                                                                  Tools.formatDate(
+                                                                      element.createdAt!),
+                                                                  style: TextStyle(
+                                                                      fontSize: 12.0,
+                                                                      color: AppTheme.of(context)
+                                                                          .primary),
+                                                                ),
+                                                              ],
+                                                            )
+                                                          ],
+                                                        ),
+                                                      )
                                               ],
                                             )),
                                       ),
                                     );
                                   },
                                 ),
-                              )
-                            ),
+                              )),
                     ),
                   )
                 : Column(

@@ -26,7 +26,7 @@ class Library {
     this.createdBy = '',
     this.createdAt  = null,
     this.updatedAt = null,
-    this.isPersonal = true,
+    this.isPersonal = false,
   });
 
   factory Library.fromJson(Map<String, dynamic> json) {
@@ -44,7 +44,7 @@ class Library {
           json['created_at'] != null ? DateTime.parse(json['created_at']) : null,
       updatedAt:
           json['updated_at']  != null ?  DateTime.parse(json['updated_at']) : null,
-      isPersonal: json['is_personal'] ?? true,
+      isPersonal: json['is_personal'] ?? false,
     );
   }
 

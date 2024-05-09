@@ -32,7 +32,7 @@ class UserModel {
     return {
       "email": email.trim(),
       "name": name.trim(),
-      "lastName": lastname.trim(),
+      "lastname": lastname.trim(),
       "password": password.trim(),
     };
   }

@@ -9,8 +9,10 @@ import '../../../app/routes/router.dart';
 import '../../../app/theme/snackBar_const.dart';
 import '../../../services/models/company_model.dart';
 import '../../../services/models/globalData_model.dart';
+import '../../../services/models/information_model.dart';
 import '../../../services/models/responseAPI_model.dart';
 import '../../../services/repositories/company_repository.dart';
+import '../../../services/repositories/information_repository.dart';
 
 class JoinCompany extends StatefulWidget {
   JoinCompany(this.globalData, {Key? key}) : super(key: key);
@@ -46,6 +48,15 @@ class _JoinCompanyState extends State<JoinCompany> {
     ResponseApi? responseApi =
         await CompanyRepository().joinCompany(context, codeCompanyController.text);
     if (responseApi != null && responseApi.status == 200) {
+      if (responseApi.body['uuid'] != null) {
+        await InformationRepository().createInformation(
+            context,
+            Information(
+                core_company: responseApi.body['uuid'],
+                type: "NEW",
+                message: "${widget.globalData.user.name} ${widget.globalData.user.lastname} a rejoint l'entreprise"
+            ));
+      }
       await Navigator.pushNamed(context, AppRouter.MAIN, arguments: widget.globalData.user.uuid);
     }else{
       SnackConst.SnackCustom("Le code ne correspond à aucune entreprise", context, color: Colors.red);

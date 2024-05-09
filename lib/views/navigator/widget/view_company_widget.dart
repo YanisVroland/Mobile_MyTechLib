@@ -32,8 +32,11 @@ class _ViewCompanyState extends State<ViewCompany> {
     final ResponseApi? response =
         await CompanyRepository().getStatistiqueCompany(context, widget.globalData.company!.uuid);
     if (response != null && response.status == 200) {
-      widget.globalData.company!.projectCpt = response.body["projectCpt"];
-      widget.globalData.company!.libraryCpt = response.body["libraryCpt"];
+      setState(() {
+
+        widget.globalData.company!.projectCpt = response.body["projectCpt"];
+        widget.globalData.company!.libraryCpt = response.body["libraryCpt"];
+      });
     }
   }
 
@@ -127,6 +130,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                                       Text(
                                         widget.globalData.company!.createdAt,
                                         style: const TextStyle(
+                                          color: ColorConst.secondary,
                                           fontSize: 10.0,
                                         ),
                                       ),
@@ -261,6 +265,7 @@ class _ViewCompanyState extends State<ViewCompany> {
                       child: Padding(
                           padding: EdgeInsets.only(bottom: 20.h),
                           child: Container(
+                            width: MediaQuery.sizeOf(context).width,
                             padding: EdgeInsets.only(
                               left: 15.w,
                               right: 15.w,
@@ -400,8 +405,8 @@ class _ViewCompanyState extends State<ViewCompany> {
                                 widget.globalData.company!.description.isNotEmpty
                                     ? AutoSizeText(
                                         widget.globalData.company!.description,
-                                        maxLines: 10,
-                                        textAlign: TextAlign.justify,
+                                  textAlign: TextAlign.justify,
+                                  maxLines: 10,
                                       )
                                     : const Row(
                                         mainAxisAlignment: MainAxisAlignment.center,

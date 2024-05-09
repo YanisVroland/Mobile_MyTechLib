@@ -10,12 +10,14 @@ import '../../app/theme/color_const.dart';
 import '../../app/theme/snackBar_const.dart';
 import '../../app/widgets/DeleteDialog_custom.dart';
 import '../../app/widgets/icon_custom.dart';
+import '../../services/models/user_model.dart';
 import '../../services/models/webProject_model.dart';
 import '../../services/repositories/library_repository.dart';
 import '../../services/repositories/project_repository.dart';
 
 class WebWidget extends StatefulWidget {
-  WebWidget(this.project, {Key? key}) : super(key: key);
+  WebWidget(this.userModel, this.project, {Key? key}) : super(key: key);
+  UserModel userModel;
   WebProject project;
 
   @override
@@ -65,9 +67,9 @@ class _WebWidgetState extends State<WebWidget> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppTheme.of(context).secondaryBackground,
+      backgroundColor: AppTheme.of(context).background,
       appBar: AppBar(
-        backgroundColor: AppTheme.of(context).secondaryBackground,
+        backgroundColor: AppTheme.of(context).background,
         automaticallyImplyLeading: false,
         leading: IconCustom(
           borderColor: Colors.transparent,
@@ -161,51 +163,65 @@ class _WebWidgetState extends State<WebWidget> {
                           ),
                           Padding(
                             padding: EdgeInsets.only(left: 10.w),
-                            child: PopupMenuButton<String>(
-                              itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
-                                PopupMenuItem<String>(
-                                  onTap: () async {
-                                    Object? newData = await Navigator.pushNamed(
-                                        context, AppRouter.WEB_MODIFY_PROJECT,
-                                        arguments: widget.project);
-                                    if (newData != null) {
-                                      setState(() {
-                                        widget.project = newData as WebProject;
-                                      });
-                                    }
-                                  },
-                                  child: const Row(
-                                    children: [
-                                      Icon(Icons.edit),
-                                      Text('Modifier'),
+                            child: widget.project.isPersonal || widget.userModel.companyAdmin
+                                ? PopupMenuButton<String>(
+                                    itemBuilder: (BuildContext context) => <PopupMenuEntry<String>>[
+                                      PopupMenuItem<String>(
+                                        onTap: () async {
+                                          Object? newData = await Navigator.pushNamed(
+                                              context, AppRouter.WEB_MODIFY_PROJECT,
+                                              arguments: widget.project);
+                                          if (newData != null) {
+                                            setState(() {
+                                              widget.project = newData as WebProject;
+                                            });
+                                          }
+                                        },
+                                        child: const Row(
+                                          children: [
+                                            Icon(Icons.edit),
+                                            Text('Modifier'),
+                                          ],
+                                        ),
+                                      ),
+                                      PopupMenuItem<String>(
+                                        textStyle: const TextStyle(color: Colors.red),
+                                        onTap: deleteLibrary,
+                                        child: const Row(
+                                          children: [
+                                            Icon(Icons.delete, color: Colors.red),
+                                            Text('Supprimer', style: TextStyle(color: Colors.red)),
+                                          ],
+                                        ),
+                                      ),
                                     ],
+                                    child: Container(
+                                      width: 40.0,
+                                      height: 40.0,
+                                      decoration: BoxDecoration(
+                                        color: ColorConst.secondary,
+                                        borderRadius: BorderRadius.circular(8.0),
+                                      ),
+                                      child: const Icon(
+                                        Icons.settings,
+                                        color: Colors.white,
+                                        size: 25.0,
+                                      ),
+                                    ),
+                                  )
+                                : Container(
+                                    width: 40.0,
+                                    height: 40.0,
+                                    decoration: BoxDecoration(
+                                      color: ColorConst.secondary.withOpacity(0.5),
+                                      borderRadius: BorderRadius.circular(8.0),
+                                    ),
+                                    child: const Icon(
+                                      Icons.settings,
+                                      color: Colors.white,
+                                      size: 25.0,
+                                    ),
                                   ),
-                                ),
-                                PopupMenuItem<String>(
-                                  textStyle: const TextStyle(color: Colors.red),
-                                  onTap: deleteLibrary,
-                                  child: const Row(
-                                    children: [
-                                      Icon(Icons.delete, color: Colors.red),
-                                      Text('Supprimer', style: TextStyle(color: Colors.red)),
-                                    ],
-                                  ),
-                                ),
-                              ],
-                              child: Container(
-                                width: 40.0,
-                                height: 40.0,
-                                decoration: BoxDecoration(
-                                  color: ColorConst.secondary,
-                                  borderRadius: BorderRadius.circular(8.0),
-                                ),
-                                child: const Icon(
-                                  Icons.settings,
-                                  color: Colors.white,
-                                  size: 25.0,
-                                ),
-                              ),
-                            ),
                           ),
                         ],
                       ),
@@ -298,6 +314,7 @@ class _WebWidgetState extends State<WebWidget> {
                         Padding(
                             padding: EdgeInsets.only(left: 5.w, top: 5.h),
                             child: Text(widget.project.description,
+                                textAlign: TextAlign.justify,
                                 style: const TextStyle(
                                   fontFamily: 'Montserrat',
                                   fontSize: 12,

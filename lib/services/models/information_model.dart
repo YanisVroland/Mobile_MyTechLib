@@ -9,6 +9,7 @@ import 'library_model.dart';
 class Information {
   final String uuid;
   final String type;
+  final String message;
   final String? core_company;
   final Project? core_project;
   final Library? core_library;
@@ -19,6 +20,7 @@ class Information {
   Information({
     this.uuid = '-1',
     this.type = '',
+    this.message = '',
     this.core_company = null,
     this.core_library = null,
     this.core_project = null,
@@ -31,6 +33,7 @@ class Information {
     return Information(
       uuid: json['uuid'] ?? '-1',
       type: json['type'] ?? '',
+      message: json['message'] ?? '',
       core_company: json['core_company'] ?? '' ,
       core_library: json['core_library'] != '' ? Library.fromJsonInformation(json['core_library']) : null,
       core_project: json['core_project'] != ''? Project.fromJsonInformation(json['core_project']) : null,
@@ -44,6 +47,7 @@ class Information {
   Map<String, dynamic> toJson() {
     var json= {
       'type': type,
+      'message': message,
       'core_company': core_company,
       'core_library': core_library != null ? core_library!.toJson() : '',
       'core_project': core_project != null ? core_project!.toJson() : '',

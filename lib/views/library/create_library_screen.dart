@@ -388,32 +388,26 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                             ),
                                           ],
                                         )),
-                                    Padding(
-                                        padding: EdgeInsets.only(top: 10.h),
-                                        child: Row(
-                                          children: [
-                                            Text("Librairie entreprise ",
-                                                style: TextStyle(
-                                                    color: widget.user.companyAdmin
-                                                        ? Colors.black
-                                                        : Colors.grey,
-                                                    fontSize: 16.sp)),
-                                            Checkbox(
-                                              value: toCompany,
-                                              side: BorderSide(
-                                                  color: widget.user.companyAdmin
-                                                      ? Colors.black
-                                                      : Colors.grey),
-                                              onChanged: (bool? value) {
-                                                if (widget.user.companyAdmin) {
-                                                  setState(() {
-                                                    toCompany = value!;
-                                                  });
-                                                }
-                                              },
-                                            ),
-                                          ],
-                                        )),
+                                    if (widget.user.companyAdmin)
+                                      Padding(
+                                          padding: EdgeInsets.only(top: 10.h),
+                                          child: Row(
+                                            children: [
+                                              Text("Librairie entreprise ",
+                                                  style: TextStyle(
+                                                      color: Colors.black, fontSize: 16.sp)),
+                                              Checkbox(
+                                                value: toCompany,
+                                                onChanged: (bool? value) {
+                                                  if (widget.user.companyAdmin) {
+                                                    setState(() {
+                                                      toCompany = value!;
+                                                    });
+                                                  }
+                                                },
+                                              ),
+                                            ],
+                                          )),
                                     Padding(
                                       padding: EdgeInsets.symmetric(vertical: 20.h),
                                       child: Row(
@@ -442,7 +436,7 @@ class _CreateLibraryWidgetState extends State<CreateLibraryWidget> {
                                       padding: EdgeInsets.symmetric(vertical: 20.h),
                                       child: CustomTextField(
                                         controller: codeController,
-                                        labelText: "Code de copy",
+                                        labelText: "Code de la librairie",
                                         hintText: "Entrer le code de la librairie",
                                         validator: Validators.validateEmpty,
                                       ),

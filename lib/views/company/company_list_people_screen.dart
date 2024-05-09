@@ -103,6 +103,9 @@ class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget> {
         ),
         title: Text(
           widget.globalData.company!.name,
+
+          softWrap: true,
+          overflow: TextOverflow.ellipsis,
           style: const TextStyle(
             fontSize: 20.0,
             fontWeight: FontWeight.bold,
@@ -237,6 +240,9 @@ class _CompanyListPeopleWidgetState extends State<CompanyListPeopleWidget> {
                                             ),
                                           ),
                                           Text(element.name + " " + element.lastname,
+
+                                              softWrap: true,
+                                              overflow: TextOverflow.ellipsis,
                                               style: TextStyle(
                                                 color: AppTheme.of(context).primary,
                                                 fontSize: 14.0,
