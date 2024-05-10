@@ -15,7 +15,23 @@ Ce projet est une application mobile développée avec Flutter pour faciliter la
 - **Gestion des projets :** Les utilisateurs peuvent créer de nouveaux projets, mettre à jour les détails existants et visualiser des informations détaillées sur chaque projet.
 - **Suivi des modifications de projet :** Une page dédiée permet aux utilisateurs de visualiser les modifications apportées aux projets au fil du temps.
 
-## Version APK pour Téléphones Android
+## À savoir
+
+Voici quelques informations importantes à connaître sur ce projet :
+
+- Ce projet est réalisé dans le cadre d'un projet de fin d'étude de Master 2 en informatique à l'université catholique de Lille.
+
+- Il est accompagné d'une API pour son bon fonctionnement, disponible sur le lien GitHub suivant : [API_MyTechLib](https://github.com/YanisVroland/API_MyTechLib.git). Cette API fournit les services nécessaires à l'application mobile MyTechLib, tels que l'accès aux données des projets et des utilisateurs.
+
+- Le projet utilise une base de données Firebase et Supabase, qui sont hébergées pour assurer la disponibilité et la performance des données. Ces bases de données sont utilisées pour stocker et gérer les informations des utilisateurs, des entreprises et des projets de l'application.
+
+- Tous les documents annexes en lien avec ce projet se trouvent dans le dossier **"annexes"**. Vous y trouverez notamment le rapport sur ce projet, les informations d'installation, ainsi que tous les autres documents utiles à la compréhension et à l'utilisation de l'application.
+
+- Pour des tests d'utilisation plus immersifs et avancés, un compte utilisateur de test est disponible (email : test@test.com, mot de passe : azerty).
+
+---
+
+## Version APK pour téléphones Android
 
 Si vous préférez installer l'application directement sur un téléphone Android plutôt que de la construire localement, une version APK est disponible dans le dossier annexes du dépôt GitHub. Vous pouvez télécharger cette APK et l'installer sur votre téléphone en suivant les instructions habituelles pour l'installation d'applications depuis des sources inconnues.
 
@@ -70,4 +86,23 @@ Pour exécuter l'application localement, suivez ces étapes :
 
 **REMARQUE** : En cas de problème lors de l'installation, n'hésitez pas à utiliser l'APK mis à disposition (voir partie : *Version APK pour Téléphones Android*)
 
+---
+
 ## Structure du projet
+
+Le projet est organisé de manière à faciliter la navigation et la gestion des différentes parties de l'application. Voici un aperçu de la structure des dossiers :
+
+- **dossier annexes :** Ce dossier contient tous les documents en lien avec le projet ou utiles au README. Des tutoriels, des guides, des captures d'écran ou tout autre document pertinent pour le développement ou l'utilisation de l'application.
+
+- **Dossier assets :** Ce dossier contient les ressources utiles commes les icônes importées, les images ou encore les fichiers d'animations. 
+
+- **Dossier lib :** C'est le dossier le plus important du projet, car il contient tout le code de l'application mobile. Il est subdivisé en trois sous-dossiers :
+
+  - **view :** Ce dossier contient toutes les vues de l'application, c'est-à-dire toutes les interfaces utilisateur et les écrans visibles par les utilisateurs. Chaque fichier représente un écran spécifique de l'application.
+
+  - **services :** Ce dossier contient les codes et algorithmes en lien avec les appels API, ainsi que les modèles de chaque objet utilisé dans l'application. Les services sont responsables de la logique métier de l'application, tels que la récupération et la manipulation des données à partir de l'API.
+
+  - **app :** Ce dossier contient tous les fichiers de configuration de l'application. Les variables globales, les thèmes de l'application, les alertes personnalisées, etc. Les fichiers de ce dossier sont utilisés pour configurer et personnaliser le comportement global de l'application.
+
+- **Dossier test :** Ce dossier contient les tests réalisés à l'aide de la bibliothèque flutter_test. Les tests sont utilisés pour vérifier le bon fonctionnement des formulaires de l'application.
+
