@@ -1,3 +1,7 @@
+/*
+  This file contains a custom button widget used throughout the application.
+*/
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -14,7 +18,8 @@ class CustomButton extends StatefulWidget {
   final Widget? prefix;
   final VoidCallback onTap;
 
-  const CustomButton({Key? key,
+  const CustomButton({
+    Key? key,
     required this.onTap,
     required this.text,
     this.prefix,

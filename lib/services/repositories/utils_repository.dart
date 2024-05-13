@@ -1,3 +1,7 @@
+/*
+  This file contains a repository class for managing utility functions related to API requests
+*/
+
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
@@ -10,6 +14,8 @@ import '../local/pref.dart';
 import '../models/responseAPI_model.dart';
 
 class UtilsRepository {
+
+  // Make a POST request
   Future<ResponseApi?> requestPost(
       BuildContext context, String endpoint, Map<String, dynamic> bodyJson) async {
     try {
@@ -29,6 +35,7 @@ class UtilsRepository {
     }
   }
 
+  // Make a PATCH request
   Future<ResponseApi?> requestPatch(
       BuildContext context, String endpoint, Map<String, dynamic> bodyJson) async {
     try {
@@ -48,6 +55,7 @@ class UtilsRepository {
     }
   }
 
+  // Make a GET request
   Future<ResponseApi?> requestGet(BuildContext context, String endpoint) async {
     try {
       String accessToken = await LocalPref().getString("access_token");
@@ -62,6 +70,7 @@ class UtilsRepository {
     }
   }
 
+  // Make a PUT request
   Future<ResponseApi?> requestPut(
       BuildContext context, String endpoint, Map<String, dynamic> bodyJson) async {
     try {
@@ -81,6 +90,7 @@ class UtilsRepository {
     }
   }
 
+// Make a DELETE request
   Future<ResponseApi?> requestDelete(BuildContext context, String endpoint) async {
     try {
       String accessToken = await LocalPref().getString("access_token");
@@ -94,6 +104,7 @@ class UtilsRepository {
     }
   }
 
+  // Make a POST request
   Future<ResponseApi> requestImagePost(
       BuildContext context, String endpoint, Map<String, Object> bodyJson) async {
     try {

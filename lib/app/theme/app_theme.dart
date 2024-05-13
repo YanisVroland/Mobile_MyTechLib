@@ -1,3 +1,10 @@
+/*
+  This file contains classes related to the application's theme management,
+  including AppTheme and Typography. It also defines LightModeTheme and DarkModeTheme
+  for light and dark themes respectively, along with the extension TextStyleHelper
+  for TextStyle customization.
+*/
+
 // ignore_for_file: overridden_fields, annotate_overrides
 import 'dart:math';
 
@@ -5,13 +12,17 @@ import 'package:flutter/material.dart';
 import 'package:my_tech_lib/app/theme/color_const.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+// Key for storing theme mode in SharedPreferences
 const kThemeModeKey = '__theme_mode__';
+
 SharedPreferences? _prefs;
 
+// AppTheme class for managing theme mode and colors
 abstract class AppTheme {
   static Future initialize() async =>
       _prefs = await SharedPreferences.getInstance();
 
+  // Returns the current theme mode
   static ThemeMode get themeMode {
     final darkMode = _prefs?.getBool(kThemeModeKey);
     return darkMode == null
@@ -21,22 +32,17 @@ abstract class AppTheme {
         : ThemeMode.light;
   }
 
+  // Saves the selected theme mode
   static void saveThemeMode(ThemeMode mode) => mode == ThemeMode.system
       ? _prefs?.remove(kThemeModeKey)
       : _prefs?.setBool(kThemeModeKey, mode == ThemeMode.dark);
 
+  // Returns AppTheme based on the current brightness of the context
   static AppTheme of(BuildContext context) {
     return Theme.of(context).brightness == Brightness.dark
         ? DarkModeTheme()
         : LightModeTheme();
   }
-
-  @Deprecated('Use primary instead')
-  Color get primaryColor => primary;
-  @Deprecated('Use secondary instead')
-  Color get secondaryColor => secondary;
-  @Deprecated('Use tertiary instead')
-  Color get tertiaryColor => tertiary;
 
   late Color primary;
   late Color secondary;
@@ -49,17 +55,11 @@ abstract class AppTheme {
 
   late Color background;
   late Color secondaryBackground;
-
 }
 
+// LightModeTheme class for light theme configuration
 class LightModeTheme extends AppTheme {
-  @Deprecated('Use primary instead')
-  Color get primaryColor => primary;
-  @Deprecated('Use secondary instead')
-  Color get secondaryColor => secondary;
-  @Deprecated('Use tertiary instead')
-  Color get tertiaryColor => tertiary;
-
+  // Color constants for light theme
   late Color primary = ColorConst.primary;
   late Color secondary = ColorConst.secondary;
   late Color tertiary = ColorConst.tertiary;
@@ -73,6 +73,7 @@ class LightModeTheme extends AppTheme {
   late Color secondaryBackground = ColorConst.secondaryBackground;
 }
 
+// Typography class for managing text styles
 abstract class Typography {
   String get displayLargeFamily;
   TextStyle get displayLarge;
@@ -106,14 +107,9 @@ abstract class Typography {
   TextStyle get bodySmall;
 }
 
+// DarkModeTheme class for dark theme configuration
 class DarkModeTheme extends AppTheme {
-  @Deprecated('Use primary instead')
-  Color get primaryColor => primary;
-  @Deprecated('Use secondary instead')
-  Color get secondaryColor => secondary;
-  @Deprecated('Use tertiary instead')
-  Color get tertiaryColor => tertiary;
-
+  // Color constants for dark theme
   late Color primary = const Color(0xFF127D7D);
   late Color secondary = const Color(0xFFF2A384);
   late Color tertiary = const Color(0xFF39D2C0);
@@ -135,6 +131,7 @@ class DarkModeTheme extends AppTheme {
   late Color errorRed = Color(0xFFF06A6A);
 }
 
+// Extension to customize TextStyle properties
 extension TextStyleHelper on TextStyle {
   TextStyle override({
     String? fontFamily,
@@ -147,7 +144,7 @@ extension TextStyleHelper on TextStyle {
     TextDecoration? decoration,
     double? lineHeight,
   }) =>
-   copyWith(
+      copyWith(
         fontFamily: fontFamily,
         color: color,
         fontSize: fontSize,

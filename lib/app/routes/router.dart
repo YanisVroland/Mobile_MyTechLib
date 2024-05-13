@@ -1,3 +1,9 @@
+/*
+  This class represents the router configuration for the application.
+  It defines the routes and generates appropriate MaterialPageRoute
+  instances for navigation.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/models/globalData_model.dart';
 import 'package:my_tech_lib/services/models/mobileProject_model.dart';
@@ -33,6 +39,7 @@ import '../../views/project/web_screen.dart';
 import '../../views/splash_screen.dart';
 
 class AppRouter {
+  // Route names
   static const String MAIN = '/Main';
   static const String HOME = '/Home';
   static const String SPLASH = '/Splash';
@@ -45,14 +52,11 @@ class AppRouter {
   static const String PRIVACY_POLICY = '/PrivacyPolicy';
   static const String NOTIFICATION_SETTINGS = '/Notification';
   static const String ONBOARDING = '/Onboarding';
-
   static const String COMPANY_EDIT = '/CompanyEdit';
-  static const String COMPANY_LIST_POEPLE = '/CompanyListPeople';
-
+  static const String COMPANY_LIST_PEOPLE = '/CompanyListPeople';
   static const String LIBRARY = '/Library';
   static const String CREATE_LIBRARY = '/CreatePublicLibraryWidget';
   static const String MODIFY_LIBRARY = '/ModifyPublicLibraryWidget';
-
   static const String PROJECT_API = '/ProjectApi';
   static const String PROJECT_WEB = '/ProjectWeb';
   static const String PROJECT_MOBILE = '/ProjectMobile';
@@ -61,6 +65,7 @@ class AppRouter {
   static const String API_MODIFY_PROJECT = '/ApiModifyProject';
   static const String WEB_MODIFY_PROJECT = '/WebApiModifyProject';
 
+  // Generates appropriate MaterialPageRoute for navigation
   static Route<dynamic> generateRoute(RouteSettings settings) {
     switch (settings.name) {
       case MAIN:
@@ -90,13 +95,11 @@ class AppRouter {
         return MaterialPageRoute(builder: (_) => const NotificationsSettingsWidget());
       case ONBOARDING:
         return MaterialPageRoute(builder: (_) => const OnboardingPage());
-
       case COMPANY_EDIT:
         return MaterialPageRoute(builder: (_) => CompanyEditWidget(settings.arguments as Company));
-      case COMPANY_LIST_POEPLE:
+      case COMPANY_LIST_PEOPLE:
         return MaterialPageRoute(
             builder: (_) => CompanyListPeopleWidget(settings.arguments as GlobalData));
-
       case LIBRARY:
         return MaterialPageRoute(
             builder: (_) => LibraryWidget((settings.arguments! as List<Object>)[0] as UserModel,
@@ -109,7 +112,6 @@ class AppRouter {
             builder: (_) => ModifyLibraryWidget(
                 (settings.arguments! as List<Object>)[0] as UserModel,
                 (settings.arguments! as List<Object>)[1] as Library));
-
       case PROJECT_MOBILE:
         return MaterialPageRoute(builder: (_) => MobileWidget((settings.arguments! as List<Object>)[0] as UserModel, (settings.arguments! as List<Object>)[1]  as MobileProject));
       case PROJECT_API:
@@ -128,14 +130,13 @@ class AppRouter {
       case WEB_MODIFY_PROJECT:
         return MaterialPageRoute(
             builder: (_) => WebModifyProjectWidget(settings.arguments as WebProject));
-
       default:
         return MaterialPageRoute(
             builder: (_) => Scaffold(
-                  body: Center(
-                    child: Text('No route defined for ${settings.name}'),
-                  ),
-                ));
+              body: Center(
+                child: Text('No route defined for ${settings.name}'),
+              ),
+            ));
     }
   }
 }

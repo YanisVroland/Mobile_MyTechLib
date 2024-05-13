@@ -1,3 +1,7 @@
+/*
+  This file contains a custom dropdown widget used throughout the application.
+*/
+
 import 'package:flutter/material.dart';
 import '../theme/color_const.dart';
 
@@ -36,19 +40,19 @@ class _CustomDropDown extends State<CustomDropDown> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        decoration: BoxDecoration(
+      decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
-    ),
-    child: DropdownButtonFormField<dynamic>(
+      ),
+      child: DropdownButtonFormField<dynamic>(
         value: widget.value,
         isExpanded: true,
         icon: const Icon(Icons.keyboard_arrow_down),
         validator: widget.validator,
         style: TextStyle(
-            color: widget.disabled ? Colors.grey.withOpacity(0.9) : Colors.black.withOpacity(0.8),
-            fontSize:  16.0),
-        // style: TextStyle(color: widget.disabled ? Colors.grey : Colors.black),
-        decoration:InputDecoration(
+          color: widget.disabled ? Colors.grey.withOpacity(0.9) : Colors.black.withOpacity(0.8),
+          fontSize:  16.0,
+        ),
+        decoration: InputDecoration(
           filled: true,
           fillColor: widget.disabled ? Colors.grey.withOpacity(0.2) : widget.fillColor,
           errorMaxLines: 2,
@@ -56,14 +60,13 @@ class _CustomDropDown extends State<CustomDropDown> {
           labelStyle: TextStyle(
             color: widget.disabled ? Colors.grey : Colors.black.withOpacity(0.6),
           ),
-          floatingLabelStyle:
-          TextStyle(fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.6)),
+          floatingLabelStyle: TextStyle(fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.6)),
           alignLabelWithHint: true,
           errorStyle: widget.errorStyle ?? const TextStyle(height: 0),
           hintText: widget.hintText,
           suffixIcon: widget.suffixIcon,
           hintMaxLines: 1,
-          hintStyle:  TextStyle(color: Colors.black.withOpacity(0.5)),
+          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),
             borderSide: BorderSide(
@@ -84,6 +87,8 @@ class _CustomDropDown extends State<CustomDropDown> {
             value: value,
             child: Text(value is String ? value : value.name),
           );
-        }).toList()));
+        }).toList(),
+      ),
+    );
   }
 }

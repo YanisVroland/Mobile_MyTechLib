@@ -1,5 +1,8 @@
+/*
+  This file contains a custom text field widget with various customization options.
+*/
+
 import 'package:flutter/material.dart';
-import '../theme/color_const.dart';
 
 class CustomTextField extends StatefulWidget {
   final TextEditingController? controller;
@@ -56,6 +59,7 @@ class CustomTextField extends StatefulWidget {
 class _CustomTextFieldState extends State<CustomTextField> {
   @override
   Widget build(BuildContext context) {
+    // Define the custom text form field
     return Container(
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -68,8 +72,9 @@ class _CustomTextFieldState extends State<CustomTextField> {
         obscureText: widget.obscureText && !widget.passwordVisible,
         focusNode: widget.focus,
         style: TextStyle(
-            color: widget.disabled ? Colors.grey.withOpacity(0.9) : Colors.black.withOpacity(0.8),
-            fontSize: widget.sizeText),
+          color: widget.disabled ? Colors.grey.withOpacity(0.9) : Colors.black.withOpacity(0.8),
+          fontSize: widget.sizeText,
+        ),
         keyboardType: widget.keyboardType,
         validator: widget.validator,
         textCapitalization: TextCapitalization.sentences,
@@ -81,14 +86,16 @@ class _CustomTextFieldState extends State<CustomTextField> {
           labelStyle: TextStyle(
             color: widget.disabled ? Colors.grey : Colors.black.withOpacity(0.6),
           ),
-          floatingLabelStyle:
-              TextStyle(fontWeight: FontWeight.bold, color: Colors.black.withOpacity(0.6)),
+          floatingLabelStyle: TextStyle(
+            fontWeight: FontWeight.bold,
+            color: Colors.black.withOpacity(0.6),
+          ),
           alignLabelWithHint: true,
           errorStyle: widget.errorStyle ?? const TextStyle(height: 0),
           hintText: widget.hintText,
           suffixIcon: widget.suffixIcon,
           hintMaxLines: 1,
-          hintStyle:  TextStyle(color: Colors.black.withOpacity(0.5)),
+          hintStyle: TextStyle(color: Colors.black.withOpacity(0.5)),
           prefixIcon: widget.prefixIcon,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(10),

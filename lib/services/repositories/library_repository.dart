@@ -1,3 +1,7 @@
+/*
+  This file contains a repository class for managing library-related operations.
+*/
+
 import 'dart:developer';
 import 'package:path/path.dart' as path;
 import 'package:dio/dio.dart';
@@ -17,6 +21,7 @@ class LibraryRepository {
   UtilsRepository utilsRepository = UtilsRepository();
   InformationRepository informationRepository = InformationRepository();
 
+  // Method to get personal library
   Future<ResponseApi?> getPersonalLibrary(BuildContext context) async {
     String uuidUser = await LocalPref().getString("uuid_user");
     try {
@@ -27,6 +32,7 @@ class LibraryRepository {
     }
   }
 
+  // Method to get company library
   Future<ResponseApi?> getCompanyLibrary(BuildContext context, String companyUuid) async {
     try {
       return utilsRepository.requestGet(context, AppConst.libraryCompanyGetEndpoint + companyUuid);
@@ -36,6 +42,7 @@ class LibraryRepository {
     }
   }
 
+  // Method to update library
   Future<ResponseApi?> updateLibrary(BuildContext context, Library library) async {
     try {
       ResponseApi? responseApi = await utilsRepository.requestPatch(
@@ -56,7 +63,6 @@ class LibraryRepository {
           await uploadLogo(context, library.uuid, library.logoUrl);
         }
         if (library.bannerUrl != null && !library.bannerUrl.contains("http")) {
-
           await uploadBanner(context, library.uuid, library.bannerUrl);
         }
       }
@@ -67,6 +73,7 @@ class LibraryRepository {
     }
   }
 
+  // Method to create library
   Future<ResponseApi?> createLibrary(BuildContext context, Library library) async {
     try {
       ResponseApi? responseApi = await utilsRepository.requestPost(
@@ -98,6 +105,7 @@ class LibraryRepository {
     }
   }
 
+  // Method to delete library
   Future<ResponseApi?> deleteLibrary(BuildContext context, String uuid) async {
     try {
       return utilsRepository.requestDelete(context, AppConst.libraryDeleteEndpoint + uuid);
@@ -107,6 +115,7 @@ class LibraryRepository {
     }
   }
 
+  // Method to upload logo
   Future<ResponseApi?> uploadLogo(
       BuildContext context, String libraryUuid, String uploadedFileUrl) async {
     try {
@@ -128,17 +137,18 @@ class LibraryRepository {
     }
   }
 
-  Future<ResponseApi?> updateLibraryCountProject(
-      BuildContext context, String libraryUuid) async {
+  // Method to update library project count
+  Future<ResponseApi?> updateLibraryCountProject(BuildContext context, String libraryUuid) async {
     try {
-      return utilsRepository.requestPatch(
-          context, AppConst.libraryCountProjectUpdatePatchEndpoint + libraryUuid, {});
+      return utilsRepository
+          .requestPatch(context, AppConst.libraryCountProjectUpdatePatchEndpoint + libraryUuid, {});
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
+  // Method to upload banner
   Future<ResponseApi?> uploadBanner(
       BuildContext context, String libraryUuid, String uploadedFileUrl) async {
     try {

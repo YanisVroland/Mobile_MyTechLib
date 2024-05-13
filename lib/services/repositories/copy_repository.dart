@@ -1,28 +1,37 @@
+/*
+  This file contains a repository class for managing copy-related operations.
+*/
+
 import 'dart:developer';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_tech_lib/services/models/information_model.dart';
-import 'package:my_tech_lib/services/repositories/utils_repository.dart';
 
 import '../../app/theme/app_const.dart';
 import '../models/responseAPI_model.dart';
+import '../repositories/utils_repository.dart';
 
 class CopyRepository {
   UtilsRepository utilsRepository = UtilsRepository();
 
-  Future<ResponseApi?> createCopyLibrary(BuildContext context, String uuidLibrary) async {
+  // Method to create a copy of a library by UUID
+  Future<ResponseApi?> createCopyLibrary(
+      BuildContext context, String uuidLibrary) async {
     try {
-      return utilsRepository.requestPost(context, AppConst.copyLibraryCreateEndpoint + uuidLibrary, {});
+      return utilsRepository.requestPost(
+          context, AppConst.copyLibraryCreateEndpoint + uuidLibrary, {});
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
-  Future<ResponseApi?> useCopyLibrary(BuildContext context, String codeCopy) async {
+  // Method to use a copy of a library by code
+  Future<ResponseApi?> useCopyLibrary(
+      BuildContext context, String codeCopy) async {
     try {
-      return utilsRepository.requestPost(context, AppConst.useCopyLibraryPostEndpoint + codeCopy, {});
+      return utilsRepository.requestPost(
+          context, AppConst.useCopyLibraryPostEndpoint + codeCopy, {});
     } catch (e) {
       log(e.toString());
       return null;

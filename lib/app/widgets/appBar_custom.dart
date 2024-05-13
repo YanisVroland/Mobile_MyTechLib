@@ -1,3 +1,7 @@
+/*
+  This file contains a custom AppBar widget used throughout the application.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:my_tech_lib/services/models/user_model.dart';
 
@@ -7,9 +11,9 @@ import '../theme/app_theme.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   CustomAppBar(
-    this.user, {
-    Key? key,
-  }) : super(key: key);
+      this.user, {
+        Key? key,
+      }) : super(key: key);
   UserModel user;
 
   @override
@@ -17,8 +21,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     return AppBar(
       backgroundColor: AppTheme.of(context).secondaryBackground,
       automaticallyImplyLeading: false,
-      title: const Text(AppConst.appName,
-          style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold)),
+      title: const Text(
+        AppConst.appName,
+        style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.bold),
+      ),
       leading: Padding(
         padding: const EdgeInsetsDirectional.fromSTEB(15.0, 0.0, .0, 0.0),
         child: Image.asset(

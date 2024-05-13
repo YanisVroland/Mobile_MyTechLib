@@ -1,3 +1,7 @@
+/*
+  This file contains a utility class for displaying custom alerts using rflutter_alert package.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -5,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import '../theme/color_const.dart';
 
 class Alerts {
+  // Method to display an alert with image
   static alert_image(context, Function onTap) {
     Alert(
       context: context,
@@ -21,7 +26,7 @@ class Alerts {
           onPressed: () {
             Navigator.pop(context);
           },
-          width: 12.w,
+          width: 120.w,
         ),
         DialogButton(
           color: ColorConst.primary,

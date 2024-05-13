@@ -1,3 +1,7 @@
+/*
+  This file contains a custom dialog widget for confirmation of deletion.
+*/
+
 import 'package:flutter/material.dart';
 
 class DeleteDialog extends StatelessWidget {
@@ -26,7 +30,7 @@ class DeleteDialog extends StatelessWidget {
         ),
         TextButton(
           onPressed: () async {
-             onDelete();
+            onDelete();
           },
           child: const Text("Continuer"),
         ),

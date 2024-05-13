@@ -1,3 +1,7 @@
+/*
+  This file contains a custom icon button widget with various customization options.
+*/
+
 import 'package:flutter/material.dart';
 
 class IconCustom extends StatefulWidget {
@@ -53,8 +57,8 @@ class _IconCustomState extends State<IconCustom> {
   }
 
   void _updateIcon() {
-    // final isFontAwesome = widget.icon is FaIcon;
-    // if (isFontAwesome) {
+    // Determine whether the provided icon is a FontAwesome icon or a regular icon
+    // if (widget.icon is FaIcon) {
     //   FaIcon icon = widget.icon as FaIcon;
     //   effectiveIcon = FaIcon(
     //     icon.icon,
@@ -63,21 +67,22 @@ class _IconCustomState extends State<IconCustom> {
     //   iconSize = icon.size;
     //   iconColor = icon.color;
     // } else {
-      Icon icon = widget.icon as Icon;
-      effectiveIcon = Icon(
-        icon.icon,
-        size: icon.size,
-      );
-      iconSize = icon.size;
-      iconColor = icon.color;
+    Icon icon = widget.icon as Icon;
+    effectiveIcon = Icon(
+      icon.icon,
+      size: icon.size,
+    );
+    iconSize = icon.size;
+    iconColor = icon.color;
     // }
   }
 
   @override
   Widget build(BuildContext context) {
+    // Define button style based on different states
     ButtonStyle style = ButtonStyle(
       shape: MaterialStateProperty.resolveWith<OutlinedBorder>(
-        (states) {
+            (states) {
           return RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(widget.borderRadius ?? 0),
             side: BorderSide(
@@ -88,7 +93,7 @@ class _IconCustomState extends State<IconCustom> {
         },
       ),
       iconColor: MaterialStateProperty.resolveWith<Color?>(
-        (states) {
+            (states) {
           if (states.contains(MaterialState.disabled) &&
               widget.disabledIconColor != null) {
             return widget.disabledIconColor;
@@ -101,7 +106,7 @@ class _IconCustomState extends State<IconCustom> {
         },
       ),
       backgroundColor: MaterialStateProperty.resolveWith<Color?>(
-        (states) {
+            (states) {
           if (states.contains(MaterialState.disabled) &&
               widget.disabledColor != null) {
             return widget.disabledColor;
@@ -110,7 +115,6 @@ class _IconCustomState extends State<IconCustom> {
               widget.hoverColor != null) {
             return widget.hoverColor;
           }
-
           return widget.fillColor;
         },
       ),
@@ -122,6 +126,7 @@ class _IconCustomState extends State<IconCustom> {
       }),
     );
 
+    // Build the icon button widget
     return SizedBox(
       width: widget.buttonSize,
       height: widget.buttonSize,
@@ -132,30 +137,30 @@ class _IconCustomState extends State<IconCustom> {
           child: IconButton(
             icon: (widget.showLoadingIndicator && loading)
                 ? Container(
-                    width: iconSize,
-                    height: iconSize,
-                    child: CircularProgressIndicator(
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        iconColor ?? Colors.white,
-                      ),
-                    ),
-                  )
+              width: iconSize,
+              height: iconSize,
+              child: CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(
+                  iconColor ?? Colors.white,
+                ),
+              ),
+            )
                 : effectiveIcon,
             onPressed: widget.onPressed == null
                 ? null
                 : () async {
-                    if (loading) {
-                      return;
-                    }
-                    setState(() => loading = true);
-                    try {
-                      await widget.onPressed!();
-                    } finally {
-                      if (mounted) {
-                        setState(() => loading = false);
-                      }
-                    }
-                  },
+              if (loading) {
+                return;
+              }
+              setState(() => loading = true);
+              try {
+                await widget.onPressed!();
+              } finally {
+                if (mounted) {
+                  setState(() => loading = false);
+                }
+              }
+            },
             splashRadius: widget.buttonSize,
             style: style,
           ),

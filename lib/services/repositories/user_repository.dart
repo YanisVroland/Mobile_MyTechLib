@@ -1,3 +1,7 @@
+/*
+  This file contains a repository class for managing user-related operations
+*/
+
 import 'dart:developer';
 
 import 'package:dio/dio.dart';
@@ -16,6 +20,7 @@ import 'package:path/path.dart' as path;
 class UserRepository {
   UtilsRepository utilsRepository = UtilsRepository();
 
+  // Sign in user with email and password
   Future<ResponseApi?> signIn(BuildContext context, String name, String password) async {
     try {
       var requestBody = {
@@ -23,9 +28,10 @@ class UserRepository {
         'password': password.trim(),
       };
       ResponseApi? response =
-          await utilsRepository.requestPost(context, AppConst.signInPostEndpoint, requestBody);
+      await utilsRepository.requestPost(context, AppConst.signInPostEndpoint, requestBody);
 
       if (response != null && response.status == 200) {
+        // Save user information in local storage upon successful sign-in
         await LocalPref().saveString("uuid_user", response.body["uuid_user"]);
         await LocalPref().saveString("access_token", response.body["access_token"]);
         await LocalPref().saveString("refresh_token", response.body["refresh_token"]);
@@ -37,14 +43,17 @@ class UserRepository {
     }
   }
 
+  // Sign up user
   Future<ResponseApi?> signUp(BuildContext context, UserModel user) async {
     try {
       ResponseApi? response =
-          await utilsRepository.requestPost(context, AppConst.signUpPostEndpoint, user.toJson());
+      await utilsRepository.requestPost(context, AppConst.signUpPostEndpoint, user.toJson());
 
       if (response != null && response.status == 201) {
+        // Display success message upon successful sign-up
         SnackConst.SnackCustom(AppConst.userCreatedMessage, context,
             duration: 3, color: Colors.green);
+        // Automatically sign in user after sign-up
         return await signIn(context, user.email, user.password);
       }
 
@@ -55,6 +64,7 @@ class UserRepository {
     }
   }
 
+  // Request password reset
   Future<ResponseApi?> forgotPassword(BuildContext context, String email) async {
     try {
       var requestBody = {
@@ -67,6 +77,7 @@ class UserRepository {
     }
   }
 
+  // Get user information by UUID
   Future<ResponseApi?> getUser(BuildContext context, String uuidUser) async {
     try {
       return utilsRepository.requestGet(context, AppConst.userGetEndpoint + uuidUser);
@@ -76,6 +87,7 @@ class UserRepository {
     }
   }
 
+  // Set user as admin or not
   Future<ResponseApi?> setUserAdmin(
       BuildContext context, List<String> uuidUser, bool boolean) async {
     try {
@@ -87,6 +99,7 @@ class UserRepository {
     }
   }
 
+  // Update user's profile image
   Future<ResponseApi?> updateProfileImageUser(
       BuildContext context, UserModel user, String uploadedFileUrl) async {
     try {
@@ -107,6 +120,7 @@ class UserRepository {
     }
   }
 
+  // Update user information
   Future<ResponseApi?> updateUser(BuildContext context, UserModel user) async {
     try {
       var requestBody = {

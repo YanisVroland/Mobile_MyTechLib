@@ -1,23 +1,25 @@
+/*
+  This file contains a repository class for managing company-related operations.
+*/
+
 import 'dart:developer';
 import 'dart:math' as math;
+import 'dart:async';
 
-// import 'dart:math' ;
 import 'package:dio/dio.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:path/path.dart' as path;
 import 'package:http_parser/http_parser.dart';
-
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
-import 'package:my_tech_lib/services/repositories/utils_repository.dart';
-import 'package:uuid/uuid.dart';
 
 import '../../app/theme/app_const.dart';
 import '../models/company_model.dart';
 import '../models/responseAPI_model.dart';
+import '../repositories/utils_repository.dart';
 
 class CompanyRepository {
   UtilsRepository utilsRepository = UtilsRepository();
 
+  // Method to create a company
   Future<ResponseApi?> createCompany(BuildContext context, Company company) async {
     try {
       return utilsRepository.requestPost(
@@ -28,34 +30,43 @@ class CompanyRepository {
     }
   }
 
+  // Method to join a company using a code
   Future<ResponseApi?> joinCompany(BuildContext context, String code) async {
     try {
-      return utilsRepository.requestPut(context, AppConst.joinCompanyPutEndpoint + code, {});
+      return utilsRepository.requestPut(
+          context, AppConst.joinCompanyPutEndpoint + code, {});
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
+  // Method to get company details by UUID
   Future<ResponseApi?> getCompany(BuildContext context, String companyUuid) async {
     try {
-      return utilsRepository.requestGet(context, AppConst.companyGetEndpoint + companyUuid);
+      return utilsRepository.requestGet(
+          context, AppConst.companyGetEndpoint + companyUuid);
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
-  Future<ResponseApi?> getUserCompany(BuildContext context, String companyUuid) async {
+  // Method to get user company by UUID
+  Future<ResponseApi?> getUserCompany(
+      BuildContext context, String companyUuid) async {
     try {
-      return utilsRepository.requestGet(context, AppConst.companyUsersGetEndpoint + companyUuid);
+      return utilsRepository.requestGet(
+          context, AppConst.companyUsersGetEndpoint + companyUuid);
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
-  Future<ResponseApi?> getStatistiqueCompany(BuildContext context, String companyUuid) async {
+  // Method to get company statistics by UUID
+  Future<ResponseApi?> getStatistiqueCompany(
+      BuildContext context, String companyUuid) async {
     try {
       return utilsRepository.requestGet(
           context, AppConst.companyStatistiqueGetEndpoint + companyUuid);
@@ -65,8 +76,10 @@ class CompanyRepository {
     }
   }
 
+  // Method to generate a unique string of a specified length
   String generateUniqueString(int length) {
-    const characters = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
+    const characters =
+        'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789';
     var result = '';
     var random = math.Random();
     for (var i = 0; i < length; i++) {
@@ -75,7 +88,9 @@ class CompanyRepository {
     return result;
   }
 
-  Future<ResponseApi?> changeCodeCompany(BuildContext context, String companyUuid) async {
+  // Method to change the company code by UUID
+  Future<ResponseApi?> changeCodeCompany(
+      BuildContext context, String companyUuid) async {
     try {
       String newCode = generateUniqueString(10);
       return utilsRepository.requestPatch(
@@ -86,29 +101,29 @@ class CompanyRepository {
     }
   }
 
-  Future<ResponseApi?> leaveCompany(BuildContext context, String userUuid) async {
+  // Method to leave the company by user UUID
+  Future<ResponseApi?> leaveCompany(
+      BuildContext context, String userUuid) async {
     try {
-      return utilsRepository
-          .requestPatch(context, AppConst.companyLeaveCompanyPostEndpoint + userUuid, {});
+      return utilsRepository.requestPatch(
+          context, AppConst.companyLeaveCompanyPostEndpoint + userUuid, {});
     } catch (e) {
       log(e.toString());
       return null;
     }
   }
 
+  // Method to update the company logo
   Future<ResponseApi?> updateLogoCompany(
       BuildContext context, Company company, String uploadedFileUrl) async {
     try {
       String extension = path.extension(uploadedFileUrl);
-
       final url = await MultipartFile.fromFile(
         uploadedFileUrl,
         filename: "logo" + extension,
         contentType: MediaType('image', extension.substring(1)),
       );
-
       Map<String, Object> bodyJson = {"file": url};
-
       return utilsRepository.requestImagePost(
           context, AppConst.companyLogoPostEndpoint + company.uuid, bodyJson);
     } catch (e) {
@@ -117,7 +132,9 @@ class CompanyRepository {
     }
   }
 
-  Future<ResponseApi?> updateCompany(BuildContext context, Company company) async {
+  // Method to update company details
+  Future<ResponseApi?> updateCompany(
+      BuildContext context, Company company) async {
     try {
       var requestBody = {
         'name': company.name,

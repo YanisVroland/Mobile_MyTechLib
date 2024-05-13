@@ -1,23 +1,27 @@
+/*
+  This file contains a repository class for managing project-related operations.
+*/
+
 import 'dart:developer';
 import 'package:dio/dio.dart';
 import 'package:path/path.dart' as path;
 import 'package:http_parser/http_parser.dart';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:my_tech_lib/services/models/library_model.dart';
-import 'package:my_tech_lib/services/models/project_model.dart';
-import 'package:my_tech_lib/services/repositories/utils_repository.dart';
 
 import '../../app/theme/app_const.dart';
 import '../models/information_model.dart';
+import '../models/library_model.dart';
 import '../models/responseAPI_model.dart';
-import 'information_repository.dart';
+import '../models/project_model.dart';
+import '../repositories/information_repository.dart';
+import '../repositories/utils_repository.dart';
 
 class ProjectRepository {
   UtilsRepository utilsRepository = UtilsRepository();
   InformationRepository informationRepository = InformationRepository();
 
+  // Method to get projects by library
   Future<ResponseApi?> getProjectByLibrary(BuildContext context, String uuidLibrary) async {
     try {
       return utilsRepository.requestGet(context, AppConst.projectGetEndpoint + uuidLibrary);
@@ -27,6 +31,7 @@ class ProjectRepository {
     }
   }
 
+  // Method to create project
   Future<ResponseApi?> createProject(BuildContext context, Project project, Library library) async {
     try {
       ResponseApi? responseApi = await utilsRepository.requestPost(
@@ -48,6 +53,7 @@ class ProjectRepository {
     }
   }
 
+  // Method to update project
   Future<ResponseApi?> updateProject(BuildContext context, Project project) async {
     try {
       ResponseApi? responseApi = await utilsRepository.requestPatch(
@@ -73,6 +79,7 @@ class ProjectRepository {
     }
   }
 
+  // Method to update project logo
   Future<ResponseApi?> updateLogoProject(
       BuildContext context, String projectUuid, String uploadedFileUrl) async {
     try {
@@ -94,6 +101,7 @@ class ProjectRepository {
     }
   }
 
+  // Method to upload illustrations for project
   Future<ResponseApi?> uploadIllustrations(
       BuildContext context, String projectUuid, List<String> illustrations) async {
     try {
@@ -125,6 +133,7 @@ class ProjectRepository {
     }
   }
 
+  // Method to upload one illustration for project
   Future<ResponseApi?> uploadOneIllustration(
       BuildContext context, String projectUuid, String illustrations,int index) async {
     try {
@@ -146,6 +155,7 @@ class ProjectRepository {
     }
   }
 
+  // Method to update APK for project
   Future<ResponseApi?> updateApkProject(
       BuildContext context, String projectUuid, String uploadedFileUrl) async {
     try {
@@ -167,9 +177,11 @@ class ProjectRepository {
     }
   }
 
+  // Method to delete project
   Future<ResponseApi?> deleteProject(BuildContext context, Project project) async {
     try {
-      ResponseApi? responseApi = await utilsRepository.requestDelete(context, AppConst.projectDeleteEndpoint + project.uuid);
+      ResponseApi? responseApi = await utilsRepository.requestDelete(
+          context, AppConst.projectDeleteEndpoint + project.uuid);
       if (responseApi != null && responseApi.status == 204) {
         if (project.core_company != null) {
           informationRepository.createInformation(

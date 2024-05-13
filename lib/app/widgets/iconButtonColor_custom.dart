@@ -1,3 +1,7 @@
+/*
+  This file contains a custom icon button widget with a specified color.
+*/
+
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 
@@ -31,14 +35,15 @@ class _CustomIconButtonColorState extends State<CustomIconButtonColor> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-        padding: EdgeInsets.only(right: 2.w, left: 2.w),
-        child: ElevatedButton(
-          onPressed: widget.disabled ? null : widget.onPressed,
-          child: widget.icon,
-          style: ElevatedButton.styleFrom(
-            textStyle:  TextStyle(fontSize: widget.fontSize),
-            primary: widget.color,
-          ),
-        ));
+      padding: EdgeInsets.only(right: 2.w, left: 2.w),
+      child: ElevatedButton(
+        onPressed: widget.disabled ? null : widget.onPressed,
+        child: widget.icon,
+        style: ElevatedButton.styleFrom(
+          textStyle: TextStyle(fontSize: widget.fontSize),
+          primary: widget.color,
+        ),
+      ),
+    );
   }
 }
