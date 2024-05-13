@@ -28,9 +28,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
     super.initState();
     passwordLoginVisibility = false;
     emailAddressLoginController = TextEditingController();
-    emailAddressLoginController.text = 'Test@test.com';
     passwordLoginController = TextEditingController();
-    passwordLoginController.text = 'azerty';
   }
 
   @override
