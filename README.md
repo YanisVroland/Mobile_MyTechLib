@@ -37,6 +37,8 @@ Si vous préférez installer l'application directement sur un téléphone Androi
 
 En cas de problème lors de l'installation ou de l'exécution de l'application, n'hésitez pas à consulter la [documentation Flutter](https://docs.flutter.dev/), qui est très détaillée et offre des solutions à de nombreuses questions courantes.
 
+Il est possible que votre téléphone demande des autorisations pour installer l'application. Vous pouvez les accepter en allant dans les paramètres de votre téléphone et en activant l'installation d'applications depuis des sources inconnues. Si besoin, vous pouvez suivre ce [tutoriel](https://www.frandroid.com/comment-faire/tutoriaux/184151_comment-installer-un-fichier-apk-sur-son-terminal-android).
+
 > [!TIP]
 > Un compte utilisateur de test y est prérempli (test@test.com).
 
@@ -48,6 +50,8 @@ Pour exécuter l'application localement, suivez ces étapes :
 
 > Suivez les instructions de la [documentation Flutter](https://docs.flutter.dev/get-started/install) **OU** suivez le fichier tutoriel nommé **"installation_flutter"** qui est dans le dossier annexes du dépôt GitHub.
 
+> [!NOTE]
+> Version recommandée au projet : Flutter (3.13.6), Dart (3.1.3)
 2. Clonez ou téléchargez ce dépôt sur votre machine locale.
 
 > **Commande git :** git clone https://github.com/YanisVroland/Mobile_MyTechLib.git
@@ -81,8 +85,6 @@ Pour exécuter l'application localement, suivez ces étapes :
   flutter run 
 ```
 
-> [!NOTE]
-> Version nécessaire au projet : Flutter (3.13.6), Dart (3.1.3)
 
 **REMARQUE** : En cas de problème lors de l'installation, n'hésitez pas à utiliser l'APK mis à disposition (voir partie : *Version APK pour Téléphones Android*)
 
@@ -92,7 +94,7 @@ Pour exécuter l'application localement, suivez ces étapes :
 
 Le projet est organisé de manière à faciliter la navigation et la gestion des différentes parties de l'application. Voici un aperçu de la structure des dossiers :
 
-- **dossier annexes :** Ce dossier contient tous les documents en lien avec le projet ou utiles au README. Des tutoriels, des guides, des captures d'écran ou tout autre document pertinent pour le développement ou l'utilisation de l'application.
+- **dossier annexes :** Ce dossier contient tous les documents en lien avec le projet ou utiles au README. Des tutoriels, des guides ou tout autre document pertinent pour le développement ou l'utilisation de l'application.
 
 - **Dossier assets :** Ce dossier contient les ressources utiles commes les icônes importées, les images ou encore les fichiers d'animations. 
 
