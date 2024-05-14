@@ -53,12 +53,9 @@ Pour exécuter l'application localement, suivez ces étapes :
 
 > Suivez les instructions de la [documentation Flutter](https://docs.flutter.dev/get-started/install) **OU** suivez le fichier tutoriel officiel nommé **"installation_flutter"** qui est dans le dossier annexes du dépôt GitHub.
 
-> [!NOTE]
-> Version recommandée au projet : Flutter (3.13.6), Dart (3.1.3)
+- Si vous avez besoin de changer de version Flutter, suivez ces étapes :
 
-Si vous avez besoin de changer de version Flutter, suivez ces étapes :
-
-- Exécutez la commande suivante dans un terminal pour trouver le répertoire d'installation de Flutter :
+  - Exécutez la commande suivante dans un terminal pour trouver le répertoire d'installation de Flutter :
 
    ```bash
    flutter doctor
@@ -66,12 +63,14 @@ Si vous avez besoin de changer de version Flutter, suivez ces étapes :
 
    Vous trouverez votre dossier Flutter sous la ligne "Flutter version".
 
-- Une fois dans ce dossier, utilisez la commande suivante pour changer de version:
+  - Une fois dans ce dossier, utilisez la commande suivante pour changer de version:
 
    ```bash
    git checkout 3.13.6
    ```
 
+> [!NOTE]
+> Version nécéssaire au projet : Flutter (3.13.6), Dart (3.1.3)
 
 2. Clonez ou téléchargez ce dépôt sur votre machine locale dans le répertoir de votre choix.
 
