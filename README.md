@@ -25,8 +25,10 @@ Voici quelques informations importantes à connaître sur ce projet :
 
 - Le projet utilise une base de données Firebase et Supabase, qui sont hébergées pour assurer la disponibilité et la performance des données. Ces bases de données sont utilisées pour stocker et gérer les informations des utilisateurs, des entreprises et des projets de l'application.
 
-- Tous les documents annexes en lien avec ce projet se trouvent dans le dossier **"annexes"**. Vous y trouverez notamment le rapport sur ce projet, les informations d'installation, ainsi que tous les autres documents utiles à la compréhension et à l'utilisation de l'application.
+- Tous les documents annexes en lien avec ce projet se trouvent dans le dossier **"annexes"**. Vous y trouverez notamment le rapport de ce projet ainsi que tous les autres documents utiles à la compréhension et à l'utilisation de l'application.
 
+- À noter que dans le dossier "annexes", vous trouverez également une vidéo simple, montrant l'utilisation de l'application, couvrant la plupart de ses fonctionnalités, ainsi qu'une documentation d'utilisation exhaustive.
+- 
 - Pour des tests d'utilisation plus immersifs et avancés, un compte utilisateur de test est disponible (email : test@test.com, mot de passe : azerty).
 
 ---

@@ -21,7 +21,7 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   late TextEditingController passwordLoginController;
   final _formKey = GlobalKey<FormState>();
   late bool passwordLoginVisibility;
-  final bool _loader = false;
+  bool _loader = false;
 
   @override
   void initState() {
@@ -39,6 +39,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
   }
 
   validButton() async {
+    setState(() {
+      _loader = true;
+    });
     UserRepository userRepository = UserRepository();
     ResponseApi? response = await userRepository.signIn(
         context, emailAddressLoginController.text, passwordLoginController.text);
@@ -54,6 +57,9 @@ class _LoginPageWidgetState extends State<LoginPageWidget> {
         duration: Duration(seconds: 3),
       ));
     }
+    setState(() {
+      _loader = false;
+    });
   }
 
   @override

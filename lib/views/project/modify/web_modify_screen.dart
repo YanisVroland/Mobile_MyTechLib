@@ -463,7 +463,7 @@ class _ModifyProjectWidgetState extends State<WebModifyProjectWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const Text(
-                        "Nouveau projet",
+                        "Modification projet",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 25.0,

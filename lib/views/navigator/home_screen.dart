@@ -59,18 +59,20 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       await getCompanyLibraries();
     }
 
-    searchListLibrairies.sort((a, b) {
-      if (a.updatedAt != null && b.updatedAt != null) {
-        return b.updatedAt!.compareTo(a.updatedAt!);
-      } else {
-        if (a.updatedAt == null && b.updatedAt == null) {
-          return 0;
-        } else if (a.updatedAt == null) {
-          return -1;
+    setState(() {
+      searchListLibrairies.sort((a, b) {
+        if (a.updatedAt != null && b.updatedAt != null) {
+          return b.updatedAt!.compareTo(a.updatedAt!);
         } else {
-          return 1;
+          if (a.updatedAt == null && b.updatedAt == null) {
+            return 0;
+          } else if (a.updatedAt == null) {
+            return -1;
+          } else {
+            return 1;
+          }
         }
-      }
+      });
     });
   }
 
@@ -116,9 +118,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
       listPersonalLibrairies.addAll(result.cast<Library>());
       widget.globalData.listPersonalLibrairies = listPersonalLibrairies;
       searchListLibrairies.addAll(result.cast<Library>());
-    }else{
-        listPersonalLibrairies = [];
-        widget.globalData.listPersonalLibrairies = [];
+    } else {
+      listPersonalLibrairies = [];
+      widget.globalData.listPersonalLibrairies = [];
     }
   }
 
@@ -133,7 +135,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
         widget.globalData.listCompanyLibrairies = listCompanyLibrairies;
         searchListLibrairies.addAll(result.cast<Library>());
       });
-    }else{
+    } else {
       setState(() {
         listCompanyLibrairies = [];
         widget.globalData.listCompanyLibrairies = [];
@@ -397,7 +399,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                       ),
                                                                     ),
                                                                   ),
-                                                                 Padding(
+                                                                  Padding(
                                                                     padding: EdgeInsets.only(
                                                                         right: 10.w),
                                                                     child: Column(
@@ -474,8 +476,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                         ),
                                                         InkWell(
                                                           onTap: () async {
-                                                            if (element.isPersonal || widget
-                                                                .globalData.user.companyAdmin) {
+                                                            if (element.isPersonal ||
+                                                                widget
+                                                                    .globalData.user.companyAdmin) {
                                                               await copyLibrary(element);
                                                             }
                                                           },
@@ -483,10 +486,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                             width: 50.w,
                                                             height: 70.h,
                                                             decoration: BoxDecoration(
-                                                              color:element.isPersonal ||  widget
-                                                                      .globalData.user.companyAdmin
+                                                              color: element.isPersonal ||
+                                                                      widget.globalData.user
+                                                                          .companyAdmin
                                                                   ? AppTheme.of(context).tertiary
-                                                                  : AppTheme.of(context).secondary.withOpacity(0.5),
+                                                                  : AppTheme.of(context)
+                                                                      .secondary
+                                                                      .withOpacity(0.5),
                                                               borderRadius: const BorderRadius.only(
                                                                   topRight: Radius.circular(8.0),
                                                                   bottomRight:
@@ -608,7 +614,7 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                           ),
                                                                         ),
                                                                       ),
-                                                                       Padding(
+                                                                      Padding(
                                                                         padding: EdgeInsets.only(
                                                                             right: 10.w),
                                                                         child: Column(
@@ -690,8 +696,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                             ),
                                                             InkWell(
                                                               onTap: () async {
-                                                                if (element.isPersonal || widget
-                                                                    .globalData.user.companyAdmin) {
+                                                                if (element.isPersonal ||
+                                                                    widget.globalData.user
+                                                                        .companyAdmin) {
                                                                   await copyLibrary(element);
                                                                 }
                                                               },
@@ -699,12 +706,14 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                                 width: 50.w,
                                                                 height: 70.h,
                                                                 decoration: BoxDecoration(
-                                                                  color:element.isPersonal ||  widget.globalData.user
-                                                                          .companyAdmin
+                                                                  color: element.isPersonal ||
+                                                                          widget.globalData.user
+                                                                              .companyAdmin
                                                                       ? AppTheme.of(context)
                                                                           .tertiary
                                                                       : AppTheme.of(context)
-                                                                          .secondary.withOpacity(0.5),
+                                                                          .secondary
+                                                                          .withOpacity(0.5),
                                                                   borderRadius:
                                                                       const BorderRadius.only(
                                                                           topRight:
@@ -922,8 +931,9 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                         ),
                                                         InkWell(
                                                           onTap: () async {
-                                                            if (element.isPersonal || widget
-                                                                .globalData.user.companyAdmin) {
+                                                            if (element.isPersonal ||
+                                                                widget
+                                                                    .globalData.user.companyAdmin) {
                                                               await copyLibrary(element);
                                                             }
                                                           },
@@ -931,10 +941,13 @@ class _HomeWidgetState extends State<HomeWidget> with TickerProviderStateMixin {
                                                             width: 50.w,
                                                             height: 70.h,
                                                             decoration: BoxDecoration(
-                                                              color: element.isPersonal || widget
-                                                                      .globalData.user.companyAdmin
+                                                              color: element.isPersonal ||
+                                                                      widget.globalData.user
+                                                                          .companyAdmin
                                                                   ? AppTheme.of(context).tertiary
-                                                                  : AppTheme.of(context).secondary.withOpacity(0.5),
+                                                                  : AppTheme.of(context)
+                                                                      .secondary
+                                                                      .withOpacity(0.5),
                                                               borderRadius: const BorderRadius.only(
                                                                   topRight: Radius.circular(8.0),
                                                                   bottomRight:

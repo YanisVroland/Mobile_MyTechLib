@@ -117,7 +117,7 @@ class _ModifyLibraryWidgetState extends State<ModifyLibraryWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       const Text(
-                        "Nouvelle Librairie",
+                        "Modification Librairie",
                         style: TextStyle(
                           color: Colors.white,
                           fontSize: 25.0,
