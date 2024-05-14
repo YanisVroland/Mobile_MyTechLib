@@ -31,6 +31,7 @@ class UtilsRepository {
 
       return await verificationResponse(context, response, endpoint);
     } catch (e) {
+      SnackConst.SnackCustom(AppConst.errorApiMessage, context, duration: 3);
       throw Exception(e);
     }
   }

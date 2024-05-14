@@ -60,7 +60,7 @@ class AppConst {
   static String   useCopyLibraryPostEndpoint = '/copy/useCopyLibrary/';
 
   // Messages
-  static String errorApiMessage = 'Erreur de fonctionnement, veuillez contacter le support.';
+  static String errorApiMessage = 'Erreur avec l\'API, veuillez contacter le support.';
   static String errorSearchMessage = 'Element recherché introuvable';
   static String missingDataMessage = 'Aucune information disponible';
   static String userCreatedMessage = 'Compte utilisateur créé avec succès';
