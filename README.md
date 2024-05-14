@@ -19,16 +19,17 @@ Ce projet est une application mobile développée avec Flutter pour faciliter la
 
 Voici quelques informations importantes à connaître sur ce projet :
 
-- Ce projet est réalisé dans le cadre d'un projet de fin d'étude de Master 2 en informatique à l'université catholique de Lille.
+- Ce projet est réalisé dans le cadre d'un projet de fin d'étude de Master 2 en informatique à l'université Catholique de Lille.
 
 - Il est accompagné d'une API pour son bon fonctionnement, disponible sur le lien GitHub suivant : [API_MyTechLib](https://github.com/YanisVroland/API_MyTechLib.git). Cette API fournit les services nécessaires à l'application mobile MyTechLib, tels que l'accès aux données des projets et des utilisateurs.
 
 - Le projet utilise une base de données Firebase et Supabase, qui sont hébergées pour assurer la disponibilité et la performance des données. Ces bases de données sont utilisées pour stocker et gérer les informations des utilisateurs, des entreprises et des projets de l'application.
 
-- Tous les documents annexes en lien avec ce projet se trouvent dans le dossier **"annexes"**. Vous y trouverez notamment le rapport de ce projet ainsi que tous les autres documents utiles à la compréhension et à l'utilisation de l'application.
+- Tous les documents annexes en lien avec ce projet se trouvent dans le dossier **"annexes"**. Vous y trouverez notamment le rapport de ce projet, une documentation d'utilisation exhaustive ainsi que tous les autres documents utiles à la compréhension et à l'utilisation de l'application.
+  
+- Si besoin voici un lien d'une [vidéo simple](https://drive.google.com/file/d/1qYlrTzDbXmqzlC9UBseff8qjaESfjMMl/view?usp=drive_link) montrant l'utilisation de l'application, couvrant la plupart de ses fonctionnalités.
 
-- À noter que dans le dossier "annexes", vous trouverez également une vidéo simple, montrant l'utilisation de l'application, couvrant la plupart de ses fonctionnalités, ainsi qu'une documentation d'utilisation exhaustive.
-- 
+  
 - Pour des tests d'utilisation plus immersifs et avancés, un compte utilisateur de test est disponible (email : test@test.com, mot de passe : azerty).
 
 ---
@@ -50,11 +51,29 @@ Pour exécuter l'application localement, suivez ces étapes :
 
 1. Assurez-vous d'avoir installé Flutter sur votre système. 
 
-> Suivez les instructions de la [documentation Flutter](https://docs.flutter.dev/get-started/install) **OU** suivez le fichier tutoriel nommé **"installation_flutter"** qui est dans le dossier annexes du dépôt GitHub.
+> Suivez les instructions de la [documentation Flutter](https://docs.flutter.dev/get-started/install) **OU** suivez le fichier tutoriel officiel nommé **"installation_flutter"** qui est dans le dossier annexes du dépôt GitHub.
 
 > [!NOTE]
 > Version recommandée au projet : Flutter (3.13.6), Dart (3.1.3)
-2. Clonez ou téléchargez ce dépôt sur votre machine locale.
+
+Si vous avez besoin de changer de version Flutter, suivez ces étapes :
+
+- Exécutez la commande suivante dans un terminal pour trouver le répertoire d'installation de Flutter :
+
+   ```bash
+   flutter doctor
+   ```
+
+   Vous trouverez votre dossier Flutter sous la ligne "Flutter version".
+
+- Une fois dans ce dossier, utilisez la commande suivante pour changer de version:
+
+   ```bash
+   git checkout 3.13.6
+   ```
+
+
+2. Clonez ou téléchargez ce dépôt sur votre machine locale dans le répertoir de votre choix.
 
 > **Commande git :** git clone https://github.com/YanisVroland/Mobile_MyTechLib.git
 
